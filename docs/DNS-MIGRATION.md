@@ -14,7 +14,12 @@ Two separate, separately-authorized changes:
 
 ## 0. Pre-flight checks (do these first, nothing changes)
 
-### 0.1 Resolve the MX discrepancy — run on your Windows PC (PowerShell or cmd)
+### 0.1 MX discrepancy — RESOLVED 2026-11-02
+
+Authoritative query of ns8.wixdns.net returned priorities 40/50 as `aspmx2.googlemail.com` / `aspmx3.googlemail.com`, matching public resolvers. The Wix UI's `alt3/alt4` display is not what is published. The table in §1 carries the authoritative values.
+
+<details><summary>Original check (for the record)</summary>
+
 
 ```
 nslookup -type=MX savantanalytics.net ns8.wixdns.net
@@ -28,6 +33,8 @@ Interpretation:
 - Both `alt3/alt4.aspmx.l.google.com` and `aspmx2/aspmx3.googlemail.com` are valid Google Workspace MX hosts (the `googlemail.com` names are Google's older documented set; `alt1–4` the newer). Either delivers. The point is to copy **what is authoritatively published**, not to pick a "better" set.
 - If ns8/ns9 return the `googlemail.com` names, the Wix UI is showing a normalized/cached display and the public resolvers are right.
 - If ns8/ns9 return `alt3/alt4`, the public resolvers are serving stale cache (TTL 3600) — re-run in an hour; if still different, stop and investigate before copying.
+
+</details>
 
 ### 0.2 Google Admin — DKIM and auth state
 Google Admin → Apps → Google Workspace → Gmail → **Authenticate email**. Note:
@@ -60,8 +67,8 @@ Inspect its DNS and redirect at Wix before any action; it is out of scope for th
 | MX | @ | aspmx.l.google.com | 10 | 3600 | — | keep |
 | MX | @ | alt1.aspmx.l.google.com | 20 | 3600 | — | keep |
 | MX | @ | alt2.aspmx.l.google.com | 30 | 3600 | — | keep |
-| MX | @ | *(authoritative value from §0.1)* | 40 | 3600 | — | copy exactly |
-| MX | @ | *(authoritative value from §0.1)* | 50 | 3600 | — | copy exactly |
+| MX | @ | aspmx2.googlemail.com | 40 | 3600 | — | **confirmed authoritative (ns8.wixdns.net, 2026-11-02)** — do not substitute alt3 |
+| MX | @ | aspmx3.googlemail.com | 50 | 3600 | — | **confirmed authoritative (ns8.wixdns.net, 2026-11-02)** — do not substitute alt4 |
 | TXT | `<selector>._domainkey` | *(only if §0.2 shows DKIM on)* | | 3600 | — | copy exactly |
 
 Rules: gray cloud (DNS only) on every A/CNAME — Cloudflare's Wix guidance requires it and it keeps the Wix site working through the move. Do **not** import ns8/ns9 as NS records. Do not add SPF/DMARC/anything not in the table. Do not delete anything Cloudflare imported that is in the table; delete anything it imported that is not (and tell me what it was).
