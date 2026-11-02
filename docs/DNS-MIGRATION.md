@@ -36,16 +36,26 @@ Interpretation:
 
 </details>
 
-### 0.2 Google Admin — DKIM and auth state
+### 0.2 Google Admin — DKIM — RESOLVED 2026-11-02: **not authenticating** (DKIM off). No `_domainkey` record to copy. DKIM becomes a §5 follow-up.
+
+<details><summary>Original check</summary>
+
 Google Admin → Apps → Google Workspace → Gmail → **Authenticate email**. Note:
 - Whether DKIM is "Authenticating email" (on) or "Not authenticating" (off).
 - The selector shown (usually `google`). If on, there is a TXT at `<selector>._domainkey` that must be copied; the public lookup of `google._domainkey` returned NXDOMAIN, which suggests DKIM is not configured — confirm, don't assume.
 - No SPF or DMARC exists today. **Do not add them during the move.** Note as a follow-up (see §5).
 
-### 0.3 Network Solutions — DNSSEC
+</details>
+
+### 0.3 DNSSEC — RESOLVED 2026-11-02: Verisign .net RDAP reports `delegationSigned: false`; no DS record exists. Nothing to remove.
+
+<details><summary>Original check</summary>
+
 Network Solutions → domain → Advanced / DNSSEC. Confirm it is **off / no DS records**. If any DS record exists, stop: nameserver change with DS present breaks resolution. Removing DS is a separate authorized step.
 
-### 0.4 analytic.expert
+</details>
+
+### 0.4 analytic.expert — OPEN
 Inspect its DNS and redirect at Wix before any action; it is out of scope for this plan and must not be affected. If its redirect is implemented at Wix as a *Wix site* feature (not DNS), it is unaffected by the savantanalytics.net nameserver change. Confirm.
 
 ---
@@ -53,7 +63,7 @@ Inspect its DNS and redirect at Wix before any action; it is out of scope for th
 ## 1. Change A — build the Cloudflare zone (no effect on live traffic until §2)
 
 1. Cloudflare → **Domains → Add a domain** → `savantanalytics.net` → **Free** plan. Cloudflare scans and proposes records.
-2. **Compare** the imported records against the table below. Fix every difference by hand. The authoritative MX values from §0.1 replace the MX rows if they differ.
+2. **Compare** the imported records against the table below (also in `CLOUDFLARE-ZONE-RECORDS.md`, the approval copy). Fix every difference by hand. The authoritative MX values from §0.1 replace the MX rows if they differ.
 
 | Type | Name | Content | Prio | TTL | Proxy | Note |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -69,7 +79,6 @@ Inspect its DNS and redirect at Wix before any action; it is out of scope for th
 | MX | @ | alt2.aspmx.l.google.com | 30 | 3600 | — | keep |
 | MX | @ | aspmx2.googlemail.com | 40 | 3600 | — | **confirmed authoritative (ns8.wixdns.net, 2026-11-02)** — do not substitute alt3 |
 | MX | @ | aspmx3.googlemail.com | 50 | 3600 | — | **confirmed authoritative (ns8.wixdns.net, 2026-11-02)** — do not substitute alt4 |
-| TXT | `<selector>._domainkey` | *(only if §0.2 shows DKIM on)* | | 3600 | — | copy exactly |
 
 Rules: gray cloud (DNS only) on every A/CNAME — Cloudflare's Wix guidance requires it and it keeps the Wix site working through the move. Do **not** import ns8/ns9 as NS records. Do not add SPF/DMARC/anything not in the table. Do not delete anything Cloudflare imported that is in the table; delete anything it imported that is not (and tell me what it was).
 
