@@ -1,0 +1,15 @@
+{
+  // Cloudflare Workers config: static site from ./dist + the /api/contact endpoint.
+  // Build: `npm run build`  ·  Deploy: `npx wrangler deploy`
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "savantweb",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  },
+  "observability": { "enabled": true }
+}

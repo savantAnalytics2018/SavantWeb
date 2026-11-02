@@ -1,4 +1,17 @@
-# Deploy to Cloudflare Pages (free plan) and point savantanalytics.net at it
+# Deploy to Cloudflare (free plan) and point savantanalytics.net at it
+
+> The project is deployed as a **Cloudflare Worker with static assets** (`wrangler.jsonc`, `worker/index.ts`). Cloudflare's dashboard now creates this by default when you connect a Git repo. Pages Functions (`functions/`) are kept for anyone who prefers a Pages project; both use the same handler.
+
+## Worker build settings (Workers & Pages → savantweb → Settings → Build)
+
+- Build command: `npm run build`
+- Deploy command: `npx wrangler deploy`
+- Root directory: `/`
+- Build variables: `NODE_VERSION` = `22`, `VITE_SITE_ORIGIN` = `https://savantanalytics.net`, `VITE_INDEXABLE` = `true` (production only), `VITE_CONTACT_ENDPOINT` = `/api/contact`
+- Secrets (Settings → Variables and Secrets, type *Secret*): `CONTACT_TO`, `CONTACT_FROM`, `RESEND_API_KEY`
+
+---
+
 
 ## 1. Cloudflare project (one time, ~5 minutes)
 
