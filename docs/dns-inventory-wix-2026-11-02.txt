@@ -1,0 +1,126 @@
+SAVANT ANALYTICS - WIX DNS INVENTORY AND MIGRATION HANDOFF
+Domain: savantanalytics.net
+Wix UI snapshot: 2026-11-02 at 17:13 UTC
+MX verification updated: 2026-11-02 at 17:34 UTC
+Registrar: Network Solutions
+Current DNS provider: Wix
+
+PURPOSE AND AUTHORIZATION
+This is a human-readable inventory and planning handoff for Claude, not a
+DNS zone import file. No DNS, nameserver, email, or website changes are
+authorized by this document. The user's Google email must not be disrupted.
+Do not claim a zero-downtime guarantee.
+
+MX VALUES CONFIRMED - OTHER PRE-MIGRATION CHECKS REMAIN
+The user supplied results from queries directed to both current Wix
+nameservers:
+- ns8.wixdns.net: screenshot at 17:29 UTC, server address 216.239.32.101.
+- ns9.wixdns.net: pasted result at 17:34 UTC, server address 216.239.34.101.
+
+Both returned the same five MX destinations and priorities shown in the
+confirmed migration inventory below. These also agree with the earlier
+Google and Cloudflare public recursive resolver results. The confirmed
+migration values at priorities 40 and 50 are aspmx2.googlemail.com and
+aspmx3.googlemail.com. Retain TTL 3600 from the Wix UI inventory.
+
+Historical UI discrepancy (retained for audit, no longer an MX blocker):
+Priority   Wix UI at 17:13 UTC            Confirmed live DNS
+40         alt3.aspmx.l.google.com         aspmx2.googlemail.com
+50         alt4.aspmx.l.google.com         aspmx3.googlemail.com
+
+Do not use the UI-only alt3/alt4 values for this migration. Priorities 10,
+20, and 30 agreed across the UI and DNS results. No DNS records were
+changed to resolve this discrepancy; it was resolved by verification.
+
+Migration remains on hold for Google Admin DKIM selector/status verification,
+the registrar DNSSEC check, a Cloudflare zone comparison, and explicit user
+approvals. This is a review inventory, not an import file or authorization
+to change external settings.
+
+CONFIRMED MIGRATION INVENTORY
+Sources: signed-in Wix UI for A/CNAME/TXT and TTLs; user-supplied
+ns8/ns9 lookup results for MX destinations and priorities.
+@ means the zone apex, savantanalytics.net. TTLs are seconds.
+
+Type   Host   Priority   TTL    Value
+A      @      -          3600   185.230.63.171
+A      @      -          3600   185.230.63.186
+A      @      -          3600   185.230.63.107
+CNAME  m      -          3600   www4.wixdns.net
+CNAME  www    -          3600   cdn3.wixdns.net
+TXT    @      -          3600   MS=ms17224690
+TXT    @      -          3600   google-site-verification=jfEcweXBlqQnYx0zR0pFcobVLf-uJtesDxiffu2JO-g
+MX     @      10         3600   aspmx.l.google.com
+MX     @      20         3600   alt1.aspmx.l.google.com
+MX     @      30         3600   alt2.aspmx.l.google.com
+MX     @      40         3600   aspmx2.googlemail.com
+MX     @      50         3600   aspmx3.googlemail.com
+
+Preserve these confirmed record values and MX priorities during an
+authorized DNS migration. Do not substitute different
+"standard" priorities or Google's newer single-MX configuration as part
+of the move.
+
+CURRENT NAMESERVERS - ROLLBACK REFERENCE ONLY
+NS     @      -          86400  ns8.wixdns.net
+NS     @      -          86400  ns9.wixdns.net
+
+Do not import these old apex NS records into Cloudflare. Any future
+registrar delegation change must use the nameservers assigned to the
+actual Cloudflare zone and requires authorization.
+
+EMAIL AUTHENTICATION: OBSERVATIONS AND LIMITS
+- Wix UI shows no SPF, DKIM, DMARC, or SRV records.
+- A public Google DNS lookup returned only the two root TXT values above.
+- A public Google DNS lookup for _dmarc.savantanalytics.net returned NXDOMAIN.
+- A public Google DNS lookup for DS returned no answer.
+- A public lookup of google._domainkey returned NXDOMAIN. This checks
+  only that selector, not all possible DKIM selectors.
+- These observations do not prove that every possible DKIM selector is
+  absent. Verify the actual DKIM selector and configuration in Google Admin
+  before describing the email-authentication inventory as complete.
+- Review missing email authentication separately. Do not invent TXT records,
+  guess selectors, or change email authentication while copying this zone.
+- Check DNSSEC status at Network Solutions even though the public DS lookup
+  returned no answer. Do not change DNSSEC or DS settings without approval.
+
+SAFE SEQUENCING FOR A FUTURE AUTHORIZED MIGRATION
+1. Finish the Google Admin DKIM and registrar DNSSEC checks. Recheck the
+   live inventory immediately before making any changes.
+2. Prepare and compare the Cloudflare zone against the current records.
+   Keep all existing Google MX and verification TXT values exactly intact.
+3. Separate DNS-provider migration from website cutover. Keep the existing
+   Wix A and CNAME records DNS-only (gray cloud) while moving DNS; do not
+   simultaneously replace the website routing.
+4. After an authorized delegation change, confirm the website still works
+   and test Google email in both directions before proceeding further.
+5. Only at a separately authorized web cutover, with the Cloudflare zone
+   active, resolve apex/www record conflicts and configure the intended
+   Worker custom domain routing. Do not remove Wix website records early.
+6. Preserve the analytic.expert redirect separately. Its DNS and redirect
+   records are not included in this inventory and must be inspected before
+   any action that could affect it.
+
+OPEN CHECKS / BLOCKERS BEFORE A COMPLETE CUTOVER PLAN
+- Compare the prepared Cloudflare zone with this confirmed inventory.
+- Google Admin: verify the real DKIM selector and authentication state.
+- Network Solutions: verify registrar-side DNSSEC/DS state.
+- Confirm intended Worker deployment and apex/www cutover behavior.
+- Inventory analytic.expert and preserve its existing redirect separately.
+- Obtain explicit authorization for the proposed external changes.
+
+SOURCES
+User-supplied ns8/ns9 DNS query results, 2026-11-02 at 17:29 and 17:34 UTC.
+Earlier public Google and Cloudflare resolver results corroborated the MX set.
+
+Observed signed-in Wix DNS management UI:
+https://manage.wix.com/account/domains?referralInfo=sidebar
+
+Cloudflare official guidance for Wix DNS records:
+https://developers.cloudflare.com/dns/manage-dns-records/reference/vendor-specific-records/#wix
+
+Cloudflare Workers custom-domain routing:
+https://developers.cloudflare.com/workers/configuration/routing/custom-domains/
+
+The inventory above reflects the recorded snapshot, not a guarantee that
+records have remained unchanged since that time.
