@@ -7,7 +7,7 @@
  */
 // `import.meta.env` exists in the Vite browser build; it is undefined when this
 // module is bundled into the Cloudflare Worker, so read it defensively.
-const viteEnv = ((import.meta as unknown as { env?: Record<string, string | undefined> }).env ?? {});
+const viteEnv: Record<string, string | undefined> = import.meta.env ?? {};
 const endpoint = viteEnv.VITE_CONTACT_ENDPOINT?.trim() ?? '';
 
 export const contactConfig = {
