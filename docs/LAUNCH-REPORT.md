@@ -66,6 +66,8 @@ form is intentionally in preview mode until the owner decisions below are resolv
 
 ## Changelog
 
+- **2026-11-02 v2.2** — Fix redirect loop on /services, /approach, /about, /contact, /privacy (and service pages): Worker assets now `drop-trailing-slash`; duplicate trailing-slash rules removed from `_redirects`. Verified with wrangler dev on all routes.
+
 - **2026-11-02 v2.1** — SBA EDWOSB and WOSB certification badges added to About and footer.
 
 - **2026-11-01 v2.0** — Headline is a five-word problem: "Your AI never reaches production." with the solution in smaller text. Hero art in the NOBL register: one circle, an orchestrator, five workflow pictograms (case file, database, batch process, report, compliance) drawn one by one with a done mark; 12 s loop.

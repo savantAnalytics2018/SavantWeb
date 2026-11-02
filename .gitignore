@@ -7,3 +7,4 @@ dist-server
 qa/screenshots
 *.log
 .DS_Store
+.wrangler

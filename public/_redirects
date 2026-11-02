@@ -1,9 +1,3 @@
 # Cloudflare Pages redirects — legacy routes observed on the previous site (D-06).
 /ai           /services/ai-strategy            301
 /migration    /services/legacy-modernization   301
-# Trailing-slash normalisation
-/services/    /services                        301
-/approach/    /approach                        301
-/about/       /about                           301
-/contact/     /contact                         301
-/privacy/     /privacy                         301
