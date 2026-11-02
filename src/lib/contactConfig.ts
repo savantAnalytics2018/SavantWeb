@@ -5,7 +5,10 @@
  * Otherwise the form renders in preview mode: a clear notice, submission
  * disabled, and no simulated success.
  */
-const endpoint = (import.meta.env.VITE_CONTACT_ENDPOINT as string | undefined)?.trim() ?? '';
+// `import.meta.env` exists in the Vite browser build; it is undefined when this
+// module is bundled into the Cloudflare Worker, so read it defensively.
+const viteEnv = ((import.meta as unknown as { env?: Record<string, string | undefined> }).env ?? {});
+const endpoint = viteEnv.VITE_CONTACT_ENDPOINT?.trim() ?? '';
 
 export const contactConfig = {
   endpoint,
