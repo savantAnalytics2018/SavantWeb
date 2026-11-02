@@ -2,7 +2,7 @@
 
 Prepared 2026-11-02 from the confirmed Wix inventory (MX verified at ns8 and ns9). **For comparison and approval. Nothing is changed by this document.**
 
-Pre-flight status: MX confirmed · DKIM **off** in Google Admin (no `_domainkey` record to copy) · DNSSEC: registry reports `delegationSigned: false`, no DS to remove · analytic.expert: still to be inspected separately.
+Pre-flight status: MX confirmed · Google Admin reports DKIM not authenticating for the domain; **no DKIM record was identified** (the `google` selector resolves NXDOMAIN) — nothing to copy on current evidence · DNSSEC: registry reports `delegationSigned: false`, no DS to remove · analytic.expert: still to be inspected separately.
 
 ## Records — 12 total
 
@@ -35,7 +35,7 @@ In the Cloudflare UI, `@` can be typed as `@` or `savantanalytics.net`; TTL is s
 1. Cloudflare → Domains → **Add a domain** → `savantanalytics.net` → Free plan.
 2. On the "Review DNS records" screen, Cloudflare shows what its scan found. Compare row by row against the table:
    - Missing row → add it.
-   - Extra row → delete it and note what it was.
+   - Extra row → **do not delete.** Switch it to DNS only if it is an A/CNAME, note exactly what it is, and send it to the chat for review before anything is removed.
    - Any A/CNAME showing orange cloud → switch to DNS only.
    - MX 40/50 must read `aspmx2.googlemail.com` / `aspmx3.googlemail.com` — the scan may pick up either set; correct to these.
 3. Continue to the page showing the two assigned Cloudflare nameservers. **Stop. Copy them into the chat.** Do not change anything at Network Solutions yet.

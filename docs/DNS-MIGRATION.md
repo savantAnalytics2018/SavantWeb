@@ -36,7 +36,7 @@ Interpretation:
 
 </details>
 
-### 0.2 Google Admin — DKIM — RESOLVED 2026-11-02: **not authenticating** (DKIM off). No `_domainkey` record to copy. DKIM becomes a §5 follow-up.
+### 0.2 Google Admin — DKIM — CHECKED 2026-11-02: Google Admin reports **not authenticating** for savantanalytics.net and **no DKIM record was identified** (public lookup of `google._domainkey` is NXDOMAIN). On current evidence there is nothing to copy; if Cloudflare's scan surfaces any `_domainkey` TXT, flag it for review rather than discarding it. DKIM setup is a §5 follow-up.
 
 <details><summary>Original check</summary>
 
@@ -80,7 +80,7 @@ Inspect its DNS and redirect at Wix before any action; it is out of scope for th
 | MX | @ | aspmx2.googlemail.com | 40 | 3600 | — | **confirmed authoritative (ns8.wixdns.net, 2026-11-02)** — do not substitute alt3 |
 | MX | @ | aspmx3.googlemail.com | 50 | 3600 | — | **confirmed authoritative (ns8.wixdns.net, 2026-11-02)** — do not substitute alt4 |
 
-Rules: gray cloud (DNS only) on every A/CNAME — Cloudflare's Wix guidance requires it and it keeps the Wix site working through the move. Do **not** import ns8/ns9 as NS records. Do not add SPF/DMARC/anything not in the table. Do not delete anything Cloudflare imported that is in the table; delete anything it imported that is not (and tell me what it was).
+Rules: gray cloud (DNS only) on every A/CNAME — Cloudflare's Wix guidance requires it and it keeps the Wix site working through the move. Do **not** import ns8/ns9 as NS records. Do not add SPF/DMARC/anything not in the table. Do not delete anything Cloudflare imported. Anything it imported that is **not** in the table: leave it, set A/CNAME to DNS only, and report it for review before removal.
 
 3. Cloudflare shows two assigned nameservers (e.g. `xxx.ns.cloudflare.com`, `yyy.ns.cloudflare.com`). Write them down. **Stop here and report.** Nothing has changed yet.
 
