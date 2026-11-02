@@ -5,6 +5,8 @@
   "name": "savantweb",
   "main": "worker/index.ts",
   "compatibility_date": "2026-10-01",
+  // Run the site build before deploying, so the dashboard build command can stay empty.
+  "build": { "command": "npm run build" },
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
