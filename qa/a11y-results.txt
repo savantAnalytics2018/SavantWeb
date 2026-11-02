@@ -1,0 +1,50 @@
+--- Token contrast (needs 4.5 text / 3 large+UI) ---
+ 14.78 ink on canvas
+  7.10 ink-2 on canvas
+  7.67 ink-2 on surface
+  5.91 teal on canvas (links/eyebrow)
+  6.39 teal on surface
+  5.45 teal on pale
+ 10.24 green on pale
+ 11.11 on-dark on green
+  8.01 on-dark-muted on green
+  5.43 accent on green (card eyebrow 13px bold)
+  3.86 border-strong on canvas (UI 3:1)
+  4.17 border-strong on surface (UI 3:1)
+  6.69 error on error-bg
+  6.39 white on teal (btn hover)
+ 11.11 green on canvas (secondary btn)
+  2.04 accent on canvas (decorative only)
+
+reduced-motion: running animations = 0 | pause button present = 0
+normal: running animations = 28
+after pause click: play states = paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused
+after reload (session persists): button = Resume animation
+tab order: Skip to main content > Savant Analytics > Services > Approach > About > Contact > Talk through your situation
+focus outline on focused element: 3px solid
+skip link -> hash: #main | active = main
+mobile nav open, links: 4 | toggle label: Close
+after Escape, toggle label: Menu | focus on toggle: true
+touch targets (360px): Contact:0x0 | Menu:75x44 | Talk through your :257x45 | See how we work:185x45 | Pause animation:146x44 | Talk through your :257x45
+/                          {"h1":1,"skips":0,"landmarks":4,"title":"Savant Analytics — Enterprise AI consulting","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/"}
+/services                  {"h1":1,"skips":0,"landmarks":4,"title":"Services — Savant Analytics","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/services"}
+/services/ai-governance    {"h1":1,"skips":0,"landmarks":4,"title":"AI governance and operational controls — Savant Analytics","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/services/ai-governance"}
+/approach                  {"h1":1,"skips":0,"landmarks":4,"title":"Approach — Savant Analytics","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/approach"}
+/about                     {"h1":1,"skips":0,"landmarks":4,"title":"About — Savant Analytics","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/about"}
+/contact                   {"h1":1,"skips":0,"landmarks":4,"title":"Contact — Savant Analytics","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/contact"}
+/privacy                   {"h1":1,"skips":0,"landmarks":4,"title":"Privacy — Savant Analytics","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/privacy"}
+/missing                   {"h1":1,"skips":0,"landmarks":4,"title":"Page not found — Savant Analytics","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/404"}
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+page.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('text=Explore services')[22m
+
+    at /home/claude/savantanalytics-site/qa/a11y.cjs:86:14 {
+  log: [ "  - waiting for locator('text=Explore services')" ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.23.4
