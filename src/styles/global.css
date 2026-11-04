@@ -15,6 +15,7 @@
   --color-border: #d3ddd5; /* decorative only */
   --color-border-strong: #6f8077; /* ≥3:1 on canvas; use for control boundaries */
   --color-accent: #d7a56f; /* warm accent, decorative, never small text */
+  --color-sharp: #bf3620; /* text-safe version of the logo red (≥4.5:1 on canvas and white); logo keeps #D7442C */
   --color-error: #9b2c1f;
   --color-error-bg: #fbeeec;
   --color-success-bg: #e4f1ea;
@@ -413,12 +414,9 @@ h4 {
   gap: var(--s-2);
   min-height: 44px;
 }
-.wordmark__dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--color-teal);
-  box-shadow: 0 0 0 3px var(--color-pale);
+.wordmark__mark {
+  width: 28px;
+  height: 28px;
 }
 .nav {
   display: none;
@@ -1341,4 +1339,46 @@ h4 {
 }
 .section--dark .stage {
   border-top-color: var(--color-accent);
+}
+
+/* ---------- Sharp accent (logo red), used sparingly ---------- */
+.hero__em {
+  color: var(--color-sharp);
+}
+.hero__em::after {
+  background: var(--color-sharp);
+  opacity: 0.18;
+}
+.evidence__stat {
+  color: #f0b4a6; /* light tint of the sharp red for contrast on deep green (≈8:1) */
+}
+.pain-list li:nth-child(even) {
+  border-left-color: var(--color-sharp);
+}
+.do-list__num,
+.stage__num {
+  color: var(--color-sharp);
+}
+.specialty--1 .eyebrow {
+  color: #f0b4a6;
+}
+.specialty--2 {
+  border-color: var(--color-sharp);
+}
+.specialty--2 .eyebrow {
+  color: var(--color-sharp);
+}
+.btn--primary:hover {
+  background: var(--color-sharp);
+  color: #fff;
+}
+.nav__link[aria-current='page'] {
+  border-bottom-color: var(--color-sharp);
+}
+.link-arrow:hover::after {
+  color: var(--color-sharp);
+}
+.section--dark .btn--primary:hover {
+  background: var(--color-sharp);
+  color: #fff;
 }

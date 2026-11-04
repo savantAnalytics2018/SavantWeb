@@ -27,7 +27,7 @@ function Header() {
     <header className="header">
       <div className="container header__inner">
         <Link to="/" className="wordmark" aria-label={`${site.name} home`}>
-          <span className="wordmark__dot" aria-hidden="true" />
+          <img className="wordmark__mark" src="/logo-mark.svg" alt="" width="28" height="28" aria-hidden="true" />
           {site.name}
         </Link>
         <nav className="nav" aria-label="Primary">
