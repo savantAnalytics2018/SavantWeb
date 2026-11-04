@@ -21,19 +21,22 @@ const ICON_R = 34;
 const STEP = 1.9; // s between workflows
 const START = 0.5;
 
-type Icon = { name: string; paths: string[] };
+type Icon = { name: string; color: string; paths: string[] };
 /** Icons drawn in a 64×64 box centred at 0,0 — simple single-stroke pictograms. */
 const ICONS: Icon[] = [
   {
     name: 'case file',
+    color: '#2563EB',
     paths: ['M-20 -28 H 8 L 20 -16 V 28 H -20 Z', 'M8 -28 V -16 H 20', 'M-10 -2 H 10', 'M-10 8 H 10', 'M-10 18 H 2'],
   },
   {
     name: 'database',
+    color: '#0EA5A4',
     paths: ['M-22 -20 A 22 9 0 0 0 22 -20 A 22 9 0 0 0 -22 -20 Z', 'M-22 -20 V 20 A 22 9 0 0 0 22 20 V -20', 'M-22 0 A 22 9 0 0 0 22 0'],
   },
   {
     name: 'batch process',
+    color: '#F59E0B',
     paths: [
       'M0 -26 A 26 26 0 1 1 -0.1 -26',
       'M0 -10 A 10 10 0 1 0 0.1 -10',
@@ -42,10 +45,12 @@ const ICONS: Icon[] = [
   },
   {
     name: 'report',
+    color: '#7C3AED',
     paths: ['M-24 -24 V 24 H 24', 'M-12 24 V 4', 'M0 24 V -8', 'M12 24 V -18'],
   },
   {
     name: 'compliance check',
+    color: '#DC2626',
     paths: ['M0 -28 L 24 -18 V 2 C 24 16, 12 26, 0 30 C -12 26, -24 16, -24 2 V -18 Z', 'M-10 2 L -2 10 L 12 -8'],
   },
 ];
@@ -112,9 +117,9 @@ export default function HeroArt() {
 
         <g fill="none" stroke={INK} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
           {/* Orchestrator */}
-          <circle className="orch-pulse" cx={C.x} cy={C.y} r="22" strokeWidth="1.5" style={{ transformOrigin: `${C.x}px ${C.y}px` }} />
-          <circle cx={C.x} cy={C.y} r="22" strokeWidth="3" />
-          <circle cx={C.x} cy={C.y} r="7" fill={INK} stroke="none" />
+          <circle className="orch-pulse" cx={C.x} cy={C.y} r="22" strokeWidth="1.5" stroke="#2563EB" style={{ transformOrigin: `${C.x}px ${C.y}px` }} />
+          <circle cx={C.x} cy={C.y} r="22" strokeWidth="3" stroke="#2563EB" />
+          <circle cx={C.x} cy={C.y} r="7" fill="#F59E0B" stroke="none" />
 
           {ICONS.map((icon, i) => {
             const angle = (-90 + i * 72) * (Math.PI / 180);
@@ -138,15 +143,15 @@ export default function HeroArt() {
                   </g>
                 </g>
                 {/* live: connector draws, icon draws, done mark */}
-                <line className="draw draw--link" pathLength="1" style={style} x1={x1} y1={y1} x2={x2} y2={y2} />
-                <g transform={`translate(${x} ${y})`}>
+                <line className="draw draw--link" pathLength="1" style={style} x1={x1} y1={y1} x2={x2} y2={y2} stroke={icon.color} />
+                <g transform={`translate(${x} ${y})`} stroke={icon.color}>
                   {icon.paths.map((p, k) => (
                     <path key={k} className="draw draw--icon" pathLength="1" style={{ '--d': `${d + 0.35 + k * 0.12}s` } as CSSProperties} d={p} />
                   ))}
                 </g>
                 <g className="done" style={{ '--d': `${d + 1.25}s`, transformOrigin: `${x + 30}px ${y - 30}px` } as CSSProperties}>
-                  <circle cx={x + 30} cy={y - 30} r="10" fill="#2563EB" stroke="none" />
-                  <path d={`M${x + 25.5} ${y - 30} l3 3 l6 -6.5`} strokeWidth="2.2" />
+                  <circle cx={x + 30} cy={y - 30} r="10" fill={icon.color} stroke="none" />
+                  <path d={`M${x + 25.5} ${y - 30} l3 3 l6 -6.5`} strokeWidth="2.2" stroke="#FFFFFF" />
                 </g>
               </g>
             );
