@@ -5,22 +5,22 @@
 
 :root {
   /* Color */
-  --color-canvas: #f7f6f2;
+  --color-canvas: #f7f7f4;
   --color-surface: #ffffff;
-  --color-ink: #14251f;
-  --color-ink-2: #46574f;
-  --color-green: #173d31;
-  --color-teal: #0b6b60;
-  --color-pale: #e7efe8;
-  --color-border: #d3ddd5; /* decorative only */
-  --color-border-strong: #6f8077; /* ≥3:1 on canvas; use for control boundaries */
+  --color-ink: #141a2b;
+  --color-ink-2: #4a5468;
+  --color-green: #1b2a4a; /* primary navy (token name kept for stability) */
+  --color-teal: #1f4f8f; /* secondary blue (token name kept) */
+  --color-pale: #e9edf4;
+  --color-border: #d6dbe5; /* decorative only */
+  --color-border-strong: #6c768c; /* ≥3:1 on canvas; use for control boundaries */
   --color-accent: #d7a56f; /* warm accent, decorative, never small text */
   --color-sharp: #bf3620; /* text-safe version of the logo red (≥4.5:1 on canvas and white); logo keeps #D7442C */
   --color-error: #9b2c1f;
   --color-error-bg: #fbeeec;
-  --color-success-bg: #e4f1ea;
-  --color-on-dark: #f7f6f2;
-  --color-on-dark-muted: #c9d6cf;
+  --color-success-bg: #e6f1ec;
+  --color-on-dark: #f7f7f4;
+  --color-on-dark-muted: #c3cbdc;
 
   /* Type */
   --font-serif: Georgia, Cambria, 'Times New Roman', serif;
@@ -392,7 +392,7 @@ h4 {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: color-mix(in srgb, var(--color-canvas) 92%, transparent);
+  background: color-mix(in srgb, var(--color-canvas) 94%, transparent);
   backdrop-filter: saturate(150%) blur(8px);
   border-bottom: 1px solid var(--color-border);
 }
@@ -553,6 +553,12 @@ h4 {
   aspect-ratio: 1 / 1;
 }
 .hero-art__toggle {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
   min-height: 44px;
   padding: var(--s-2) var(--s-3);
   background: color-mix(in srgb, var(--color-canvas) 85%, transparent);
@@ -1206,8 +1212,8 @@ h4 {
 /* ---------- Colour pass (v2.3) ---------- */
 .hero {
   background:
-    radial-gradient(60rem 30rem at 85% -10%, rgba(11, 107, 96, 0.14), transparent 60%),
-    radial-gradient(40rem 24rem at 0% 110%, rgba(215, 165, 111, 0.22), transparent 60%),
+    radial-gradient(60rem 30rem at 85% -10%, rgba(27, 42, 74, 0.12), transparent 60%),
+    radial-gradient(40rem 24rem at 0% 110%, rgba(215, 68, 44, 0.12), transparent 60%),
     var(--color-canvas);
 }
 .hero__em {
@@ -1382,3 +1388,23 @@ h4 {
   background: var(--color-sharp);
   color: #fff;
 }
+
+/* Pause control: hidden visually, revealed on keyboard focus (WCAG 2.2.2) */
+.hero-art__toggle:focus-visible {
+  position: static !important;
+  width: auto;
+  height: auto;
+  clip: auto;
+  overflow: visible;
+  margin-top: var(--s-3);
+}
+/* Navy palette: links */
+a { color: #1f4f8f; }
+a:hover { color: var(--color-green); }
+.link-arrow { color: #1f4f8f; }
+.eyebrow { color: #1f4f8f; }
+.do-list__title:hover { color: #1f4f8f; }
+.nav__link:hover { color: #1f4f8f; }
+.btn--primary:hover { background: var(--color-sharp); }
+.card--lead .eyebrow, .specialty--1 .eyebrow { color: #f0b4a6; }
+.wordmark__mark { width: 30px; height: 30px; }

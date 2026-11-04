@@ -7,7 +7,7 @@ import type { ServiceId } from './types';
  */
 
 export const homeHero = {
-  eyebrow: 'For mid-market and federal technology leaders',
+  eyebrow: 'For commercial and federal technology leaders',
   /** "\n" marks deliberate line breaks. The <em> span is highlighted. */
   headline: '94% use AI.\n<em>2%</em> run it at scale.',
   lines: ['The gap is not the model. It is legacy systems and data that are not ready.', 'We fix that — with your team, under your controls.'],

@@ -66,6 +66,8 @@ form is intentionally in preview mode until the owner decisions below are resolv
 
 ## Changelog
 
+- **2026-11-04 v2.5** — Palette: navy primary (#1B2A4A) replaces green; secondary blue (#1F4F8F) replaces teal; logo red (#D7442C / text #BF3620) as the sharp accent. Logo Option A1 (red circle, blue connected dots, black end dot). Pause-animation control hidden visually, revealed on keyboard focus. Eyebrow: "For commercial and federal technology leaders". OG image regenerated.
+
 - **2026-11-04 v2.4** — New logo mark (line-chart tile, in the family of the existing Savant logo) in the header; full favicon set (.ico, SVG, PNG 32/192/512, Apple touch icon, web manifest). Sharp accent (logo red) used sparingly: highlighted stat, evidence numerals (light tint on green), list numerals, Specialty 02 outline, CTA hover, active nav underline.
 
 - **2026-11-04 v2.3** — Research-led hook: "94% use AI. 2% run it at scale." (Kaufman Rossin 2026) with a cited evidence strip (RSM 2026, Kaufman Rossin 2026, Gartner). New "Where we are deepest" section: Legacy migration + Digital twins and evaluation. Colour pass: hero gradient, highlighted stat, dark evidence band, coloured specialty cards, accent numerals. Layout otherwise unchanged.

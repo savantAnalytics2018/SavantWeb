@@ -18,32 +18,64 @@
 
 reduced-motion: running animations = 0 | pause button present = 0
 normal: running animations = 28
-after pause click: play states = paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused,paused
-after reload (session persists): button = Resume animation
-tab order: Skip to main content > Savant Analytics > Services > Approach > About > Contact > Talk through your situation
-focus outline on focused element: 3px solid
-skip link -> hash: #main | active = main
-mobile nav open, links: 4 | toggle label: Close
-after Escape, toggle label: Menu | focus on toggle: true
-touch targets (360px): Contact:0x0 | Menu:75x44 | Talk through your :257x45 | See how we work:185x45 | Pause animation:146x44 | Talk through your :257x45
-/                          {"h1":1,"skips":0,"landmarks":4,"title":"Savant Analytics — Enterprise AI consulting","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/"}
-/services                  {"h1":1,"skips":0,"landmarks":4,"title":"Services — Savant Analytics","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/services"}
-/services/ai-governance    {"h1":1,"skips":0,"landmarks":4,"title":"AI governance and operational controls — Savant Analytics","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/services/ai-governance"}
-/approach                  {"h1":1,"skips":0,"landmarks":4,"title":"Approach — Savant Analytics","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/approach"}
-/about                     {"h1":1,"skips":0,"landmarks":4,"title":"About — Savant Analytics","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/about"}
-/contact                   {"h1":1,"skips":0,"landmarks":4,"title":"Contact — Savant Analytics","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/contact"}
-/privacy                   {"h1":1,"skips":0,"landmarks":4,"title":"Privacy — Savant Analytics","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/privacy"}
-/missing                   {"h1":1,"skips":0,"landmarks":4,"title":"Page not found — Savant Analytics","robots":"noindex, nofollow","canonical":"https://savantanalytics.net/404"}
 node:internal/process/promises:394
     triggerUncaughtException(err, true /* fromPromise */);
     ^
 
 page.click: Timeout 30000ms exceeded.
 Call log:
-[2m  - waiting for locator('text=Explore services')[22m
+[2m  - waiting for locator('.hero-art__toggle')[22m
+[2m    - locator resolved to <button type="button" aria-pressed="false" class="hero-art__toggle">Pause animation</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <section class="hero" aria-labelledby="hero-heading">…</section> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <section class="hero" aria-labelledby="hero-heading">…</section> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    56 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <section class="hero" aria-labelledby="hero-heading">…</section> intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
 
-    at /home/claude/savantanalytics-site/qa/a11y.cjs:86:14 {
-  log: [ "  - waiting for locator('text=Explore services')" ],
+    at /home/claude/savantanalytics-site/qa/a11y.cjs:37:14 {
+  log: [
+    "  - waiting for locator('.hero-art__toggle')",
+    '    - locator resolved to <button type="button" aria-pressed="false" class="hero-art__toggle">Pause animation</button>',
+    '  - attempting click action',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <section class="hero" aria-labelledby="hero-heading">…</section> intercepts pointer events',
+    '    - retrying click action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <section class="hero" aria-labelledby="hero-heading">…</section> intercepts pointer events',
+    '    - retrying click action',
+    '      - waiting 100ms',
+    '    56 × waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <section class="hero" aria-labelledby="hero-heading">…</section> intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms'
+  ],
   name: 'TimeoutError'
 }
 

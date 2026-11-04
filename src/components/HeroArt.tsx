@@ -14,7 +14,7 @@ const STORAGE_KEY = 'sa-hero-animation';
  * hidden; honors prefers-reduced-motion; visitor pause control.
  */
 
-const INK = '#173D31';
+const INK = '#1B2A4A';
 const C = { x: 300, y: 300 };
 const RADIUS = 178;
 const ICON_R = 34;
@@ -145,7 +145,7 @@ export default function HeroArt() {
                   ))}
                 </g>
                 <g className="done" style={{ '--d': `${d + 1.25}s`, transformOrigin: `${x + 30}px ${y - 30}px` } as CSSProperties}>
-                  <circle cx={x + 30} cy={y - 30} r="10" fill="#D7A56F" stroke="none" />
+                  <circle cx={x + 30} cy={y - 30} r="10" fill="#D7442C" stroke="none" />
                   <path d={`M${x + 25.5} ${y - 30} l3 3 l6 -6.5`} strokeWidth="2.2" />
                 </g>
               </g>
