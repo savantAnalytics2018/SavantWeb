@@ -18,7 +18,7 @@ describe('routing and page rendering', () => {
     renderAt('/');
     const h1s = screen.getAllByRole('heading', { level: 1 });
     expect(h1s).toHaveLength(1);
-    expect(h1s[0]).toHaveTextContent(hero.headline.replace(/\n/g, ''));
+    expect(h1s[0]).toHaveTextContent(hero.headline.replace(/\n/g, '').replace(/<\/?em>/g, ''));
     const cta = screen.getAllByRole('link', { name: hero.primaryCta.label })[0];
     expect(cta).toHaveAttribute('href', '/contact');
     expect(screen.getByRole('link', { name: 'Skip to main content' })).toBeInTheDocument();

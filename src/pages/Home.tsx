@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import HeroArt from '@/components/HeroArt';
 import { Faq } from '@/components/Sections';
-import { finalCta, homeHero, howItStarts, painPoints, whatWeDo, whyUs } from '@/content/home';
+import { evidence, finalCta, homeHero, howItStarts, painPoints, specialties, whatWeDo, whyUs } from '@/content/home';
 import { serviceById, servicePath } from '@/content/services';
 import { faq } from '@/content/approach';
 import { pageMeta } from '@/content/meta';
@@ -19,12 +19,23 @@ export default function Home() {
           <div className="hero__copy">
             <p className="eyebrow">{homeHero.eyebrow}</p>
             <h1 id="hero-heading">
-              {homeHero.headline.split('\n').map((l, i, arr) => (
-                <span key={l}>
-                  {l}
-                  {i < arr.length - 1 && <br />}
-                </span>
-              ))}
+              {homeHero.headline.split('\n').map((l, i, arr) => {
+                const m = l.match(/^(.*?)<em>(.*?)<\/em>(.*)$/);
+                return (
+                  <span key={l}>
+                    {m ? (
+                      <>
+                        {m[1]}
+                        <em className="hero__em">{m[2]}</em>
+                        {m[3]}
+                      </>
+                    ) : (
+                      l
+                    )}
+                    {i < arr.length - 1 && <br />}
+                  </span>
+                );
+              })}
             </h1>
             <p className="lede">
               {homeHero.lines.map((l, i) => (
@@ -42,9 +53,34 @@ export default function Home() {
                 {homeHero.secondaryCta.label}
               </Link>
             </div>
-            <p className="hero__micro">{homeHero.micro}</p>
+            <p className="hero__micro">
+              {homeHero.micro}{' '}
+              <span className="hero__source">
+                Source:{' '}
+                <a href={homeHero.source.href} rel="noopener">
+                  {homeHero.source.label}
+                </a>
+              </span>
+            </p>
           </div>
           <HeroArt />
+        </div>
+      </section>
+
+      {/* Evidence strip */}
+      <section className="evidence" aria-label="What the research says">
+        <div className="container">
+          <ul className="evidence__list">
+            {evidence.map((e) => (
+              <li key={e.stat}>
+                <span className="evidence__stat">{e.stat}</span>
+                <span className="evidence__line">{e.line}</span>
+                <a className="evidence__src" href={e.href} rel="noopener">
+                  {e.source}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
@@ -59,6 +95,36 @@ export default function Home() {
               <li key={p}>{p}</li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* Specialties */}
+      <section className="section section--specialties" aria-labelledby="spec-heading">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow">Where we are deepest</p>
+            <h2 id="spec-heading">Two things we have done many times.</h2>
+          </div>
+          <div className="grid">
+            {specialties.map((sp, i) => (
+              <article key={sp.id} className={`col-4 col-md-6 specialty specialty--${i + 1}`}>
+                <p className="eyebrow">{sp.eyebrow}</p>
+                <h3>{sp.title}</h3>
+                <p className="specialty__lead">{sp.lines[0]}</p>
+                <p>{sp.lines[1]}</p>
+                <ul className="checklist">
+                  {sp.points.map((pt) => (
+                    <li key={pt}>{pt}</li>
+                  ))}
+                </ul>
+                <p>
+                  <Link to={servicePath(sp.id)} className="link-arrow">
+                    {sp.cta}
+                  </Link>
+                </p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -24,3 +24,4 @@ Source types: **Owner** (supplied by Saif / the brief), **Proposed** (marketing 
 | Legacy route `/ai` and `/migration` | Observed (brief register) | Redirect targets proposed; owner confirm (D-06) | `vercel.json` |
 | Privacy: processor, retention, hosting provider | Missing | Rendered as "Owner review required" notices | `src/pages/Privacy.tsx` |
 | Social-sharing image | Proposed (brand tokens only, no claims) | OK | `public/og-image.png` |
+| Statistics on homepage (94%/2%, 34%, 41%/55%, 60%) | Verified external (Kaufman Rossin 2026; RSM Middle Market AI Survey 2026; Gartner) | Cited inline with links; attributed, not claims about Savant | Hero, evidence strip |

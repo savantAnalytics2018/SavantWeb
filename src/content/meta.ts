@@ -6,7 +6,7 @@ export const pageMeta: Record<string, PageMeta> = {
     path: '/',
     title: 'Savant Analytics — Enterprise AI consulting',
     description:
-      'AI for the systems you already run. Strategy, legacy modernization, evaluation, deployment, and governance for enterprise and federal teams.',
+      '94% of mid-market firms use AI; 2% run it at scale. Savant Analytics closes the gap: legacy migration, digital twins and evaluation, deployment, and governance.',
   },
   services: {
     path: '/services',

@@ -66,6 +66,8 @@ form is intentionally in preview mode until the owner decisions below are resolv
 
 ## Changelog
 
+- **2026-11-04 v2.3** — Research-led hook: "94% use AI. 2% run it at scale." (Kaufman Rossin 2026) with a cited evidence strip (RSM 2026, Kaufman Rossin 2026, Gartner). New "Where we are deepest" section: Legacy migration + Digital twins and evaluation. Colour pass: hero gradient, highlighted stat, dark evidence band, coloured specialty cards, accent numerals. Layout otherwise unchanged.
+
 - **2026-11-02 v2.2** — Fix redirect loop on /services, /approach, /about, /contact, /privacy (and service pages): Worker assets now `drop-trailing-slash`; duplicate trailing-slash rules removed from `_redirects`. Verified with wrangler dev on all routes.
 
 - **2026-11-02 v2.1** — SBA EDWOSB and WOSB certification badges added to About and footer.
