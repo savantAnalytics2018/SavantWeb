@@ -66,6 +66,8 @@ form is intentionally in preview mode until the owner decisions below are resolv
 
 ## Changelog
 
+- **2026-11-04 v2.6** — Palette 2 "Charcoal + electric blue" chosen by owner from four rendered options: charcoal #1F2937 bands, electric blue #1D4ED8 (text) / #2563EB (graphic), amber #F59E0B accent, cool off-white canvas. Logo A1 recoloured (blue ring, blue dots, amber end dot); favicons and OG image regenerated. Contrast re-verified.
+
 - **2026-11-04 v2.5** — Palette: navy primary (#1B2A4A) replaces green; secondary blue (#1F4F8F) replaces teal; logo red (#D7442C / text #BF3620) as the sharp accent. Logo Option A1 (red circle, blue connected dots, black end dot). Pause-animation control hidden visually, revealed on keyboard focus. Eyebrow: "For commercial and federal technology leaders". OG image regenerated.
 
 - **2026-11-04 v2.4** — New logo mark (line-chart tile, in the family of the existing Savant logo) in the header; full favicon set (.ico, SVG, PNG 32/192/512, Apple touch icon, web manifest). Sharp accent (logo red) used sparingly: highlighted stat, evidence numerals (light tint on green), list numerals, Specialty 02 outline, CTA hover, active nav underline.

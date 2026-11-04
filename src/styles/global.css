@@ -5,22 +5,22 @@
 
 :root {
   /* Color */
-  --color-canvas: #f7f7f4;
+  --color-canvas: #f6f7f9;
   --color-surface: #ffffff;
-  --color-ink: #141a2b;
-  --color-ink-2: #4a5468;
-  --color-green: #1b2a4a; /* primary navy (token name kept for stability) */
-  --color-teal: #1f4f8f; /* secondary blue (token name kept) */
-  --color-pale: #e9edf4;
-  --color-border: #d6dbe5; /* decorative only */
-  --color-border-strong: #6c768c; /* ≥3:1 on canvas; use for control boundaries */
-  --color-accent: #d7a56f; /* warm accent, decorative, never small text */
-  --color-sharp: #bf3620; /* text-safe version of the logo red (≥4.5:1 on canvas and white); logo keeps #D7442C */
+  --color-ink: #15181d;
+  --color-ink-2: #4b5563;
+  --color-green: #1f2937; /* primary charcoal (token name kept for stability) */
+  --color-teal: #1d4ed8; /* electric blue, text-safe (token name kept) */
+  --color-pale: #e8eef9;
+  --color-border: #d7dce4; /* decorative only */
+  --color-border-strong: #6b7280; /* ≥3:1 on canvas; use for control boundaries */
+  --color-accent: #f59e0b; /* amber accent, decorative, never small text */
+  --color-sharp: #1d4ed8; /* sharp accent = electric blue (text-safe) */
   --color-error: #9b2c1f;
   --color-error-bg: #fbeeec;
   --color-success-bg: #e6f1ec;
-  --color-on-dark: #f7f7f4;
-  --color-on-dark-muted: #c3cbdc;
+  --color-on-dark: #f6f7f9;
+  --color-on-dark-muted: #c3cad6;
 
   /* Type */
   --font-serif: Georgia, Cambria, 'Times New Roman', serif;
@@ -1212,8 +1212,8 @@ h4 {
 /* ---------- Colour pass (v2.3) ---------- */
 .hero {
   background:
-    radial-gradient(60rem 30rem at 85% -10%, rgba(27, 42, 74, 0.12), transparent 60%),
-    radial-gradient(40rem 24rem at 0% 110%, rgba(215, 68, 44, 0.12), transparent 60%),
+    radial-gradient(60rem 30rem at 85% -10%, rgba(37, 99, 235, 0.14), transparent 60%),
+    radial-gradient(40rem 24rem at 0% 110%, rgba(245, 158, 11, 0.14), transparent 60%),
     var(--color-canvas);
 }
 .hero__em {
@@ -1356,7 +1356,7 @@ h4 {
   opacity: 0.18;
 }
 .evidence__stat {
-  color: #f0b4a6; /* light tint of the sharp red for contrast on deep green (≈8:1) */
+  color: #93b4ff; /* light blue tint on charcoal (≈8:1) */
 }
 .pain-list li:nth-child(even) {
   border-left-color: var(--color-sharp);
@@ -1366,7 +1366,7 @@ h4 {
   color: var(--color-sharp);
 }
 .specialty--1 .eyebrow {
-  color: #f0b4a6;
+  color: #93b4ff;
 }
 .specialty--2 {
   border-color: var(--color-sharp);
@@ -1399,12 +1399,12 @@ h4 {
   margin-top: var(--s-3);
 }
 /* Navy palette: links */
-a { color: #1f4f8f; }
+a { color: var(--color-teal); }
 a:hover { color: var(--color-green); }
-.link-arrow { color: #1f4f8f; }
-.eyebrow { color: #1f4f8f; }
-.do-list__title:hover { color: #1f4f8f; }
-.nav__link:hover { color: #1f4f8f; }
+.link-arrow { color: var(--color-teal); }
+.eyebrow { color: var(--color-teal); }
+.do-list__title:hover { color: var(--color-teal); }
+.nav__link:hover { color: var(--color-teal); }
 .btn--primary:hover { background: var(--color-sharp); }
-.card--lead .eyebrow, .specialty--1 .eyebrow { color: #f0b4a6; }
+.card--lead .eyebrow, .specialty--1 .eyebrow { color: #93b4ff; }
 .wordmark__mark { width: 30px; height: 30px; }
