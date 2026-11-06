@@ -19,11 +19,13 @@ function bridgeEnv(env: Env): void {
   // The shared handlers read process.env; bridge Cloudflare's env bindings.
   const g = globalThis as unknown as { process?: { env: Record<string, string | undefined> } };
   g.process = g.process ?? { env: {} };
-  g.process.env.CONTACT_TO = env.CONTACT_TO;
-  g.process.env.CONTACT_FROM = env.CONTACT_FROM;
-  g.process.env.RESEND_API_KEY = env.RESEND_API_KEY;
-  g.process.env.STUDY_TO = env.STUDY_TO;
-  g.process.env.STUDY_TURNAROUND = env.STUDY_TURNAROUND;
+  for (const key of ['CONTACT_TO', 'CONTACT_FROM', 'RESEND_API_KEY', 'STUDY_TO', 'STUDY_TURNAROUND'] as const) {
+    // process.env can stringify undefined; missing bindings must stay absent.
+    // Delete stale values too, since a Worker isolate can handle many requests.
+    const value = env[key];
+    if (value === undefined) delete g.process.env[key];
+    else g.process.env[key] = value;
+  }
 }
 
 const methodNotAllowed = () =>
