@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
 import HeroArt from '@/components/HeroArt';
+import HeroWarm from '@/components/HeroWarm';
+
+const WARM = (import.meta.env.VITE_THEME ?? '').trim() === 'warm';
 import { Faq } from '@/components/Sections';
 import { evidence, finalCta, homeHero, howItStarts, painPoints, specialties, whatWeDo, whyUs } from '@/content/home';
 import { serviceById, servicePath } from '@/content/services';
@@ -13,59 +16,65 @@ export default function Home() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="hero" aria-labelledby="hero-heading">
-        <div className="container hero__grid">
-          <div className="hero__copy">
-            <p className="eyebrow">{homeHero.eyebrow}</p>
-            <h1 id="hero-heading">
-              {homeHero.headline.split('\n').map((l, i, arr) => {
-                const m = l.match(/^(.*?)<em>(.*?)<\/em>(.*)$/);
-                return (
-                  <span key={l}>
-                    {m ? (
-                      <>
-                        {m[1]}
-                        <em className="hero__em">{m[2]}</em>
-                        {m[3]}
-                      </>
-                    ) : (
-                      l
-                    )}
-                    {i < arr.length - 1 && <br />}
+      {WARM ? (
+        <HeroWarm />
+      ) : (
+        <>
+          {/* Hero */}
+          <section className="hero" aria-labelledby="hero-heading">
+            <div className="container hero__grid">
+              <div className="hero__copy">
+                <p className="eyebrow">{homeHero.eyebrow}</p>
+                <h1 id="hero-heading">
+                  {homeHero.headline.split('\n').map((l, i, arr) => {
+                    const m = l.match(/^(.*?)<em>(.*?)<\/em>(.*)$/);
+                    return (
+                      <span key={l}>
+                        {m ? (
+                          <>
+                            {m[1]}
+                            <em className="hero__em">{m[2]}</em>
+                            {m[3]}
+                          </>
+                        ) : (
+                          l
+                        )}
+                        {i < arr.length - 1 && <br />}
+                      </span>
+                    );
+                  })}
+                </h1>
+                <p className="lede">
+                  {homeHero.lines.map((l, i) => (
+                    <span key={l} className="line">
+                      {l}
+                      {i < homeHero.lines.length - 1 && <br />}
+                    </span>
+                  ))}
+                </p>
+                <div className="hero__actions">
+                  <Link to={homeHero.primaryCta.href} className="btn btn--primary" onClick={() => track('contact_cta_click', { location: 'hero' })}>
+                    {homeHero.primaryCta.label}
+                  </Link>
+                  <Link to={homeHero.secondaryCta.href} className="btn btn--secondary">
+                    {homeHero.secondaryCta.label}
+                  </Link>
+                </div>
+                <p className="hero__micro">
+                  {homeHero.micro}{' '}
+                  <span className="hero__source">
+                    Source:{' '}
+                    <a href={homeHero.source.href} rel="noopener">
+                      {homeHero.source.label}
+                    </a>
                   </span>
-                );
-              })}
-            </h1>
-            <p className="lede">
-              {homeHero.lines.map((l, i) => (
-                <span key={l} className="line">
-                  {l}
-                  {i < homeHero.lines.length - 1 && <br />}
-                </span>
-              ))}
-            </p>
-            <div className="hero__actions">
-              <Link to={homeHero.primaryCta.href} className="btn btn--primary" onClick={() => track('contact_cta_click', { location: 'hero' })}>
-                {homeHero.primaryCta.label}
-              </Link>
-              <Link to={homeHero.secondaryCta.href} className="btn btn--secondary">
-                {homeHero.secondaryCta.label}
-              </Link>
+                </p>
+              </div>
+              <HeroArt />
             </div>
-            <p className="hero__micro">
-              {homeHero.micro}{' '}
-              <span className="hero__source">
-                Source:{' '}
-                <a href={homeHero.source.href} rel="noopener">
-                  {homeHero.source.label}
-                </a>
-              </span>
-            </p>
-          </div>
-          <HeroArt />
-        </div>
-      </section>
+          </section>
+        </>
+      )}
 
       {/* Evidence strip */}
       <section className="evidence" aria-label="What the research says">

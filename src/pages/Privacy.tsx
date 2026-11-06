@@ -2,6 +2,7 @@ import { PageHead } from '@/components/Sections';
 import { site } from '@/content/site';
 import { pageMeta } from '@/content/meta';
 import { contactConfig } from '@/lib/contactConfig';
+import { studyConfig } from '@/lib/studyConfig';
 import { useHead } from '@/lib/head';
 
 /**
@@ -36,10 +37,25 @@ export default function Privacy() {
               nothing and no information is collected through it.
             </p>
           )}
+          <h2>Research requests (Market Research)</h2>
+          {studyConfig.enabled ? (
+            <p>
+              When you submit a research request, we receive the decision, audience, and concepts you describe, plus your
+              name, organization, work email, and optional role. We use this only to prepare and email your research
+              snapshot. The request is delivered to the Savant team
+              by email; it is not published, shared with third parties, or used to train AI models. You can ask us to
+              delete it at any time. The snapshot itself is produced with AI-simulated respondents, not real people.
+            </p>
+          ) : (
+            <p>
+              The research-request form is not yet connected to a delivery destination. Until it is, submitting the form
+              sends nothing and no information is collected through it.
+            </p>
+          )}
           <h2>Where inquiries go and how long they are kept</h2>
           <p className="notice notice--warning">
             <strong>Owner review required before launch.</strong> The delivery destination (email provider or service),
-            the processor involved, and the retention period for inquiries must be confirmed by the site owner and
+            the processor involved, and the retention period for inquiries and research requests must be confirmed by the site owner and
             recorded here before this page is published. Nothing in this section should be invented.
           </p>
           <h2>Hosting</h2>

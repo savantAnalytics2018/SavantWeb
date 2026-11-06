@@ -11,7 +11,14 @@ export type AnalyticsEvent =
   | 'inquiry_submitted'
   | 'inquiry_accepted'
   | 'inquiry_failed'
-  | 'animation_toggled';
+  | 'animation_toggled'
+  | 'tyi_landing_view'
+  | 'tyi_cta_click'
+  | 'tyi_form_start'
+  | 'tyi_form_step'
+  | 'tyi_form_submitted'
+  | 'tyi_form_accepted'
+  | 'tyi_form_failed';
 
 type Payload = Record<string, string | number | boolean>;
 

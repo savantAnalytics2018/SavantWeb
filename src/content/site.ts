@@ -28,6 +28,7 @@ export const navigation: NavItem[] = [
   { id: 'services', label: 'Services', href: '/services' },
   { id: 'approach', label: 'Approach', href: '/approach' },
   { id: 'about', label: 'About', href: '/about' },
+  { id: 'market-research', label: 'Digital-Twin Market Research', sub: 'Run It', href: '/market-research' },
 ];
 
 export const headerCta: Cta = { label: 'Contact', href: '/contact' };
@@ -51,6 +52,7 @@ export const footer = {
     { id: 'services', label: 'Services', href: '/services' },
     { id: 'approach', label: 'Approach', href: '/approach' },
     { id: 'about', label: 'About', href: '/about' },
+    { id: 'market-research', label: 'Digital-Twin Market Research', sub: 'Run It', href: '/market-research' },
     { id: 'contact', label: 'Contact', href: '/contact' },
     { id: 'privacy', label: 'Privacy', href: '/privacy' },
   ] as NavItem[],

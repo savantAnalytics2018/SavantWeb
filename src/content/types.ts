@@ -70,6 +70,8 @@ export interface NavItem {
   id: string;
   label: string;
   href: string;
+  /** Optional smaller second line under the label (header and mobile menu). */
+  sub?: string;
 }
 
 export interface Cta {

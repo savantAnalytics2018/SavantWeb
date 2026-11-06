@@ -32,6 +32,17 @@ export const pageMeta: Record<string, PageMeta> = {
     description:
       'Describe your business problem, constraints, and desired next step. Savant Analytics will respond with a view on fit and a suggested first conversation.',
   },
+  testYourIdea: {
+    path: '/market-research',
+    title: 'Digital-Twin Market Research — run it here, free — Savant Analytics',
+    description:
+      'Describe your product, price, or message decision in 10 minutes. Savant tests it with a simulated audience and sends a reviewed research snapshot — free.',
+  },
+  startStudy: {
+    path: '/market-research/start',
+    title: 'Start your free study — Savant Analytics',
+    description: 'Four short screens: your decision, your audience, what to compare, and where to send the results.',
+  },
   privacy: {
     path: '/privacy',
     title: 'Privacy — Savant Analytics',

@@ -7,6 +7,8 @@ import Approach from '@/pages/Approach';
 import About from '@/pages/About';
 import Contact from '@/pages/Contact';
 import Privacy from '@/pages/Privacy';
+import TestYourIdea from '@/pages/TestYourIdea';
+import StartStudy from '@/pages/StartStudy';
 import NotFound from '@/pages/NotFound';
 
 export default function App() {
@@ -19,6 +21,8 @@ export default function App() {
         <Route path="approach" element={<Approach />} />
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
+        <Route path="market-research" element={<TestYourIdea />} />
+        <Route path="market-research/start" element={<StartStudy />} />
         <Route path="privacy" element={<Privacy />} />
         <Route path="*" element={<NotFound />} />
       </Route>

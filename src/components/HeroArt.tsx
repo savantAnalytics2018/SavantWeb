@@ -119,7 +119,7 @@ export default function HeroArt() {
           {/* Orchestrator */}
           <circle className="orch-pulse" cx={C.x} cy={C.y} r="22" strokeWidth="1.5" stroke="#2563EB" style={{ transformOrigin: `${C.x}px ${C.y}px` }} />
           <circle cx={C.x} cy={C.y} r="22" strokeWidth="3" stroke="#2563EB" />
-          <circle cx={C.x} cy={C.y} r="7" fill="#F59E0B" stroke="none" />
+          <circle cx={C.x} cy={C.y} r="7" fill="#D7263D" stroke="none" />
 
           {ICONS.map((icon, i) => {
             const angle = (-90 + i * 72) * (Math.PI / 180);

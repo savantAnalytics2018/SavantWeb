@@ -1,0 +1,18 @@
+{
+  // TEST deployment of the site as a SECOND Worker ("savantweb-test").
+  // It never touches the production Worker ("savantweb") or savantanalytics.net.
+  // Deploy command for the test Worker: `npx wrangler deploy --config wrangler.test.jsonc`
+  // Full setup: docs/DEPLOY-TEST-WORKER.md
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "savantweb-test",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-10-01",
+  "build": { "command": "npm run build" },
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "html_handling": "drop-trailing-slash"
+  },
+  "observability": { "enabled": true }
+}

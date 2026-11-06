@@ -5,6 +5,10 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import './styles/global.css';
 
+// Optional visual theme (e.g. VITE_THEME=warm) — applied before first paint of the client.
+const theme = (import.meta.env.VITE_THEME ?? '').trim();
+if (theme) document.documentElement.dataset.theme = theme;
+
 const root = document.getElementById('root')!;
 
 if (import.meta.env.VITE_ROUTER === 'hash') {

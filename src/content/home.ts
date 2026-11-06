@@ -2,12 +2,12 @@ import type { ServiceId } from './types';
 
 /**
  * Homepage copy. Short lines, direct address, one audience:
- * mid-market and federal technology leaders with legacy systems and an AI mandate.
+ * enterprise technology leaders with legacy systems and an AI mandate.
  * Statistics are cited external research (see `evidence`), not claims about Savant.
  */
 
 export const homeHero = {
-  eyebrow: 'For commercial and federal technology leaders',
+  eyebrow: 'Enterprise AI — federal and commercial',
   /** "\n" marks deliberate line breaks. The <em> span is highlighted. */
   headline: '94% use AI.\n<em>2%</em> run it at scale.',
   lines: ['The gap is not the model. It is legacy systems and data that are not ready.', 'We fix that — with your team, under your controls.'],

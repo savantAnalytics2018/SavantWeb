@@ -1,7 +1,15 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState, type ReactElement } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { footer, headerCta, navigation, site } from '@/content/site';
 import { track } from '@/lib/analytics';
+
+const WARM = (import.meta.env.VITE_THEME ?? '').trim() === 'warm';
+const NAV_ICONS: Record<string, ReactElement> = {
+  services: <path d="M4 5 h6 v6 H4 Z M14 5 h6 v6 h-6 Z M4 15 h6 v6 H4 Z M14 15 h6 v6 h-6 Z" />,
+  approach: <path d="M4 18 c4 0 4 -12 8 -12 s4 12 8 12 M18 6 h2 v2" />,
+  about: <path d="M8 11 a3 3 0 1 0 0.1 0 M16 11 a3 3 0 1 0 0.1 0 M3 20 c1 -3 3 -4 5 -4 s4 1 5 4 M11 20 c1 -3 3 -4 5 -4 s4 1 5 4" />,
+  'market-research': <path d="M4 19 h16 M7 19 v-6 M12 19 v-10 M17 19 v-4" />,
+};
 
 function Header() {
   const [open, setOpen] = useState(false);
@@ -28,12 +36,26 @@ function Header() {
       <div className="container header__inner">
         <Link to="/" className="wordmark" aria-label={`${site.name} home`}>
           <img className="wordmark__mark" src="/logo-mark.svg" alt="" width="28" height="28" aria-hidden="true" />
-          {site.name}
+          <span className="wordmark__text">
+            <span className="wordmark__a">Savant</span> <span className="wordmark__b">Analytics</span>
+          </span>
         </Link>
         <nav className="nav" aria-label="Primary">
           {navigation.map((item) => (
             <NavLink key={item.id} to={item.href} className="nav__link">
-              {item.label}
+              {WARM && NAV_ICONS[item.id] && (
+                <svg className="nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  {NAV_ICONS[item.id]}
+                </svg>
+              )}
+              {item.sub ? (
+                <span className="nav__stack">
+                  <span>{item.label}</span>
+                  <small>{item.sub}</small>
+                </span>
+              ) : (
+                item.label
+              )}
             </NavLink>
           ))}
           <Link
@@ -59,7 +81,10 @@ function Header() {
         <ul>
           {navigation.map((item) => (
             <li key={item.id}>
-              <NavLink to={item.href}>{item.label}</NavLink>
+              <NavLink to={item.href}>
+                {item.label}
+                {item.sub ? <small className="menu__sub"> — {item.sub}</small> : null}
+              </NavLink>
             </li>
           ))}
           <li>
@@ -79,7 +104,9 @@ function Footer() {
       <div className="container footer__inner">
         <div>
           <p>
-            <strong style={{ color: 'var(--color-ink)' }}>{site.name}</strong>
+            <strong className="wordmark__text">
+              <span className="wordmark__a">Savant</span> <span className="wordmark__b">Analytics</span>
+            </strong>
           </p>
           <p>{footer.line}</p>
           {site.certifications.length > 0 && (
