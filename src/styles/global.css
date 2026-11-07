@@ -1472,11 +1472,49 @@ a:hover { color: var(--color-green); }
     var(--color-canvas);
   border-bottom: 1px solid var(--color-border);
 }
-.tyi-hero__inner > * {
-  max-width: 50rem;
+.tyi-hero .eyebrow {
+  margin-bottom: var(--s-5);
 }
-.tyi-hero__inner > * + * {
-  margin-top: var(--s-4);
+.tyi-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--s-7);
+  align-items: start;
+}
+.tyi-split__col--solution {
+  border-left: 1px solid var(--color-border);
+  padding-left: var(--s-7);
+}
+.tyi-split__col > * + * {
+  margin-top: var(--s-3);
+}
+.tyi-label {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.tyi-label--problem {
+  color: var(--color-sharp);
+}
+.tyi-label--solution {
+  color: var(--color-teal);
+}
+.tyi-trustline {
+  color: var(--color-ink-2);
+}
+@media (max-width: 56rem) {
+  .tyi-split {
+    grid-template-columns: 1fr;
+    gap: var(--s-6);
+  }
+  .tyi-split__col--solution {
+    border-left: 0;
+    padding-left: 0;
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--s-6);
+  }
 }
 .tyi-hero .h1--page {
   margin-top: var(--s-3);
@@ -1487,7 +1525,7 @@ a:hover { color: var(--color-green); }
   color: var(--color-ink);
 }
 .tyi-hero .hero__actions {
-  margin-top: var(--s-6);
+  margin-top: var(--s-5);
 }
 .tyi-trust {
   list-style: none;
@@ -2059,12 +2097,10 @@ a:hover { color: var(--color-green); }
 /* ---------- Problem-first hero ---------- */
 .tyi-stat {
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 4.2vw, 3.25rem);
-  line-height: 1.1;
+  font-size: clamp(1.9rem, 3.4vw, 2.75rem);
+  line-height: 1.12;
   letter-spacing: -0.01em;
   color: var(--color-ink);
-  display: grid;
-  gap: var(--s-2);
 }
 .tyi-stat__source {
   font-family: var(--font-sans);
@@ -2080,7 +2116,7 @@ a:hover { color: var(--color-green); }
 .tyi-headline {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
   line-height: 1.35;
   letter-spacing: 0;
   color: var(--color-ink);

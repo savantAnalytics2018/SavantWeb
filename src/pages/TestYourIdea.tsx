@@ -13,32 +13,33 @@ export default function TestYourIdea() {
 
   return (
     <>
-      {/* Hero — problem first, backed by data */}
+      {/* Hero — problem, then our solution */}
       <section className="tyi-hero" aria-labelledby="tyi-heading">
-        <div className="container tyi-hero__inner">
+        <div className="container">
           <p className="eyebrow">{tyiHero.eyebrow}</p>
-          <p className="tyi-stat">
-            {tyiHero.stat}
-            <span className="tyi-stat__source">{tyiHero.statSource}</span>
-          </p>
-          <p className="tyi-problem">{tyiHero.problem}</p>
-          <h1 id="tyi-heading" className="tyi-headline">
-            {tyiHero.headline}
-          </h1>
-          <div className="hero__actions">
-            <Link to={tyiHero.primaryCta.href} className="btn btn--primary" onClick={() => track('tyi_cta_click', { location: 'hero' })}>
-              {tyiHero.primaryCta.label}
-            </Link>
-            <a href={tyiHero.secondaryCta.href} className="btn btn--secondary">
-              {tyiHero.secondaryCta.label}
-            </a>
+          <div className="tyi-split">
+            <div className="tyi-split__col tyi-split__col--problem">
+              <p className="tyi-label tyi-label--problem">{tyiHero.problemLabel}</p>
+              <p className="tyi-stat">{tyiHero.stat}</p>
+              <p className="tyi-problem">{tyiHero.problem}</p>
+              <p className="tyi-stat__source">{tyiHero.statSource}</p>
+            </div>
+            <div className="tyi-split__col tyi-split__col--solution">
+              <p className="tyi-label tyi-label--solution">{tyiHero.solutionLabel}</p>
+              <h1 id="tyi-heading" className="tyi-headline">
+                {tyiHero.headline}
+              </h1>
+              <div className="hero__actions">
+                <Link to={tyiHero.primaryCta.href} className="btn btn--primary" onClick={() => track('tyi_cta_click', { location: 'hero' })}>
+                  {tyiHero.primaryCta.label}
+                </Link>
+                <a href={tyiHero.secondaryCta.href} className="btn btn--secondary">
+                  {tyiHero.secondaryCta.label}
+                </a>
+              </div>
+              <p className="tyi-trustline small">{tyiHero.trust.join(' · ')}</p>
+            </div>
           </div>
-          <ul className="tyi-trust" aria-label="What to expect">
-            {tyiHero.trust.map((t) => (
-              <li key={t}>{t}</li>
-            ))}
-          </ul>
-          <p className="tyi-disclosure small">{tyiHero.disclosure}</p>
         </div>
       </section>
 
@@ -78,6 +79,7 @@ export default function TestYourIdea() {
               </li>
             ))}
           </ol>
+          <p className="tyi-disclosure small">{tyiHero.disclosure}</p>
           <p className="muted">
             {whoWeAre.line}{' '}
             <Link to={whoWeAre.link.href} className="link-arrow">

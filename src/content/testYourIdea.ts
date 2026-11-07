@@ -18,12 +18,14 @@ export const tyiPaths = {
 export const tyiDisclosure = 'Uses AI-simulated respondents — built to surface objections, weak claims, and segment differences fast.';
 
 export const tyiHero = {
-  eyebrow: 'Digital-twin market research — run it here, free',
+  eyebrow: 'Digital-Twin Market Research',
   /** Problem first, backed by data. */
+  problemLabel: 'The problem',
   stat: '42% of failed products had no market need.',
-  statSource: 'CB Insights, analysis of startup post-mortems',
+  statSource: 'Source: CB Insights, analysis of startup post-mortems',
   problem: 'Most teams find that out after launch. Testing first takes time and budget they don’t have — so they guess.',
-  headline: 'Describe your decision in 10 minutes. We’ll test it with a simulated audience and send you a reviewed research snapshot — free.',
+  solutionLabel: 'Our solution',
+  headline: 'Describe your decision. We test it with a simulated audience and send you a reviewed research snapshot — free.',
   primaryCta: { label: 'Start my free study', href: tyiPaths.start } satisfies Cta,
   secondaryCta: { label: 'View a sample report', href: tyiPaths.sample } satisfies Cta,
   trust: ['About 10 minutes', 'First study free', 'No sales call'],
