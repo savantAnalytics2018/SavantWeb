@@ -19,8 +19,9 @@ export default function TestYourIdea() {
           <p className="eyebrow">{tyiHero.eyebrow}</p>
           <div className="tyi-split">
             <div className="tyi-split__col tyi-split__col--problem">
-              <p className="tyi-label tyi-label--problem">{tyiHero.problemLabel}</p>
-              <p className="tyi-stat">{tyiHero.stat}</p>
+              <p className="tyi-stat">
+                <span className="tyi-stat__num">{tyiHero.statNumber}</span> {tyiHero.statRest}
+              </p>
               <p className="tyi-problem">{tyiHero.problem}</p>
               <p className="tyi-stat__source">{tyiHero.statSource}</p>
             </div>

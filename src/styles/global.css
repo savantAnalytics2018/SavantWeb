@@ -1485,6 +1485,9 @@ a:hover { color: var(--color-green); }
   border-left: 1px solid var(--color-border);
   padding-left: var(--s-7);
 }
+.tyi-split__col--problem .tyi-stat {
+  margin-top: var(--s-2);
+}
 .tyi-split__col > * + * {
   margin-top: var(--s-3);
 }
@@ -1495,11 +1498,11 @@ a:hover { color: var(--color-green); }
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-.tyi-label--problem {
-  color: var(--color-ink-2);
+.tyi-stat__num {
+  color: var(--color-sharp);
 }
 .tyi-label--solution {
-  color: var(--color-sharp);
+  color: var(--color-teal);
 }
 .tyi-trustline {
   color: var(--color-ink-2);

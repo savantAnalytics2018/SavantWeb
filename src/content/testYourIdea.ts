@@ -20,7 +20,8 @@ export const tyiDisclosure = 'Uses AI-simulated respondents — built to surface
 export const tyiHero = {
   eyebrow: 'Digital-Twin Market Research',
   /** Problem first, backed by data. */
-  problemLabel: 'The problem',
+  statNumber: '42%',
+  statRest: 'of failed products had no market need.',
   stat: '42% of failed products had no market need.',
   statSource: 'Source: CB Insights, analysis of startup post-mortems',
   problem: 'Most teams find that out after launch. Testing first takes time and budget they don’t have — so they guess.',
