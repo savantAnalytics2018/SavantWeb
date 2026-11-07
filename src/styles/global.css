@@ -1496,10 +1496,10 @@ a:hover { color: var(--color-green); }
   text-transform: uppercase;
 }
 .tyi-label--problem {
-  color: var(--color-sharp);
+  color: var(--color-ink-2);
 }
 .tyi-label--solution {
-  color: var(--color-teal);
+  color: var(--color-sharp);
 }
 .tyi-trustline {
   color: var(--color-ink-2);
