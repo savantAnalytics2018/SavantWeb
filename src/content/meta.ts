@@ -36,7 +36,7 @@ export const pageMeta: Record<string, PageMeta> = {
     path: '/market-research',
     title: 'Digital-Twin Market Research — run it here, free — Savant Analytics',
     description:
-      'Describe your product, price, or message decision in 10 minutes. Savant tests it with a simulated audience and sends a reviewed research snapshot — free.',
+      'Comparing a product idea, price, or message? Savant explores how a simulated audience might respond and sends a reviewed free report with what to test next.',
   },
   startStudy: {
     path: '/market-research/start',

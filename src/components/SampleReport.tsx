@@ -1,9 +1,9 @@
 import { sampleReport as r } from '@/content/testYourIdea';
 
 /**
- * Static, clearly labeled illustrative preview of a research snapshot,
- * presented as a report page. Bars show simulated "would adopt" share by
- * segment (n = 20 per segment, so values are multiples of 5); a hidden table
+ * Static, clearly labeled illustrative preview of a research report,
+ * presented as a report page. Bars show the share selecting each option in
+ * Q2 (willing to adopt, multi-select) by segment (n = 20 per segment, so values are multiples of 5); a hidden table
  * carries the same data for assistive tech.
  */
 export default function SampleReport() {
@@ -63,7 +63,7 @@ export default function SampleReport() {
           </section>
 
           <section className="report__block report__block--wide" aria-labelledby="sr-results">
-            <h4 id="sr-results">Simulated “would adopt” share by segment</h4>
+            <h4 id="sr-results">Share willing to adopt each option (Q2, select all that apply)</h4>
             <div className="report__chart" role="img" aria-describedby="sr-table-caption">
               {r.segments.map((seg, si) => (
                 <div key={seg} className="report__group">
@@ -84,7 +84,7 @@ export default function SampleReport() {
             <div className="visually-hidden">
               <table>
                 <caption id="sr-table-caption">
-                  Simulated “would adopt” share by concept and segment, 20 synthetic respondents per segment. Illustrative values only.
+                  Share of simulated respondents selecting each option in Q2 (willing to adopt in the next 12 months), by segment; 20 per segment. Illustrative values only.
                 </caption>
                 <thead>
                   <tr>
@@ -108,7 +108,7 @@ export default function SampleReport() {
                 </tbody>
               </table>
             </div>
-            <p className="small muted">20 synthetic respondents per segment. Directional, for comparing concepts.</p>
+            <p className="small muted">20 simulated respondents per segment. Directional, for comparing options; not a demand estimate.</p>
           </section>
 
           <section className="report__block" aria-labelledby="sr-objections">
@@ -128,7 +128,7 @@ export default function SampleReport() {
                 </li>
               ))}
             </ul>
-            <p className="small muted">Number of synthetic respondents who raised the objection unprompted.</p>
+            <p className="small muted">Number of simulated respondents mentioning each objection when asked for their first objection (Q3).</p>
           </section>
 
           <section className="report__block" aria-labelledby="sr-caveats">

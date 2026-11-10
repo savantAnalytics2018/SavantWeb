@@ -540,7 +540,7 @@ export default function StudyWizard({ fetchImpl }: StudyWizardProps) {
         {step === 2 && (
           <>
             <p className="muted" style={{ marginTop: 0 }}>
-              {intakeCopy.conceptsIntro}
+              {values.decisionType === 'problem' ? intakeCopy.conceptsIntroProblem : intakeCopy.conceptsIntro}
             </p>
             {errors.concepts && <p className="field__error">{errors.concepts}</p>}
             {values.concepts.map((c, i) => {
@@ -571,7 +571,7 @@ export default function StudyWizard({ fetchImpl }: StudyWizardProps) {
                     />
                   </div>
                   <div className="field">
-                    <label htmlFor={fid(key)}>Description, message, or price</label>
+                    <label htmlFor={fid(key)}>{values.decisionType === 'problem' ? intakeCopy.conceptLabelProblem : 'Description, message, or price'}</label>
                     <textarea
                       id={fid(key)}
                       maxLength={studyLimits.concept.max}

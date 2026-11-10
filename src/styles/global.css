@@ -2698,3 +2698,53 @@ html[data-theme='warm'] .tyi-stat {
 .tyi-more p {
   margin: 0;
 }
+
+/* Market Research — single-column hero, compact sample, expander (10 Nov) */
+.tyi-hero__inner {
+  max-width: 44rem;
+}
+.tyi-hero__inner .lede {
+  margin-top: 0.75rem;
+}
+.sample-compact {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+}
+@media (min-width: 720px) {
+  .sample-compact {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.sample-compact > div {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border, #e3e6ea);
+  border-radius: 0.75rem;
+  padding: 1rem 1.125rem;
+}
+.sample-compact dt {
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-2);
+  margin-bottom: 0.35rem;
+}
+.sample-compact dd {
+  margin: 0;
+}
+.sample-compact__next {
+  border-left: 3px solid var(--color-teal);
+}
+.sample-full > summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-teal);
+  padding: 0.5rem 0;
+}
+.sample-full[open] > summary {
+  margin-bottom: 1rem;
+}
+.tyi-more h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}

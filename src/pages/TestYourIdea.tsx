@@ -2,49 +2,60 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SampleReport from '@/components/SampleReport';
 import { Faq } from '@/components/Sections';
-import { analystLine, deliverableHeading, deliverableLede, howItWorks, ifYouNeedMore, snapshotContents, studyScope, trackRecord, tyiFaq, tyiHero, useCases, useCaseStories, whoWeAre } from '@/content/testYourIdea';
+import {
+  analystLine,
+  deliverableHeading,
+  deliverableLede,
+  howItWorks,
+  ifYouNeedMore,
+  reportOutputs,
+  sampleCompact,
+  studyScope,
+  trackRecord,
+  tyiFaq,
+  tyiHero,
+  useCases,
+  whoWeAre,
+} from '@/content/testYourIdea';
 import { pageMeta } from '@/content/meta';
 import { useHead } from '@/lib/head';
 import { track } from '@/lib/analytics';
 
+/**
+ * Market Research landing page. Order (10 Nov review): hero → three outputs →
+ * compact sample (full report behind an expander) → three-step process →
+ * deeper work → FAQ → final CTA. The "How teams use it" scenarios were removed.
+ */
 export default function TestYourIdea() {
   useHead(pageMeta.testYourIdea);
   useEffect(() => track('tyi_landing_view'), []);
 
   return (
     <>
-      {/* Hero — problem, then our solution */}
+      {/* Hero — practical promise, simulation disclosure */}
       <section className="tyi-hero" aria-labelledby="tyi-heading">
         <div className="container">
           <p className="eyebrow">{tyiHero.eyebrow}</p>
-          <div className="tyi-split">
-            <div className="tyi-split__col tyi-split__col--problem">
-              <p className="tyi-stat">
-                <span className="tyi-stat__num">{tyiHero.statNumber}</span> {tyiHero.statRest}
-              </p>
-              <p className="tyi-problem">{tyiHero.problem}</p>
-              <p className="tyi-stat__source">{tyiHero.statSource}</p>
+          <div className="tyi-hero__inner">
+            <h1 id="tyi-heading" className="tyi-headline">
+              {tyiHero.headline}
+            </h1>
+            <p className="lede">{tyiHero.lede}</p>
+            <div className="hero__actions">
+              <Link to={tyiHero.primaryCta.href} className="btn btn--primary" onClick={() => track('tyi_cta_click', { location: 'hero' })}>
+                {tyiHero.primaryCta.label}
+              </Link>
+              <a href={tyiHero.secondaryCta.href} className="btn btn--secondary">
+                {tyiHero.secondaryCta.label}
+              </a>
             </div>
-            <div className="tyi-split__col tyi-split__col--solution">
-              <p className="tyi-label tyi-label--solution">{tyiHero.solutionLabel}</p>
-              <h1 id="tyi-heading" className="tyi-headline">
-                {tyiHero.headline}
-              </h1>
-              <div className="hero__actions">
-                <Link to={tyiHero.primaryCta.href} className="btn btn--primary" onClick={() => track('tyi_cta_click', { location: 'hero' })}>
-                  {tyiHero.primaryCta.label}
-                </Link>
-                <a href={tyiHero.secondaryCta.href} className="btn btn--secondary">
-                  {tyiHero.secondaryCta.label}
-                </a>
-              </div>
-              <p className="tyi-trustline small">{tyiHero.trust.join(' · ')}</p>
-            </div>
+            <p className="tyi-trustline small">{tyiHero.trust.join(' · ')}</p>
+            <p className="tyi-disclosure small">{tyiHero.disclosure}</p>
           </div>
         </div>
       </section>
 
-      {/* Use-case tiles */}
+      {/* What you can test */}
       <section className="section section--surface" aria-labelledby="tyi-usecases">
         <div className="container">
           <h2 id="tyi-usecases" className="visually-hidden">
@@ -62,12 +73,71 @@ export default function TestYourIdea() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="section" aria-labelledby="tyi-how">
+      {/* What you receive — three outputs */}
+      <section className="section section--pale" aria-labelledby="tyi-deliverable">
+        <div className="container stack-lg">
+          <div className="section-head">
+            <p className="eyebrow">What you receive</p>
+            <h2 id="tyi-deliverable">{deliverableHeading}</h2>
+            <p className="lede">{deliverableLede}</p>
+          </div>
+          <ol className="contents">
+            {reportOutputs.map((c, i) => (
+              <li key={c.title}>
+                <span className="contents__num" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <div>
+                  <strong>{c.title}</strong>
+                  <p className="muted small">{c.detail}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <ul className="chips" aria-label="First-study scope">
+            {studyScope.chips.map((c) => (
+              <li key={c}>{c}</li>
+            ))}
+          </ul>
+          <p className="small muted">{analystLine}</p>
+        </div>
+      </section>
+
+      {/* Sample — compact, full report behind an expander */}
+      <section className="section" id="sample-report" aria-labelledby="tyi-sample">
+        <div className="container stack-lg">
+          <div className="section-head">
+            <p className="eyebrow">Sample report</p>
+            <h2 id="tyi-sample">What a report looks like</h2>
+            <p className="lede">An invented B2B pricing case. The format is real; the data is not.</p>
+          </div>
+          <dl className="sample-compact">
+            <div>
+              <dt>One finding</dt>
+              <dd>{sampleCompact.finding}</dd>
+            </div>
+            <div>
+              <dt>One caveat</dt>
+              <dd>{sampleCompact.caveat}</dd>
+            </div>
+            <div className="sample-compact__next">
+              <dt>One test with real buyers</dt>
+              <dd>{sampleCompact.nextTest}</dd>
+            </div>
+          </dl>
+          <details className="sample-full">
+            <summary>Open the full sample report</summary>
+            <SampleReport />
+          </details>
+        </div>
+      </section>
+
+      {/* How it works — three steps */}
+      <section className="section section--surface" aria-labelledby="tyi-how">
         <div className="container stack-lg">
           <div className="section-head">
             <p className="eyebrow">How it works</p>
-            <h2 id="tyi-how">Four steps from question to snapshot</h2>
+            <h2 id="tyi-how">Three steps from brief to report</h2>
           </div>
           <ol className="stages">
             {howItWorks.map((s, i) => (
@@ -80,7 +150,10 @@ export default function TestYourIdea() {
               </li>
             ))}
           </ol>
-          <p className="tyi-disclosure small">{tyiHero.disclosure}</p>
+          <div className="tyi-record" role="note" aria-labelledby="tyi-record-h">
+            <h3 id="tyi-record-h">{trackRecord.heading}</h3>
+            <p>{trackRecord.agreement ? trackRecord.published(trackRecord.agreement) : trackRecord.measuring}</p>
+          </div>
           <p className="muted">
             {whoWeAre.line}{' '}
             <Link to={whoWeAre.link.href} className="link-arrow">
@@ -90,88 +163,13 @@ export default function TestYourIdea() {
         </div>
       </section>
 
-      {/* How teams use it */}
-      <section className="section section--surface" aria-labelledby="tyi-stories">
-        <div className="container stack-lg">
-          <div className="section-head">
-            <p className="eyebrow">How teams use it · illustrative scenarios</p>
-            <h2 id="tyi-stories">One decision, one question, one snapshot</h2>
-          </div>
-          <ul className="stories">
-            {useCaseStories.map((st) => (
-              <li key={st.id} className="story">
-                <p className="story__who">{st.who}</p>
-                <p className="story__situation">{st.situation}</p>
-                <dl>
-                  <div>
-                    <dt>Asked</dt>
-                    <dd>{st.asked}</dd>
-                  </div>
-                  <div>
-                    <dt>Snapshot showed</dt>
-                    <dd>{st.showed}</dd>
-                  </div>
-                  <div className="story__next">
-                    <dt>Next, with real people</dt>
-                    <dd>{st.next}</dd>
-                  </div>
-                </dl>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* What you receive */}
-      <section className="section section--pale" aria-labelledby="tyi-deliverable">
-        <div className="container stack-lg">
-          <div className="section-head">
-            <p className="eyebrow">What you receive</p>
-            <h2 id="tyi-deliverable">{deliverableHeading}</h2>
-            <p className="lede">{deliverableLede}</p>
-          </div>
-          <ul className="chips" aria-label="What's included in the first study">
-            {studyScope.chips.map((c) => (
-              <li key={c}>{c}</li>
-            ))}
-          </ul>
-          <ol className="contents">
-            {snapshotContents.map((c, i) => (
-              <li key={c.title}>
-                <span className="contents__num" aria-hidden="true">
-                  {i + 1}
-                </span>
-                <div>
-                  <strong>{c.title}</strong>
-                  <p className="muted small">{c.detail}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-          <p className="small muted">{analystLine}</p>
-
-          <div className="tyi-record" role="note" aria-labelledby="tyi-record-h">
-            <h3 id="tyi-record-h">{trackRecord.heading}</h3>
-            <p>{trackRecord.agreement ? trackRecord.published(trackRecord.agreement) : trackRecord.measuring}</p>
-            {!trackRecord.agreement && <p className="small muted">Status: measuring. Updated as studies complete.</p>}
-          </div>
-
+      {/* Deeper work, no prices */}
+      <section className="section" aria-labelledby="tyi-more-h">
+        <div className="container">
           <div className="tyi-more">
-            <h3>{ifYouNeedMore.heading}</h3>
+            <h2 id="tyi-more-h">{ifYouNeedMore.heading}</h2>
             <p className="muted">{ifYouNeedMore.line}</p>
           </div>
-        </div>
-      </section>
-
-      {/* Sample report */}
-      <section className="section" id="sample-report" aria-labelledby="tyi-sample">
-        <div className="container stack-lg">
-          <div className="section-head">
-            <p className="eyebrow">Sample report</p>
-            <h2 id="tyi-sample">What a snapshot looks like</h2>
-            <p className="lede">An invented B2B pricing case. The format is real; the data is not.</p>
-          </div>
-          <SampleReport />
         </div>
       </section>
 
@@ -189,7 +187,7 @@ export default function TestYourIdea() {
       {/* Final CTA */}
       <section className="section section--dark" aria-labelledby="tyi-final">
         <div className="container stack">
-          <h2 id="tyi-final">Bring the question. We’ll run the study.</h2>
+          <h2 id="tyi-final">Bring the question. We’ll run the first pass.</h2>
           <p className="muted" style={{ fontSize: '1.125rem', maxWidth: 'var(--measure)' }}>
             About 10 minutes to describe your decision and audience. No account, no sales call.
           </p>

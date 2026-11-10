@@ -35,8 +35,9 @@ describe('Market Research pages', () => {
     expect(screen.getByRole('link', { name: tyiHero.secondaryCta.label })).toHaveAttribute('href', '/market-research#sample-report');
     expect(screen.getAllByText(/AI-simulated respondents/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Illustrative example — invented concept, simulated data/i)).toBeInTheDocument();
-    expect(screen.getByText('42%')).toBeInTheDocument();
-    expect(screen.getByText(/of failed products had no market need/i)).toBeInTheDocument();
+    expect(screen.queryByText(/of failed products had no market need/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/How teams use it/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/One test with real buyers/i)).toBeInTheDocument();
   });
 
   it('existing routes still render', () => {

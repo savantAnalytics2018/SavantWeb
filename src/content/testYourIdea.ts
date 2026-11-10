@@ -19,14 +19,9 @@ export const tyiDisclosure = 'Uses AI-simulated respondents — built to surface
 
 export const tyiHero = {
   eyebrow: 'Digital-Twin Market Research',
-  /** Problem first, backed by data. */
-  statNumber: '42%',
-  statRest: 'of failed products had no market need.',
-  stat: '42% of failed products had no market need.',
-  statSource: 'Source: CB Insights, analysis of startup post-mortems',
-  problem: 'Most teams find that out after launch. Testing first takes time and budget they don’t have — so they guess.',
-  solutionLabel: 'Our solution',
-  headline: 'Describe your decision. We run a fast first pass with a simulated audience, then tell you exactly what to test with real people — free.',
+  /** Practical promise, no borrowed statistic (10 Nov review). */
+  headline: 'Before you commit, find what deserves a closer test.',
+  lede: 'Comparing a product idea, price, or message? We explore how a simulated audience might respond, review the findings, and send you a free report with the objections and assumptions worth testing next.',
   primaryCta: { label: 'Start my free study', href: tyiPaths.start } satisfies Cta,
   secondaryCta: { label: 'View a sample report', href: tyiPaths.sample } satisfies Cta,
   trust: ['About 10 minutes', 'First study free', 'No sales call'],
@@ -42,15 +37,14 @@ export interface UseCaseTile {
 export const useCases: UseCaseTile[] = [
   { id: 'product', title: 'Test a product or feature', question: 'Which concept is worth a real test?' },
   { id: 'price', title: 'Explore a price or offer', question: 'What objections and value signals come up?' },
-  { id: 'message', title: 'Compare messages', question: 'Which claims land with which buyers?' },
-  { id: 'survey', title: 'Run a quick market survey', question: 'What do three customer segments say?' },
+  { id: 'message', title: 'Compare messages', question: 'Which claims are worth testing with each buyer group?' },
+  { id: 'survey', title: 'Explore audience perspectives', question: 'What objections might differ across audiences?' },
 ];
 
 export const howItWorks: { id: string; name: string; summary: string }[] = [
-  { id: 'describe', name: 'Describe your decision', summary: 'Tell us what you are considering and why.' },
-  { id: 'audience', name: 'Define your audience', summary: 'Who needs to react: buyers, users, or shoppers.' },
-  { id: 'simulate', name: 'We run a simulated study', summary: 'We build synthetic personas, run the questions, and the Savant Research Team checks the results.' },
-  { id: 'snapshot', name: 'Receive your snapshot', summary: 'A short PDF by email.' },
+  { id: 'describe', name: 'Submit your brief', summary: 'Your decision, the audience whose perspective matters, and up to three options. About 10 minutes.' },
+  { id: 'simulate', name: 'We simulate and review', summary: 'We build personas from your brief, run the questions, and an accountable reviewer checks the findings.' },
+  { id: 'snapshot', name: 'Receive your report', summary: 'A short PDF: likely objections, how the options compare, and what to test with real buyers next.' },
 ];
 
 /** One line on who Savant is, with a link — answers "why trust them with research?" */
@@ -105,6 +99,13 @@ export const useCaseStories: UseCaseStory[] = [
 ];
 
 /** What the complimentary snapshot contains. Shown on the landing page. */
+/** The three outputs shown on the landing page. */
+export const reportOutputs: { title: string; detail: string }[] = [
+  { title: 'Likely objections', detail: 'What a simulated audience pushes back on, by segment, and which objections to take seriously.' },
+  { title: 'How the options compare', detail: 'Where each option leans, where results are unstable, and what the comparison does not settle.' },
+  { title: 'What to test next', detail: 'Two to four practical tests with real buyers or users — the part most teams act on first.' },
+];
+
 export const snapshotContents: { title: string; detail: string }[] = [
   { title: 'Executive overview', detail: 'Your question, the concepts tested, the key simulated themes, the main caveats.' },
   { title: 'How we asked', detail: 'Personas, selection assumptions, synthetic sample size, and the exact questions.' },
@@ -115,10 +116,9 @@ export const snapshotContents: { title: string; detail: string }[] = [
 
 /** What the reviewers do — makes "reviewed" concrete. */
 export const analystLine =
-  'Every snapshot is reviewed by the Savant Research Team — subject-matter experts, not a bot — before it is sent. They check for unstable results, remove implausible responses, and write the interpretation.';
-export const deliverableHeading = 'A reviewed first pass — and a plan for what to test with real people.';
-export const deliverableLede =
-  'A short PDF, reviewed by the Savant Research Team before it reaches you. It ends with the two to four tests worth running with real buyers or users — the part clients act on first.';
+  'Every report is reviewed by a named member of the Savant Research Team before it is sent. We check unsupported claims, contradictory responses, and sensitivity to assumptions. Any exclusions are documented; surprising or inconvenient findings are not removed because they are surprising.';
+export const deliverableHeading = 'A reviewed first pass — and a recommendation for what to test with real people.';
+export const deliverableLede = 'A short PDF, reviewed by an accountable person before it reaches you. Simulated responses, clearly labelled, with their limits stated.';
 
 /**
  * Track record. Every snapshot is scored against a small human panel; the
@@ -126,19 +126,18 @@ export const deliverableLede =
  * its status honestly rather than an implied number.
  */
 export const trackRecord = {
-  heading: 'How close do simulated answers come to real ones?',
-  /** Set to e.g. '7 in 10' once the first five studies are scored; null = still measuring. */
+  heading: 'Does the free report include real people?',
+  /** Set once a defined metric exists (tasks, audiences, exclusions). null = nothing published. */
   agreement: null as string | null,
   measuring:
-    'We score every snapshot against a small panel of real respondents. Our twin-vs-human agreement rate will be published here once the first five studies are complete.',
-  published: (rate: string) =>
-    `Across our studies so far, the simulated audience agreed with a real human panel on the leading option ${rate} times. Where it did not, the snapshot says so.`,
+    'No. The free report uses simulated responses only. Separately, we are evaluating selected studies against human responses to understand where the simulation holds and where it does not. Any human evidence included in a report is identified as such.',
+  published: (rate: string) => `On the studies we have compared so far, the simulated audience agreed with a human panel on the leading option ${rate}. The method and exclusions are described in each report.`,
 };
 
 /** Signpost to paid work. Intake page only — no prices here. */
 export const ifYouNeedMore = {
-  heading: 'If the snapshot raises more questions',
-  line: 'Most teams act on the free snapshot alone. If you need a fuller decision study, a real human panel to confirm the results, or ongoing research support, ask when you receive it. No pitch unless you ask.',
+  heading: 'Need a deeper answer?',
+  line: 'Your free report is yours to use, with no sales call required. If you want help testing the findings with real buyers, comparing more options, or developing a fuller recommendation, reply to the report email. We agree the scope and fee before any paid work begins.',
 };
 
 /** Operational caps for the first complimentary study (configurable). Shown as chips. */
@@ -167,23 +166,29 @@ export const tyiFaq: FaqItem[] = [
   {
     id: 'why-free',
     question: 'Why is it free?',
-    answer: 'It’s how we show our work. If the snapshot is useful, you’ll know where to find us. If not, you’ve lost ten minutes. One complimentary study per organisation (we check by company domain), and we prioritise requests from company email addresses.',
+    answer: 'It’s how we show our work. If the report is useful, you’ll know where to find us. If not, you’ve lost ten minutes. One complimentary study per organisation (we check by company domain), and we prioritise requests from company email addresses.',
   },
   {
     id: 'real',
     question: 'Are these real people?',
     answer:
-      'No — but the method is close to a real survey, and the research backs it. Peer-reviewed studies have found that AI-simulated respondents built from real demographic profiles reproduce the pattern of human survey answers: correlations above 0.90 with the American National Election Studies (Argyle et al., Political Analysis, 2023), and agents that replicate people’s own General Social Survey answers about 85% as accurately as the people themselves (Park et al., 2024). The same literature shows they can flatten nuance and overstate consensus (Bisbee et al., 2024). That is why the Savant Research Team reviews every snapshot and ends it with tests to run with real people.',
+      'No. These are AI-generated responses based on the audience and concepts in your brief. They can surface possible objections and questions to investigate, but they do not measure actual demand or replace research with real customers. Any human evidence included in your report is clearly identified.',
+  },
+  {
+    id: 'method',
+    question: 'What does the research say about simulated respondents?',
+    answer:
+      'Published work is mixed and specific. Argyle et al. (Political Analysis, 2023) found language models conditioned on demographic profiles reproduced binary vote-choice patterns with tetrachoric correlations above 0.90; Park et al. (2024, preprint) found interview-grounded agents reproduced individuals’ General Social Survey answers at about 85% of those individuals’ own test-retest consistency. Other studies find simulated panels flatten variance, overstate consensus, and perform worst on price and purchase questions. None of this validates our workflow for your decision — it is why every report ends with tests to run with real people.',
   },
   {
     id: 'submission',
     question: 'What happens to what I submit?',
-    answer: 'Only the Savant team preparing your snapshot sees it. It arrives by email and is not published, shared, or used to train AI models. Ask and we’ll delete it. Still, describe concepts at the level you would share with a prospective customer — no confidential, personal, or regulated information.',
+    answer: 'Only the Savant team preparing your report sees it. It arrives by email and is not published. Ask and we’ll delete it. Still, describe concepts at the level you would share with a prospective customer — no confidential, personal, or regulated information. The privacy notice lists the services that handle it.',
   },
   {
     id: 'reviewer',
     question: 'Who reviews the results?',
-    answer: 'The Savant Research Team — subject-matter experts in simulated evaluation and digital twins — reviews every snapshot before it is sent. They check for unstable results, remove implausible responses, and write the interpretation and next steps.',
+    answer: 'A named member of the Savant Research Team, identified on your report. They check unsupported claims, contradictory responses, and sensitivity to assumptions, document any exclusions, and write the interpretation and next tests.',
   },
   {
     id: 'what',
@@ -193,13 +198,13 @@ export const tyiFaq: FaqItem[] = [
   {
     id: 'when',
     question: 'How soon will I receive it?',
-    answer: 'Within three business days of your request we confirm, by email, that it is accepted and when to expect the snapshot.',
+    answer: 'We confirm fit within three business days and give you a delivery date before starting. If a request is outside what a simulated audience can usefully answer, we say so in the same email.',
   },
   {
     id: 'more',
     question: 'What if I need more than the snapshot?',
     answer:
-      'Ask when you receive it. We can scope a fuller decision study, confirm the results with a real human panel, or set up ongoing research support. We only discuss those if you raise them.',
+      'Reply to the report email. We can scope a fuller decision study, test the findings with real buyers, or set up ongoing research support — and agree scope and fee before any paid work starts.',
   },
   {
     id: 'decline',
@@ -217,19 +222,21 @@ export const tyiFaq: FaqItem[] = [
 /* ---------- Sample report (illustrative, B2B) ---------- */
 
 export const sampleReport = {
-  label: 'Illustrative example — invented concept, simulated data',
+  label: 'Illustrative example — invented concept, simulated data, example reviewer',
   pageLabel: 'Research snapshot · illustrative · 7 pages',
   overview: [
-    'Option A (included in Enterprise) is the safest route to a pilot: it leans strong with two of three segments and draws the fewest objections.',
-    'Option B (per-seat add-on) is viable if sold for a few power users rather than every seat — cost controllers reject the all-seats framing.',
-    'Option C (usage-based) should not go to pilot as written: budget predictability is a blocking objection for risk-cautious IT, even with a cap.',
+    'Prioritise A and B for testing with real buyers. In this illustration their main trade-off is predictable budgeting (A) versus paying only for selected users (B).',
+    'B is worth testing as an add-on for a few power users rather than every seat — cost controllers objected to the all-seats framing.',
+    'Before testing C, specify the spending cap and typical usage. Budget predictability is an objection to investigate, not evidence that buyers will reject it.',
   ],
   caveats: [
+    'Part of what this example tests is incomplete pricing information: C’s cap and A’s base price were not specified, and several objections turn on that.',
     'Early adopters leaned strong on both A and B — the simulation could not separate them; a real pilot is needed to.',
     'Results for cost controllers were stable across runs; results for risk-cautious IT on option B shifted between runs and are flagged as unstable.',
   ],
   questions: [
     'Which of these three pricing options would you choose for your team, and why?',
+    'Which of these options would you be willing to adopt in the next 12 months? (select all that apply)',
     'What is the first objection you would raise to each option?',
     'How would you forecast annual spend under each option?',
     'Who else in your organization would need to approve this, and what would they ask?',
@@ -238,24 +245,24 @@ export const sampleReport = {
     'Which option is easiest to explain to your CFO?',
     'Would any option make you consider switching vendors?',
   ],
-  /** Top objection per concept, with how many of the 60 synthetic respondents raised it. */
+  /** Top objection per concept, counted when respondents were asked for their first objection (Q3). */
   objections: [
     { concept: 'A', text: '“Included” is a hidden 8% price rise', count: 19 },
     { concept: 'B', text: 'Paying for seats that won’t use it', count: 27 },
     { concept: 'C', text: 'Can’t forecast annual spend', count: 38 },
   ],
-  reviewedBy: 'Reviewed by the Savant Research Team before sending',
+  reviewedBy: 'Reviewed by [reviewer name], Savant Research Team — example line; real reports name the reviewer',
   title: 'Pricing an AI add-on for a mid-market workflow platform',
   question: 'Which way of pricing a new AI assistant should a mid-market SaaS vendor take to a pilot?',
   audience:
     'IT and operations leaders at U.S. companies with 200–2,000 employees that already use workflow software (modeled; 60 synthetic respondents, 20 per segment).',
   concepts: [
-    { id: 'A', name: 'Included in Enterprise tier', note: 'No extra fee; Enterprise price rises 8%' },
+    { id: 'A', name: 'Included in Enterprise tier', note: 'No extra fee; Enterprise price rises 8% (from $60 to $65 per user per month)' },
     { id: 'B', name: '$15 per user per month add-on', note: 'Opt-in per seat' },
-    { id: 'C', name: 'Usage-based', note: '$0.10 per AI action with a monthly cap' },
+    { id: 'C', name: 'Usage-based', note: '$0.10 per AI action, capped at $20 per user per month' },
   ],
   segments: ['Cost controllers', 'Early adopters', 'Risk-cautious IT'],
-  /** Simulated "would adopt" share per concept, per segment. n = 20 per segment, so values are multiples of 5. Illustrative only. */
+  /** Share selecting each option in Q2 ("willing to adopt in the next 12 months", multi-select). n = 20 per segment, so values are multiples of 5. Illustrative only. */
   wouldAdopt: [
     { concept: 'A', values: [60, 80, 75] },
     { concept: 'B', values: [35, 80, 55] },
@@ -277,11 +284,18 @@ export const sampleReport = {
   ],
 };
 
+/** Compact sample shown on the landing page; the full report sits behind an expander. */
+export const sampleCompact = {
+  finding: 'Option B (per-seat add-on) polarised: early adopters accepted it, cost controllers wanted it for a few power users only.',
+  caveat: 'Risk-cautious IT shifted between runs on option B — flagged as unstable.',
+  nextTest: 'Pilot A and B with five existing customers each for one renewal cycle.',
+};
+
 /* ---------- Intake wizard ---------- */
 
 export const intakeSteps: { id: string; title: string }[] = [
   { id: 'decision', title: 'What would you like to test?' },
-  { id: 'audience', title: 'Who should we ask?' },
+  { id: 'audience', title: 'Whose perspective should we explore?' },
   { id: 'concepts', title: 'What are the options?' },
   { id: 'contact', title: 'Where should we send the results?' },
 ];
@@ -305,7 +319,7 @@ export const intakeCopy = {
   lede: 'Four short screens, about 10 minutes if you have your question and options to hand. We save your answers in this tab as you go — closing the tab clears them. Nothing is sent until you submit.',
   intro: 'Answer what you can — “not sure” is a fine answer. Questions are required unless marked optional.',
   questionExamples: [
-    '“Would small-business owners pay $49/month for automated bookkeeping reminders?”',
+    '“What objections should we test before offering automated bookkeeping reminders to small-business owners at $49/month?”',
     '“Which of our three onboarding messages gets IT managers at 500-person companies to book a demo?”',
   ],
   audienceHelper:
@@ -318,6 +332,8 @@ export const intakeCopy = {
   errorSummary: 'Please fix the highlighted fields.',
   conceptsIntro:
     'You told us your question. Now show us the options — up to three concepts, messages, or prices. One is fine. Describe each at the level you would share with a prospective customer: no confidential, personal, or regulated information.',
+  conceptsIntroProblem:
+    'For a problem worth solving, describe the problem and any proposed approach. A developed concept is not required — one entry is enough.',
   consent:
     'I agree that Savant Analytics may process this submission to prepare and email my complimentary research snapshot. I understand the snapshot uses AI-simulated respondents and is decision support, not a forecast.',
   stakesHelper: 'Helps us judge how much depth the snapshot needs. One sentence is plenty.',
@@ -326,6 +342,7 @@ export const intakeCopy = {
   disclosure: tyiDisclosure,
   submit: 'Submit my research request',
   successHeadline: 'Your research request is in.',
+  conceptLabelProblem: 'Describe the problem or proposed approach',
   successSent: (email: string) =>
     `We’ve sent a confirmation to ${email}. We’ll confirm your delivery window there within three business days — reply to that email if anything changes. If the confirmation doesn’t arrive within a few minutes, check your spam folder.`,
   successNotSent: (email: string) =>

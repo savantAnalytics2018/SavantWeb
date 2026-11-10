@@ -27,7 +27,7 @@ export default function StartStudy() {
               <ul className="checklist">
                 <li>We review the brief for completeness, fit, and scope.</li>
                 <li>{turnaroundLine()} If something is unclear, we ask first.</li>
-                <li>You receive a reviewed research snapshot. A follow-up conversation is optional.</li>
+                <li>You receive a reviewed research report. A follow-up conversation is optional.</li>
               </ul>
             </div>
             <div className="aside-box">
