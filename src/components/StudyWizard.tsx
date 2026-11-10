@@ -46,6 +46,31 @@ function clearDraft(): void {
   }
 }
 
+/** Attribution: referrer and UTM parameters, captured once per browser session on arrival. */
+export function captureSource(): string {
+  try {
+    const key = 'savant.tyi.source.v1';
+    const existing = window.sessionStorage.getItem(key);
+    if (existing) return existing;
+    const u = new URL(window.location.href);
+    const utm = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content']
+      .map((k) => (u.searchParams.get(k) ? `${k.slice(4)}=${u.searchParams.get(k)}` : ''))
+      .filter(Boolean)
+      .join(' ');
+    let ref = '';
+    try {
+      ref = document.referrer ? new URL(document.referrer).host : '';
+    } catch {
+      ref = '';
+    }
+    const value = [utm, ref ? `ref=${ref}` : ''].filter(Boolean).join(' ').slice(0, 300) || 'direct';
+    window.sessionStorage.setItem(key, value);
+    return value;
+  } catch {
+    return '';
+  }
+}
+
 /* ---------- Small field helpers ---------- */
 
 function Field({
@@ -210,12 +235,12 @@ export default function StudyWizard({ fetchImpl }: StudyWizardProps) {
     }
     setStatus('submitting');
     setServerMessage('');
-    track('tyi_form_submitted');
+    track('tyi_form_submitted', { decisionType: values.decisionType });
     try {
       const res = await (fetchImpl ?? fetch)(studyConfig.endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ ...values, website: honeypot, elapsedMs: Date.now() - startedAt.current }),
+        body: JSON.stringify({ ...values, source: captureSource(), website: honeypot, elapsedMs: Date.now() - startedAt.current }),
       });
       let data: { ok?: boolean; message?: string; errors?: StudyErrors; reference?: string; confirmationSent?: boolean } = {};
       try {
@@ -228,14 +253,14 @@ export default function StudyWizard({ fetchImpl }: StudyWizardProps) {
         setConfirmationSent(data.confirmationSent !== false);
         setStatus('success');
         clearDraft();
-        track('tyi_form_accepted');
+        track('tyi_form_accepted', { decisionType: values.decisionType });
       } else {
         if (data.errors) {
           setErrors(data.errors);
           // Jump to the first screen that has an error so the visitor can fix it.
           const keys = Object.keys(data.errors);
           const screen = (k: string) =>
-            ['decisionType', 'question', 'context'].includes(k)
+            ['decisionType', 'question', 'context', 'decideBy', 'stakes'].includes(k)
               ? 0
               : ['audience', 'geography', 'buyerType'].includes(k)
                 ? 1
@@ -428,6 +453,34 @@ export default function StudyWizard({ fetchImpl }: StudyWizardProps) {
                 />
               )}
             </Field>
+
+            <div className="wizard__row">
+              <Field id={fid('decideBy')} label="When do you need to decide?" optional hint={intakeCopy.decideByHelper} error={errors.decideBy}>
+                {(a) => (
+                  <input
+                    {...a}
+                    type="text"
+                    name="decideBy"
+                    placeholder="e.g. end of Q1"
+                    maxLength={studyLimits.short.max}
+                    value={values.decideBy}
+                    onChange={set('decideBy')}
+                  />
+                )}
+              </Field>
+              <Field id={fid('stakes')} label="What happens if you get this wrong?" optional hint={intakeCopy.stakesHelper} error={errors.stakes}>
+                {(a) => (
+                  <input
+                    {...a}
+                    type="text"
+                    name="stakes"
+                    maxLength={studyLimits.short.max * 2}
+                    value={values.stakes}
+                    onChange={set('stakes')}
+                  />
+                )}
+              </Field>
+            </div>
           </>
         )}
 
@@ -745,6 +798,16 @@ function BriefSummary({ values, heading, compact }: { values: StudyInput; headin
               <>
                 <br />
                 <span className="muted">Context: {values.context.trim()}</span>
+              </>
+            )}
+            {(values.decideBy.trim() || values.stakes.trim()) && (
+              <>
+                <br />
+                <span className="muted">
+                  {[values.decideBy.trim() ? `Decide by: ${values.decideBy.trim()}` : '', values.stakes.trim() ? `If wrong: ${values.stakes.trim()}` : '']
+                    .filter(Boolean)
+                    .join(' · ')}
+                </span>
               </>
             )}
           </dd>

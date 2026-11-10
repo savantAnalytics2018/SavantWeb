@@ -26,7 +26,7 @@ export const tyiHero = {
   statSource: 'Source: CB Insights, analysis of startup post-mortems',
   problem: 'Most teams find that out after launch. Testing first takes time and budget they don’t have — so they guess.',
   solutionLabel: 'Our solution',
-  headline: 'Describe your decision. We test it with a simulated audience and send you a reviewed research snapshot — free.',
+  headline: 'Describe your decision. We run a fast first pass with a simulated audience, then tell you exactly what to test with real people — free.',
   primaryCta: { label: 'Start my free study', href: tyiPaths.start } satisfies Cta,
   secondaryCta: { label: 'View a sample report', href: tyiPaths.sample } satisfies Cta,
   trust: ['About 10 minutes', 'First study free', 'No sales call'],
@@ -116,8 +116,30 @@ export const snapshotContents: { title: string; detail: string }[] = [
 /** What the reviewers do — makes "reviewed" concrete. */
 export const analystLine =
   'Every snapshot is reviewed by the Savant Research Team — subject-matter experts, not a bot — before it is sent. They check for unstable results, remove implausible responses, and write the interpretation.';
-export const deliverableHeading = 'Expert-reviewed research — not a chatbot answer.';
-export const deliverableLede = 'A short PDF, reviewed by the Savant Research Team before it reaches you.';
+export const deliverableHeading = 'A reviewed first pass — and a plan for what to test with real people.';
+export const deliverableLede =
+  'A short PDF, reviewed by the Savant Research Team before it reaches you. It ends with the two to four tests worth running with real buyers or users — the part clients act on first.';
+
+/**
+ * Track record. Every snapshot is scored against a small human panel; the
+ * agreement rate is published here once measured. Until then the slot shows
+ * its status honestly rather than an implied number.
+ */
+export const trackRecord = {
+  heading: 'How close do simulated answers come to real ones?',
+  /** Set to e.g. '7 in 10' once the first five studies are scored; null = still measuring. */
+  agreement: null as string | null,
+  measuring:
+    'We score every snapshot against a small panel of real respondents. Our twin-vs-human agreement rate will be published here once the first five studies are complete.',
+  published: (rate: string) =>
+    `Across our studies so far, the simulated audience agreed with a real human panel on the leading option ${rate} times. Where it did not, the snapshot says so.`,
+};
+
+/** Signpost to paid work. Intake page only — no prices here. */
+export const ifYouNeedMore = {
+  heading: 'If the snapshot raises more questions',
+  line: 'Most teams act on the free snapshot alone. If you need a fuller decision study, a real human panel to confirm the results, or ongoing research support, ask when you receive it. No pitch unless you ask.',
+};
 
 /** Operational caps for the first complimentary study (configurable). Shown as chips. */
 export const studyScope = {
@@ -145,7 +167,7 @@ export const tyiFaq: FaqItem[] = [
   {
     id: 'why-free',
     question: 'Why is it free?',
-    answer: 'It’s how we show our work. If the snapshot is useful, you’ll know where to find us. If not, you’ve lost ten minutes. One complimentary study per organisation, please.',
+    answer: 'It’s how we show our work. If the snapshot is useful, you’ll know where to find us. If not, you’ve lost ten minutes. One complimentary study per organisation (we check by company domain), and we prioritise requests from company email addresses.',
   },
   {
     id: 'real',
@@ -172,6 +194,18 @@ export const tyiFaq: FaqItem[] = [
     id: 'when',
     question: 'How soon will I receive it?',
     answer: 'Within three business days of your request we confirm, by email, that it is accepted and when to expect the snapshot.',
+  },
+  {
+    id: 'more',
+    question: 'What if I need more than the snapshot?',
+    answer:
+      'Ask when you receive it. We can scope a fuller decision study, confirm the results with a real human panel, or set up ongoing research support. We only discuss those if you raise them.',
+  },
+  {
+    id: 'decline',
+    question: 'Will every request be accepted?',
+    answer:
+      'Most are. We may decline or ask to reshape a request that is outside what a simulated audience can usefully answer — for example, forecasting a specific sales number — and we will say so within three business days. The snapshot is decision support, not a forecast.',
   },
   {
     id: 'call',
@@ -284,7 +318,10 @@ export const intakeCopy = {
   errorSummary: 'Please fix the highlighted fields.',
   conceptsIntro:
     'You told us your question. Now show us the options — up to three concepts, messages, or prices. One is fine. Describe each at the level you would share with a prospective customer: no confidential, personal, or regulated information.',
-  consent: 'I agree that Savant Analytics may process this submission to prepare and email my complimentary research snapshot.',
+  consent:
+    'I agree that Savant Analytics may process this submission to prepare and email my complimentary research snapshot. I understand the snapshot uses AI-simulated respondents and is decision support, not a forecast.',
+  stakesHelper: 'Helps us judge how much depth the snapshot needs. One sentence is plenty.',
+  decideByHelper: 'A month or a date. “Not sure” is fine.',
   marketing: 'Send me occasional Savant research notes. Not required for your report.',
   disclosure: tyiDisclosure,
   submit: 'Submit my research request',

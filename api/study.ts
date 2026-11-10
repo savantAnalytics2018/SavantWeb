@@ -22,7 +22,7 @@
  * one; no database is introduced here.
  */
 
-import { coerceStudy, makeReference, validateStudy, type StudyInput } from '../src/lib/studyConfig';
+import { coerceStudy, emailDomain, makeReference, studyPriority, validateStudy, type StudyInput } from '../src/lib/studyConfig';
 import { buyerTypes, decisionTypes } from '../src/content/testYourIdea';
 
 const MAX_BODY_BYTES = 48 * 1024;
@@ -65,6 +65,8 @@ export function formatBrief(v: StudyInput, reference: string): string {
     `Type: ${label(decisionTypes, v.decisionType)}${v.decisionType === 'other' && v.otherDetail.trim() ? ` — ${v.otherDetail.trim()}` : ''}`,
     `Question: ${v.question.trim()}`,
     `Context / alternatives: ${or(v.context)}`,
+    `Decide by: ${or(v.decideBy)}`,
+    `If wrong: ${or(v.stakes)}`,
     ``,
     `2. AUDIENCE`,
     `Description: ${v.audience.trim()}`,
@@ -81,6 +83,19 @@ export function formatBrief(v: StudyInput, reference: string): string {
     `Work email: ${v.email.trim()}`,
     `Role: ${or(v.role)}`,
     `Processing consent: ${v.consent ? 'yes' : 'no'}`,
+  ].join('\n');
+}
+
+/** Internal-only lines appended to the Savant copy (never sent to the prospect). */
+export function formatTriage(v: StudyInput): string {
+  const priority = studyPriority(v.email);
+  return [
+    `5. TRIAGE (internal)`,
+    `Priority: ${priority === 'review' ? 'REVIEW — consumer mailbox; confirm the organisation before starting work' : 'standard — company domain'}`,
+    `Company domain: ${emailDomain(v.email) || '—'}  (check: one complimentary study per organisation)`,
+    `Source: ${or(v.source)}`,
+    `Decision type: ${label(decisionTypes, v.decisionType)}`,
+    `Decision-Study candidate: ${v.decideBy.trim() || v.stakes.trim() ? 'possibly — has a date or stakes' : 'unknown'}`,
   ].join('\n');
 }
 
@@ -135,6 +150,8 @@ export default async function handler(req: Request): Promise<Response> {
 
   const reference = makeReference();
   const brief = formatBrief(input, reference);
+  const triage = formatTriage(input);
+  const priority = studyPriority(input.email);
   const turnaround = process.env.STUDY_TURNAROUND?.trim();
   const turnaroundLine = turnaround
     ? `Expected delivery: ${turnaround}.`
@@ -146,9 +163,9 @@ export default async function handler(req: Request): Promise<Response> {
       from,
       to: [to],
       reply_to: input.email.trim(),
-      subject: `[${reference}] Research request — ${input.company.trim()} — ${label(decisionTypes, input.decisionType)}`,
-      text: `New Market Research request via savantanalytics.net\nStatus: New\n\n${brief}`,
-      html: `<pre style="font:14px/1.5 system-ui">${esc(`New Market Research request via savantanalytics.net\nStatus: New\n\n${brief}`)}</pre>`,
+      subject: `[${reference}]${priority === 'review' ? ' [REVIEW]' : ''} Research request — ${input.company.trim()} — ${label(decisionTypes, input.decisionType)}`,
+      text: `New Market Research request via savantanalytics.net\nStatus: New\n\n${brief}\n\n${triage}`,
+      html: `<pre style="font:14px/1.5 system-ui">${esc(`New Market Research request via savantanalytics.net\nStatus: New\n\n${brief}\n\n${triage}`)}</pre>`,
     });
     if (!internal) {
       console.error('[study] provider error (internal)', { elapsed: Date.now() - started });
@@ -159,8 +176,9 @@ export default async function handler(req: Request): Promise<Response> {
       `Hello ${input.name.trim()},`,
       ``,
       `Your research request is in. ${turnaroundLine}`,
+      priority === 'review' ? `We prioritise requests from company email addresses; if you have one, reply from it and we will link it to this reference.` : null,
       ``,
-      `Please note: your study uses simulated respondents, not real people. Findings are exploratory and should be validated with real buyers or users before major decisions.`,
+      `Please note: your snapshot uses AI-simulated respondents and is decision support, not a forecast. It ends with the tests we recommend running with real buyers or users before you commit.`,
       ``,
       `A copy of what you submitted:`,
       ``,
@@ -169,7 +187,9 @@ export default async function handler(req: Request): Promise<Response> {
       `Reply to this email if you want to add or change anything.`,
       ``,
       `Savant Analytics`,
-    ].join('\n');
+    ]
+      .filter((l) => l !== null)
+      .join('\n');
     const ok = await send(apiKey, {
       from,
       to: [input.email.trim()],

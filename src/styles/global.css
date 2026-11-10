@@ -2673,3 +2673,28 @@ html[data-theme='warm'] .tyi-hero__inner > * {
 html[data-theme='warm'] .tyi-stat {
   color: var(--color-green);
 }
+
+/* Market Research — track record + signpost (deliverable section) */
+.tyi-record {
+  border-left: 3px solid var(--color-teal);
+  padding: 0.75rem 1rem;
+  background: var(--color-surface, #fff);
+  max-width: var(--measure);
+}
+.tyi-record h3,
+.tyi-more h3 {
+  font-size: 1.0625rem;
+  margin: 0 0 0.35rem;
+}
+.tyi-record p {
+  margin: 0;
+}
+.tyi-record p + p {
+  margin-top: 0.35rem;
+}
+.tyi-more {
+  max-width: var(--measure);
+}
+.tyi-more p {
+  margin: 0;
+}

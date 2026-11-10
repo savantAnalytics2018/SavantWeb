@@ -45,3 +45,13 @@ Dated 1 November 2026. "Status" is **Blocking** (launch gate) or **Optional**.
 | I-14 | v1.3 hero: a four-column board (Backlog → AI agents → Your review → Production). Work items move through, agents show a working arc, a check pops at the review gate, finished items stack in Production. Answers the buyer's pain (pilots that never ship; nobody owns the risk) and shows human review in the loop. Transform/opacity only; reduced-motion shows one item per column. | Owner direction 1 Nov: practical, addresses the challenge. |
 - **2026-11-01 v1.3** — Hero rewritten around the buyer's gap (mandate vs legacy system); board animation; audience-cards section removed; "Why a small team" added (senior people, no bench — owner-stated). D-12 now covers all five why-us lines.
 | I-15 | v2.5 palette: navy/blue/red replaces the brief's green/teal/amber tokens after owner review ("green doesn't go well"). Token names unchanged (`--color-green`, `--color-teal`) so components did not change; values did. Contrast re-verified ≥4.5:1 for text, ≥3:1 UI. | Owner direction 4 Nov. |
+
+## D-13 — Market Research tab aligned to the business-strategy research (9 Nov 2026)
+Source: "Digital-Twin Research: What Business to Build" (Claude Doc). Changes on the intake tab only; paid tiers are not on the site.
+- Positioning: hero and deliverable copy now promise a reviewed first pass that ends with what to test with real people, not a prediction.
+- Gate: consumer-mailbox requests are accepted but routed to REVIEW (subject tag + triage block); company domain recorded for the one-per-organisation rule; work email stays "preferred" on the form.
+- Trust: a track-record slot (twin-vs-human agreement rate) with an honest "measuring" state until five studies are scored. Fill `trackRecord.agreement` in testYourIdea.ts.
+- Signpost: "If the snapshot raises more questions" paragraph and two FAQs (what if I need more / will every request be accepted). No prices.
+- Scoping fields: optional "When do you need to decide?" and "What happens if you get this wrong?" on screen 1; shown in the brief and used to flag Decision-Study candidates.
+- Terms: consent line now states decision support, not a forecast; confirmation email uses the same wording (replaces "not real people").
+- Instrumentation: referrer/UTM captured per session and sent as `source`; decision type attached to submit/accept analytics events.

@@ -33,7 +33,7 @@ export default function StartStudy() {
             <div className="aside-box">
               <h2>First-study scope</h2>
               <ul className="checklist">
-                <li>{studyScope.studiesPerCompany} complimentary study per organisation</li>
+                <li>{studyScope.studiesPerCompany} complimentary study per organisation (company email prioritised)</li>
                 <li>{studyScope.markets} market, up to {studyScope.maxConcepts} concepts</li>
                 <li>{studyScope.questions} questions, up to {studyScope.maxRespondents} simulated respondents</li>
               </ul>

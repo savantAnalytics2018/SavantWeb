@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SampleReport from '@/components/SampleReport';
 import { Faq } from '@/components/Sections';
-import { analystLine, deliverableHeading, deliverableLede, howItWorks, snapshotContents, studyScope, tyiFaq, tyiHero, useCases, useCaseStories, whoWeAre } from '@/content/testYourIdea';
+import { analystLine, deliverableHeading, deliverableLede, howItWorks, ifYouNeedMore, snapshotContents, studyScope, trackRecord, tyiFaq, tyiHero, useCases, useCaseStories, whoWeAre } from '@/content/testYourIdea';
 import { pageMeta } from '@/content/meta';
 import { useHead } from '@/lib/head';
 import { track } from '@/lib/analytics';
@@ -149,6 +149,17 @@ export default function TestYourIdea() {
             ))}
           </ol>
           <p className="small muted">{analystLine}</p>
+
+          <div className="tyi-record" role="note" aria-labelledby="tyi-record-h">
+            <h3 id="tyi-record-h">{trackRecord.heading}</h3>
+            <p>{trackRecord.agreement ? trackRecord.published(trackRecord.agreement) : trackRecord.measuring}</p>
+            {!trackRecord.agreement && <p className="small muted">Status: measuring. Updated as studies complete.</p>}
+          </div>
+
+          <div className="tyi-more">
+            <h3>{ifYouNeedMore.heading}</h3>
+            <p className="muted">{ifYouNeedMore.line}</p>
+          </div>
         </div>
       </section>
 

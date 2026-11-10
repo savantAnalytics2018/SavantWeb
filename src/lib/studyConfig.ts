@@ -41,6 +41,9 @@ export interface StudyInput {
   otherDetail: string;
   question: string;
   context: string;
+  /** Optional: what the decision feeds and when (scoping + lead quality). */
+  decideBy: string;
+  stakes: string;
   // Screen 2
   audience: string;
   geography: string;
@@ -55,6 +58,8 @@ export interface StudyInput {
   role: string;
   consent: boolean;
   marketingOptIn: boolean;
+  /** Attribution captured on the landing page (referrer / UTM), never shown to the visitor. */
+  source: string;
 }
 
 export type StudyErrors = Partial<Record<keyof StudyInput | `concept${number}`, string>>;
@@ -66,6 +71,8 @@ export const emptyStudy = (): StudyInput => ({
   otherDetail: '',
   question: '',
   context: '',
+  decideBy: '',
+  stakes: '',
   audience: '',
   geography: '',
   buyerType: '',
@@ -77,6 +84,7 @@ export const emptyStudy = (): StudyInput => ({
   role: '',
   consent: false,
   marketingOptIn: false,
+  source: '',
 });
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -100,6 +108,8 @@ export function validateStep(step: number, v: StudyInput): StudyErrors {
       e.question = `Give us a sentence or two (at least ${studyLimits.text.min} characters) so we can scope the study.`;
     else if (tooLong(q, studyLimits.text.max)) e.question = `Keep this under ${studyLimits.text.max} characters.`;
     if (tooLong(v.context, studyLimits.optionalText.max)) e.context = `Keep this under ${studyLimits.optionalText.max} characters.`;
+    if (tooLong(v.decideBy, studyLimits.short.max)) e.decideBy = `Keep this under ${studyLimits.short.max} characters.`;
+    if (tooLong(v.stakes, studyLimits.short.max * 2)) e.stakes = `Keep this under ${studyLimits.short.max * 2} characters.`;
   }
 
   if (step === 1) {
@@ -167,6 +177,8 @@ export function coerceStudy(body: unknown): StudyInput {
     otherDetail: s('otherDetail', studyLimits.short.max),
     question: s('question', studyLimits.text.max),
     context: s('context', studyLimits.optionalText.max),
+    decideBy: s('decideBy', studyLimits.short.max),
+    stakes: s('stakes', studyLimits.short.max * 2),
     audience: s('audience', studyLimits.text.max),
     geography: s('geography', studyLimits.short.max),
     buyerType: s('buyerType', 40),
@@ -178,7 +190,34 @@ export function coerceStudy(body: unknown): StudyInput {
     role: s('role', studyLimits.short.max),
     consent: b.consent === true,
     marketingOptIn: b.marketingOptIn === true,
+    source: s('source', 300),
   };
+}
+
+/* ---------- Lead gate: company domain and free-mail detection ---------- */
+
+/** Common consumer mailbox domains. A match does not reject the request; it routes it to review. */
+export const freeMailDomains = new Set([
+  'gmail.com', 'googlemail.com', 'yahoo.com', 'yahoo.co.uk', 'ymail.com', 'hotmail.com', 'hotmail.co.uk', 'outlook.com', 'live.com',
+  'msn.com', 'aol.com', 'icloud.com', 'me.com', 'mac.com', 'protonmail.com', 'proton.me', 'pm.me', 'gmx.com', 'gmx.de', 'mail.com',
+  'zoho.com', 'yandex.com', 'yandex.ru', 'fastmail.com', 'hey.com', 'duck.com', 'tutanota.com', 'mail.ru', 'qq.com', '163.com',
+]);
+
+export function emailDomain(email: string): string {
+  const at = email.trim().toLowerCase().lastIndexOf('@');
+  return at >= 0 ? email.trim().toLowerCase().slice(at + 1) : '';
+}
+
+export function isFreeMail(email: string): boolean {
+  return freeMailDomains.has(emailDomain(email));
+}
+
+/**
+ * Request priority for the Savant inbox. 'standard' = company domain;
+ * 'review' = consumer mailbox — accepted, but a human decides before work starts.
+ */
+export function studyPriority(email: string): 'standard' | 'review' {
+  return isFreeMail(email) ? 'review' : 'standard';
 }
 
 /** Request reference shown to the visitor and used in the Savant notification. e.g. TYI-2026-A7K3QD */
