@@ -8,6 +8,8 @@ import studyHandler from '../api/study';
 
 interface Env {
   ASSETS: { fetch: (request: Request) => Promise<Response> };
+  /** Hostname prefix of the research front door (default "twinresearch."). */
+  RESEARCH_HOST_PREFIX?: string;
   CONTACT_TO?: string;
   CONTACT_FROM?: string;
   RESEND_API_KEY?: string;
@@ -46,6 +48,17 @@ export default {
       if (request.method !== 'POST') return methodNotAllowed();
       bridgeEnv(env);
       return studyHandler(request);
+    }
+    // Research subdomain: "/" and "/start" are the offer's own front door.
+    // Everything else on that host serves the same site, so deep links keep working.
+    const prefix = (env.RESEARCH_HOST_PREFIX ?? 'twinresearch.').toLowerCase();
+    if (url.hostname.toLowerCase().startsWith(prefix)) {
+      const map: Record<string, string> = { '/': '/market-research', '/start': '/market-research/start' };
+      const target = map[url.pathname];
+      if (target) {
+        url.pathname = target;
+        return env.ASSETS.fetch(new Request(url.toString(), request));
+      }
     }
     return env.ASSETS.fetch(request);
   },

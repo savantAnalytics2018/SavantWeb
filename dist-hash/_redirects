@@ -1,0 +1,5 @@
+# Cloudflare Pages redirects — legacy routes observed on the previous site (D-06).
+/ai           /services/ai-strategy            301
+/migration    /services/legacy-modernization   301
+/test-your-idea        /market-research        301
+/test-your-idea/start  /market-research/start  301

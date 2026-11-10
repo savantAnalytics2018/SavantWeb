@@ -1,7 +1,35 @@
-import { useEffect, useId, useRef, useState, type ReactElement } from 'react';
+import { useEffect, useId, useRef, useState, type ReactElement, type ReactNode } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { footer, headerCta, navigation, site } from '@/content/site';
 import { track } from '@/lib/analytics';
+import { isResearchHost, mainOrigin, researchHref } from '@/lib/host';
+import type { NavItem } from '@/content/types';
+
+/** Nav for the research subdomain: the offer, the wizard, and a way back. */
+const RESEARCH_NAV: NavItem[] = [
+  { id: 'market-research', label: 'Digital-Twin Market Research', href: '/market-research' },
+  { id: 'start', label: 'Start your free study', href: '/market-research/start' },
+];
+
+/** Set after mount so prerendered HTML (main-site version) hydrates cleanly. */
+function useResearchHost(): boolean {
+  const [research, setResearch] = useState(false);
+  useEffect(() => setResearch(isResearchHost()), []);
+  return research;
+}
+
+/** Internal links render as NavLink; absolute ones (the subdomain) as a plain anchor. */
+function NavAnchor({ item, className, children }: { item: NavItem; className: string; children: ReactNode }) {
+  return item.href.startsWith('http') ? (
+    <a href={item.href} className={className}>
+      {children}
+    </a>
+  ) : (
+    <NavLink to={item.href} className={className}>
+      {children}
+    </NavLink>
+  );
+}
 
 const WARM = (import.meta.env.VITE_THEME ?? '').trim() === 'warm';
 const NAV_ICONS: Record<string, ReactElement> = {
@@ -16,6 +44,11 @@ function Header() {
   const menuId = useId();
   const toggleRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
+  const research = useResearchHost();
+  const items: NavItem[] = research
+    ? RESEARCH_NAV
+    : navigation.map((n) => (n.id === 'market-research' ? { ...n, href: researchHref('/market-research') } : n));
+  const cta = research ? { label: 'Savant Analytics →', href: mainOrigin || '/' } : headerCta;
 
   // Close the mobile menu on navigation and on Escape.
   useEffect(() => setOpen(false), [location.pathname]);
@@ -41,8 +74,8 @@ function Header() {
           </span>
         </Link>
         <nav className="nav" aria-label="Primary">
-          {navigation.map((item) => (
-            <NavLink key={item.id} to={item.href} className="nav__link">
+          {items.map((item) => (
+            <NavAnchor key={item.id} item={item} className="nav__link">
               {WARM && NAV_ICONS[item.id] && (
                 <svg className="nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   {NAV_ICONS[item.id]}
@@ -56,15 +89,17 @@ function Header() {
               ) : (
                 item.label
               )}
-            </NavLink>
+            </NavAnchor>
           ))}
-          <Link
-            to={headerCta.href}
-            className="btn btn--primary nav__cta"
-            onClick={() => track('contact_cta_click', { location: 'header' })}
-          >
-            {headerCta.label}
-          </Link>
+          {cta.href.startsWith('http') ? (
+            <a href={cta.href} className="btn btn--primary nav__cta">
+              {cta.label}
+            </a>
+          ) : (
+            <Link to={cta.href} className="btn btn--primary nav__cta" onClick={() => track('contact_cta_click', { location: 'header' })}>
+              {cta.label}
+            </Link>
+          )}
         </nav>
         <button
           ref={toggleRef}
@@ -79,18 +114,22 @@ function Header() {
       </div>
       <nav id={menuId} className="mobile-nav" data-open={open} aria-label="Primary mobile" hidden={!open}>
         <ul>
-          {navigation.map((item) => (
+          {items.map((item) => (
             <li key={item.id}>
-              <NavLink to={item.href}>
+              <NavAnchor item={item} className="">
                 {item.label}
                 {item.sub ? <small className="menu__sub"> — {item.sub}</small> : null}
-              </NavLink>
+              </NavAnchor>
             </li>
           ))}
           <li>
-            <NavLink to={headerCta.href} onClick={() => track('contact_cta_click', { location: 'mobile-nav' })}>
-              {headerCta.label}
-            </NavLink>
+            {cta.href.startsWith('http') ? (
+              <a href={cta.href}>{cta.label}</a>
+            ) : (
+              <NavLink to={cta.href} onClick={() => track('contact_cta_click', { location: 'mobile-nav' })}>
+                {cta.label}
+              </NavLink>
+            )}
           </li>
         </ul>
       </nav>
@@ -99,6 +138,11 @@ function Header() {
 }
 
 function Footer() {
+  const research = useResearchHost();
+  const links: NavItem[] = footer.links.map((l) => {
+    if (l.id === 'market-research') return research ? { ...l, href: '/market-research' } : { ...l, href: researchHref('/market-research') };
+    return research && mainOrigin ? { ...l, href: `${mainOrigin}${l.href}` } : l;
+  });
   return (
     <footer className="footer">
       <div className="container footer__inner">
@@ -125,9 +169,9 @@ function Footer() {
         </div>
         <nav aria-label="Footer">
           <ul className="footer__links">
-            {footer.links.map((l) => (
+            {links.map((l) => (
               <li key={l.id}>
-                <Link to={l.href}>{l.label}</Link>
+                {l.href.startsWith('http') ? <a href={l.href}>{l.label}</a> : <Link to={l.href}>{l.label}</Link>}
               </li>
             ))}
           </ul>
