@@ -64,6 +64,10 @@ export interface FaqItem {
   id: string;
   question: string;
   answer: string;
+  /** Optional bullet list rendered after `answer`. */
+  points?: string[];
+  /** Optional closing paragraph rendered after `points`. */
+  after?: string;
 }
 
 export interface NavItem {

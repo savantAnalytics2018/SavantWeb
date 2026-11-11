@@ -142,6 +142,14 @@ export function Faq({ items = faq }: { items?: typeof faq }) {
           <summary>{f.question}</summary>
           <div className="faq__answer">
             <p>{f.answer}</p>
+            {f.points && (
+              <ul className="faq__points">
+                {f.points.map((pt) => (
+                  <li key={pt}>{pt}</li>
+                ))}
+              </ul>
+            )}
+            {f.after && <p>{f.after}</p>}
           </div>
         </details>
       ))}

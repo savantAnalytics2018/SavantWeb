@@ -190,7 +190,18 @@ export const tyiFaq: FaqItem[] = [
     id: 'method',
     question: 'What does the research say about simulated respondents?',
     answer:
-      'Published work is mixed and specific. Argyle et al. (Political Analysis, 2023) found language models conditioned on demographic profiles reproduced binary vote-choice patterns with tetrachoric correlations above 0.90; Park et al. (2024, preprint) found interview-grounded agents reproduced individuals’ General Social Survey answers at about 85% of those individuals’ own test-retest consistency. Other studies find simulated panels flatten variance, overstate consensus, and perform worst on price and purchase questions. None of this validates our workflow for your decision — it is why every report ends with tests to run with real people.',
+      'Peer-reviewed work finds that well-built simulated respondents track real people closely on direction and relative ranking — which is what an early-stage decision needs.',
+    points: [
+      'Interview-based twins matched real people’s survey answers 85% as well as those people matched themselves two weeks later — Stanford, Park et al., 2024',
+      'Simulated samples predicted the outcomes of 70 real experiments at r = 0.85, as well as or better than expert human forecasters — Stanford/NYU, Hewitt et al., Nature 2025',
+      'Accuracy held (r = 0.90) even for studies published after the model’s training cutoff — same Nature paper',
+      'GPT-based personas reproduced the attitudes of U.S. demographic subgroups well beyond surface similarity — BYU, Argyle et al., Political Analysis 2023',
+      'Willingness-to-pay for a toothpaste feature: humans $3.27, simulated $3.40 — in 15 minutes instead of months — Harvard Business School / Microsoft, Brand, Israeli & Ngwe',
+      'A 2,058-person benchmark shows twins predict behaviour well at both individual and aggregate level — Columbia Business School, Toubia et al., Marketing Science 2025',
+      'Mixed: the same HBS/Microsoft team reports that price estimates are sometimes close to human studies but can be off or wrong-signed, and that averages are more reliable than segment splits — Brand, Israeli & Ngwe, 2026 revision',
+    ],
+    after:
+      'That last finding is why we report direction and segment contrast rather than point estimates, and tell you where results are unstable. Simulated respondents are not a substitute for a representative poll — they are a fast, inexpensive way to find what deserves one.',
   },
   {
     id: 'submission',
