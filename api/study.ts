@@ -24,6 +24,10 @@
 
 import { coerceStudy, emailDomain, makeReference, studyPriority, validateStudy, type StudyInput } from '../src/lib/studyConfig';
 import { buyerTypes, decisionTypes } from '../src/content/testYourIdea';
+import { signToken, verifyToken } from './studyToken';
+
+const CONFIRM_TTL_S = 7 * 24 * 60 * 60;
+const confirmSecret = () => process.env.STUDY_CONFIRM_SECRET || process.env.RESEND_API_KEY || '';
 
 const MAX_BODY_BYTES = 48 * 1024;
 const WINDOW_MS = 10 * 60 * 1000;
@@ -81,6 +85,7 @@ export function formatBrief(v: StudyInput, reference: string): string {
     `Name: ${v.name.trim()}`,
     `Company: ${v.company.trim()}`,
     `Work email: ${v.email.trim()}`,
+    `Company website: ${or(v.companySite)}`,
     `Role: ${or(v.role)}`,
     `Processing consent: ${v.consent ? 'yes' : 'no'}`,
   ].join('\n');
@@ -91,8 +96,8 @@ export function formatTriage(v: StudyInput): string {
   const priority = studyPriority(v.email);
   return [
     `5. TRIAGE (internal)`,
-    `Priority: ${priority === 'review' ? 'REVIEW — consumer mailbox; confirm the organisation before starting work' : 'standard — company domain'}`,
-    `Company domain: ${emailDomain(v.email) || '—'}  (check: one complimentary study per organisation)`,
+    `Priority: ${priority === 'review' ? `REVIEW — consumer mailbox; organisation given as ${or(v.companySite)}` : 'standard — company domain'}`,
+    `Company domain: ${emailDomain(v.email) || '—'}  (limits: one request per person, two per company)`,
     `Source: ${or(v.source)}`,
     `Decision type: ${label(decisionTypes, v.decisionType)}`,
     `Decision-Study candidate: ${v.decideBy.trim() || v.stakes.trim() ? 'possibly — has a date or stakes' : 'unknown'}`,
@@ -158,27 +163,35 @@ export default async function handler(req: Request): Promise<Response> {
     : 'We will review your request and confirm your delivery window by email within three business days.';
 
   const started = Date.now();
+  const origin = (process.env.SITE_ORIGIN?.trim() || new URL(req.url).origin).replace(/\/$/, '');
   try {
     const internal = await send(apiKey, {
       from,
       to: [to],
       reply_to: input.email.trim(),
-      subject: `[${reference}]${priority === 'review' ? ' [REVIEW]' : ''} Research request — ${input.company.trim()} — ${label(decisionTypes, input.decisionType)}`,
-      text: `New Market Research request via savantanalytics.net\nStatus: New\n\n${brief}\n\n${triage}`,
-      html: `<pre style="font:14px/1.5 system-ui">${esc(`New Market Research request via savantanalytics.net\nStatus: New\n\n${brief}\n\n${triage}`)}</pre>`,
+      subject: `[${reference}] [UNCONFIRMED]${priority === 'review' ? ' [REVIEW]' : ''} Research request — ${input.company.trim()} — ${label(decisionTypes, input.decisionType)}`,
+      text: `New Market Research request via savantanalytics.net\nStatus: Awaiting email confirmation (a CONFIRMED note follows when the requester clicks the link)\n\n${brief}\n\n${triage}`,
+      html: `<pre style="font:14px/1.5 system-ui">${esc(`New Market Research request via savantanalytics.net\nStatus: Awaiting email confirmation (a CONFIRMED note follows when the requester clicks the link)\n\n${brief}\n\n${triage}`)}</pre>`,
     });
     if (!internal) {
       console.error('[study] provider error (internal)', { elapsed: Date.now() - started });
       return json(502, { ok: false, message: 'The request could not be delivered. Please try again shortly.' });
     }
 
+    const token = await signToken(
+      { ref: reference, email: input.email.trim().toLowerCase(), company: input.company.trim(), name: input.name.trim(), exp: Math.floor(Date.now() / 1000) + CONFIRM_TTL_S },
+      confirmSecret(),
+    );
+    const confirmUrl = `${origin}/api/study/confirm?t=${encodeURIComponent(token)}`;
     const confirmation = [
       `Hello ${input.name.trim()},`,
       ``,
-      `Your research request is in. ${turnaroundLine}`,
-      priority === 'review' ? `We prioritise requests from company email addresses; if you have one, reply from it and we will link it to this reference.` : null,
+      `Please confirm your research request by opening this link:`,
+      confirmUrl,
       ``,
-      `Please note: your snapshot uses AI-simulated respondents and is decision support, not a forecast. It ends with the tests we recommend running with real buyers or users before you commit.`,
+      `Your request enters our queue only once you confirm. The link works for 7 days. ${turnaroundLine}`,
+      ``,
+      `Please note: your report uses AI-simulated respondents and is decision support, not a forecast. It ends with the tests we recommend running with real buyers or users before you commit.`,
       ``,
       `A copy of what you submitted:`,
       ``,
@@ -187,25 +200,57 @@ export default async function handler(req: Request): Promise<Response> {
       `Reply to this email if you want to add or change anything.`,
       ``,
       `Savant Analytics`,
-    ]
-      .filter((l) => l !== null)
-      .join('\n');
+    ].join('\n');
     const ok = await send(apiKey, {
       from,
       to: [input.email.trim()],
       reply_to: to,
-      subject: `Your research request is in (${reference})`,
+      subject: `Confirm your research request (${reference})`,
       text: confirmation,
-      html: `<pre style="font:14px/1.5 system-ui">${esc(confirmation)}</pre>`,
+      html: `<pre style="font:14px/1.5 system-ui">${esc(confirmation).replace(esc(confirmUrl), `<a href="${esc(confirmUrl)}">${esc(confirmUrl)}</a>`)}</pre>`,
     });
-    // The internal copy was delivered, so the request is real even if the
-    // prospect's confirmation bounced; report success and log the gap.
     if (!ok) console.error('[study] provider error (confirmation)', { elapsed: Date.now() - started });
 
-    console.info('[study] accepted', { elapsed: Date.now() - started, confirmationSent: ok });
+    console.info('[study] received', { elapsed: Date.now() - started, confirmationSent: ok });
     return json(200, { ok: true, reference, confirmationSent: ok });
   } catch (err) {
     console.error('[study] provider unreachable', { reason: (err as Error).name });
     return json(502, { ok: false, message: 'The request could not be delivered. Please try again shortly.' });
   }
+}
+
+
+/**
+ * GET /api/study/confirm?t=<token> — the requester clicks the emailed link.
+ * On success: Savant gets a CONFIRMED note and the browser is redirected to the
+ * wizard with ?confirmed=1; on failure, ?confirmed=0. Stateless; no database.
+ */
+export async function confirmHandler(req: Request): Promise<Response> {
+  const url = new URL(req.url);
+  const token = url.searchParams.get('t') ?? '';
+  const research = url.hostname.toLowerCase().startsWith('twinresearch.');
+  const back = (ok: boolean) => new Response(null, { status: 303, headers: { Location: `${research ? '/start' : '/market-research/start'}?confirmed=${ok ? '1' : '0'}`, 'Cache-Control': 'no-store' } });
+  const payload = token ? await verifyToken(token, confirmSecret()) : null;
+  if (!payload) {
+    console.info('[study] confirm rejected');
+    return back(false);
+  }
+  const to = process.env.STUDY_TO || process.env.CONTACT_TO;
+  const from = process.env.CONTACT_FROM;
+  const apiKey = process.env.RESEND_API_KEY;
+  if (to && from && apiKey) {
+    try {
+      await send(apiKey, {
+        from,
+        to: [to],
+        reply_to: payload.email,
+        subject: `[${payload.ref}] [CONFIRMED] Research request — ${payload.company}`,
+        text: `The requester has confirmed their email address.\n\nReference: ${payload.ref}\nName: ${payload.name}\nCompany: ${payload.company}\nEmail: ${payload.email}\n\nStatus: New — ready for triage. Reply to the original [UNCONFIRMED] email with the delivery date.`,
+      });
+    } catch (err) {
+      console.error('[study] confirm: provider unreachable', { reason: (err as Error).name });
+    }
+  }
+  console.info('[study] confirmed');
+  return back(true);
 }

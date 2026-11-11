@@ -142,7 +142,8 @@ export const ifYouNeedMore = {
 
 /** Operational caps for the first complimentary study (configurable). Shown as chips. */
 export const studyScope = {
-  studiesPerCompany: 1,
+  studiesPerCompany: 2,
+  studiesPerPerson: 1,
   markets: 1,
   maxConcepts: 3,
   questions: '8–10',
@@ -166,7 +167,7 @@ export const tyiFaq: FaqItem[] = [
   {
     id: 'why-free',
     question: 'Why is it free?',
-    answer: 'It’s how we show our work. If the report is useful, you’ll know where to find us. If not, you’ve lost ten minutes. One complimentary study per organisation (we check by company domain), and we prioritise requests from company email addresses.',
+    answer: 'It’s how we show our work. If the report is useful, you’ll know where to find us. If not, you’ve lost ten minutes. We process one complimentary request per person and two per company, and we ask for a company email — or your company website if you use a personal address.',
   },
   {
     id: 'real',
@@ -325,7 +326,9 @@ export const intakeCopy = {
   audienceHelper:
     'Describe them the way you would to a colleague: who they are, what they buy or do today, what they care about. For business buyers, include company size, industry, and role if you know them. No names or personal data.',
   extraQuestionsHelper: 'We’ll write the survey questions, but tell us anything you specifically want asked.',
-  emailHelper: 'This is where the report will be sent. A work address is preferred.',
+  emailHelper: 'This is where the report will be sent. Please use your company email; with a personal address we’ll ask for your company website.',
+  companySiteHelper: 'Your organisation’s website, so we can confirm the request. Required with a personal email address.',
+  confirmNote: 'We’ll email you a link to confirm the request. It only enters our queue once you click it.',
   dataHandling:
     'Only the Savant team preparing your snapshot can read your request; our email provider handles delivery. We keep it only while preparing your snapshot, and you can ask us to delete it at any time.',
   previewNotice: 'This is a preview: requests can’t be sent yet, but you can walk through every screen.',
@@ -341,12 +344,16 @@ export const intakeCopy = {
   marketing: 'Send me occasional Savant research notes. Not required for your report.',
   disclosure: tyiDisclosure,
   submit: 'Submit my research request',
-  successHeadline: 'Your research request is in.',
+  successHeadline: 'One more step: confirm your request.',
   conceptLabelProblem: 'Describe the problem or proposed approach',
   successSent: (email: string) =>
-    `We’ve sent a confirmation to ${email}. We’ll confirm your delivery window there within three business days — reply to that email if anything changes. If the confirmation doesn’t arrive within a few minutes, check your spam folder.`,
+    `We’ve sent a confirmation link to ${email}. Click it and your request enters our queue; we then confirm fit and a delivery date within three business days. If it doesn’t arrive within a few minutes, check your spam folder.`,
   successNotSent: (email: string) =>
-    `Your request reached us, but we couldn’t send a confirmation to ${email}. Please check the address — we’ll confirm your delivery window within three business days once we can reach you.`,
+    `Your request reached us, but we couldn’t send the confirmation link to ${email}. Please check the address and submit again, or contact us.`,
+  confirmedHeadline: 'Thanks — your request is confirmed.',
+  confirmedBody: 'It is now in our queue. We confirm fit and give you a delivery date by email within three business days.',
+  confirmFailedHeadline: 'That confirmation link didn’t work.',
+  confirmFailedBody: 'It may have expired (links last 7 days) or been altered. Submit the request again and we’ll send a fresh link.',
 };
 
 /**

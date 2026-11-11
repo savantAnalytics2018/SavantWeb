@@ -156,7 +156,7 @@ describe('StudyWizard', () => {
     expect(body.concepts[0].name).toBe('Reminder app');
     expect(await screen.findByText(intakeCopy.successHeadline)).toBeInTheDocument();
     expect(screen.getByText('TYI-2026-TEST01')).toBeInTheDocument();
-    expect(screen.getByText(/sent a confirmation to jordan@example.com/i)).toBeInTheDocument();
+    expect(screen.getByText(/sent a confirmation link to jordan@example.com/i)).toBeInTheDocument();
     expect(window.sessionStorage.getItem('savant.tyi.draft.v1')).toBeNull();
   });
 

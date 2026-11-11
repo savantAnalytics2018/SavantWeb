@@ -56,6 +56,8 @@ export interface StudyInput {
   company: string;
   email: string;
   role: string;
+  /** Required when the email is a consumer mailbox: the organisation's website. */
+  companySite: string;
   consent: boolean;
   marketingOptIn: boolean;
   /** Attribution captured on the landing page (referrer / UTM), never shown to the visitor. */
@@ -82,11 +84,13 @@ export const emptyStudy = (): StudyInput => ({
   company: '',
   email: '',
   role: '',
+  companySite: '',
   consent: false,
   marketingOptIn: false,
   source: '',
 });
 
+const sitePattern = /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,}(\/\S*)?$/i;
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const urlPattern = /^https?:\/\/[^\s]+$/i;
 
@@ -147,6 +151,11 @@ export function validateStep(step: number, v: StudyInput): StudyErrors {
     else if (tooLong(v.company, studyLimits.short.max)) e.company = `Keep this under ${studyLimits.short.max} characters.`;
     if (!email) e.email = 'Please enter your email so we can send the report.';
     else if (email.length > studyLimits.email.max || !emailPattern.test(email)) e.email = 'Please enter a valid email address.';
+    else if (isFreeMail(email)) {
+      const site = v.companySite.trim();
+      if (!site) e.companySite = 'For a personal email address, please add your company website so we can confirm the organisation.';
+      else if (!sitePattern.test(site) || site.length > 200) e.companySite = 'Please enter a website like example.com.';
+    }
     if (tooLong(v.role, studyLimits.short.max)) e.role = `Keep this under ${studyLimits.short.max} characters.`;
     if (v.consent !== true) e.consent = 'We need your permission to process the request and email the report.';
   }
@@ -188,6 +197,7 @@ export function coerceStudy(body: unknown): StudyInput {
     company: s('company', studyLimits.short.max),
     email: s('email', studyLimits.email.max),
     role: s('role', studyLimits.short.max),
+    companySite: s('companySite', 200),
     consent: b.consent === true,
     marketingOptIn: b.marketingOptIn === true,
     source: s('source', 300),

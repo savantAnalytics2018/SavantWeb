@@ -1,9 +1,10 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { buyerTypes, decisionTypes, intakeCopy, intakeSteps } from '@/content/testYourIdea';
 import {
   emptyConcept,
   emptyStudy,
+  isFreeMail,
   studyConfig,
   studyLimits,
   validateStep,
@@ -120,6 +121,8 @@ function Field({
 
 export default function StudyWizard({ fetchImpl }: StudyWizardProps) {
   const id = useId();
+  const [params] = useSearchParams();
+  const confirmed = params.get('confirmed'); // "1" | "0" | null — set by the emailed confirmation link
   const [values, setValues] = useState<StudyInput>(emptyStudy);
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<StudyErrors>({});
@@ -279,6 +282,29 @@ export default function StudyWizard({ fetchImpl }: StudyWizardProps) {
       setStatus('error');
       track('tyi_form_failed', { httpStatus: 0 });
     }
+  }
+
+  /* ---------- Arrived from the emailed confirmation link ---------- */
+  if (confirmed === '1' || confirmed === '0') {
+    const ok = confirmed === '1';
+    return (
+      <div role="status" className="wizard-success">
+        <p className="eyebrow">{ok ? 'Request confirmed' : 'Confirmation'}</p>
+        <h2>{ok ? intakeCopy.confirmedHeadline : intakeCopy.confirmFailedHeadline}</h2>
+        <p>{ok ? intakeCopy.confirmedBody : intakeCopy.confirmFailedBody}</p>
+        <p>
+          {ok ? (
+            <Link to={localPath('/market-research')} className="link-arrow">
+              Back to Market Research
+            </Link>
+          ) : (
+            <Link to={localPath('/market-research/start')} className="link-arrow" reloadDocument>
+              Start a new request
+            </Link>
+          )}
+        </p>
+      </div>
+    );
   }
 
   /* ---------- Success screen ---------- */
@@ -712,6 +738,24 @@ export default function StudyWizard({ fetchImpl }: StudyWizardProps) {
               </Field>
             </div>
 
+            {isFreeMail(values.email) && (
+              <Field id={fid('companySite')} label="Company website" hint={intakeCopy.companySiteHelper} error={errors.companySite}>
+                {(a) => (
+                  <input
+                    {...a}
+                    type="text"
+                    name="companySite"
+                    inputMode="url"
+                    autoComplete="url"
+                    placeholder="example.com"
+                    maxLength={200}
+                    value={values.companySite}
+                    onChange={set('companySite')}
+                  />
+                )}
+              </Field>
+            )}
+
             <details className="brief-details">
               <summary>Review your brief</summary>
               <BriefSummary values={values} heading="Your brief" compact />
@@ -743,6 +787,9 @@ export default function StudyWizard({ fetchImpl }: StudyWizardProps) {
                   {errors.consent}
                 </p>
               )}
+              <p className="small muted" style={{ marginTop: '0.5rem' }}>
+                {intakeCopy.confirmNote}
+              </p>
             </div>
           </>
         )}

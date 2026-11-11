@@ -17,7 +17,14 @@ Runtime variables (Worker → Settings → Variables and Secrets):
 Build variable (Worker → Settings → Build → Variables):
 - `VITE_CONTACT_ENDPOINT` = /api/contact
 - `VITE_STUDY_ENDPOINT` = /api/study
+Optional runtime variables (added 10 Nov, evening):
+- `STUDY_CONFIRM_SECRET` = any long random string (signs the email confirmation links; falls back to RESEND_API_KEY if unset)
+- `SITE_ORIGIN` = https://twinresearch.savantanalytics.net on the test Worker (the origin used in confirmation links; defaults to the request's own origin, so this is only needed if links should always point at one hostname)
 Then retry the build. Never prefix a secret with `VITE_`.
+
+Flow to test: submit → Savant inbox gets `[UNCONFIRMED]` email, requester gets "Confirm your research request" with a link →
+click → Savant inbox gets `[CONFIRMED]`, browser lands on /start?confirmed=1 (or /market-research/start?confirmed=1 on the main host).
+A gmail/yahoo address now requires a company website on the last step; the Savant copy shows it under TRIAGE.
 Test: submit one research request with a @savantanalytics.net address and one with a gmail address;
 the second should arrive with `[REVIEW]` in the subject and a "5. TRIAGE" block at the bottom.
 
