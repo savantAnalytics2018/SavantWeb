@@ -5,6 +5,7 @@
  */
 import handler from '../api/contact';
 import studyHandler, { confirmHandler } from '../api/study';
+import decisionStudyHandler from '../api/decisionStudy';
 
 interface Env {
   ASSETS: { fetch: (request: Request) => Promise<Response> };
@@ -50,6 +51,11 @@ export default {
       if (request.method !== 'GET') return methodNotAllowed();
       bridgeEnv(env);
       return confirmHandler(request);
+    }
+    if (url.pathname === '/api/decision-study') {
+      if (request.method !== 'POST') return methodNotAllowed();
+      bridgeEnv(env);
+      return decisionStudyHandler(request);
     }
     if (url.pathname === '/api/study') {
       if (request.method !== 'POST') return methodNotAllowed();

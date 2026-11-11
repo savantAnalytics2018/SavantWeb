@@ -43,6 +43,12 @@ export const pageMeta: Record<string, PageMeta> = {
     title: 'Start your free study — Savant Analytics',
     description: 'Four short screens: your decision, your audience, what to compare, and where to send the results.',
   },
+  decisionStudy: {
+    path: '/decision-study',
+    title: 'Scope your Decision Study — Savant Analytics',
+    description: 'Scoping questionnaire for a fixed-scope Decision Study: the decision, the options, the audiences, the evidence, and the questions the memo must answer.',
+    unlisted: true,
+  },
   privacy: {
     path: '/privacy',
     title: 'Privacy — Savant Analytics',
@@ -63,7 +69,12 @@ for (const s of services) {
   };
 }
 
-/** Public routes that should be prerendered and listed in the sitemap. */
+/** Routes to prerender (everything except the 404 page), including unlisted ones. */
 export const publicRoutes: string[] = Object.values(pageMeta)
   .map((m) => m.path)
   .filter((p) => p !== '/404');
+
+/** Routes listed in the sitemap: public and not unlisted. */
+export const sitemapRoutes: string[] = Object.values(pageMeta)
+  .filter((m) => m.path !== '/404' && !m.unlisted)
+  .map((m) => m.path);

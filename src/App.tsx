@@ -9,6 +9,7 @@ import Contact from '@/pages/Contact';
 import Privacy from '@/pages/Privacy';
 import TestYourIdea from '@/pages/TestYourIdea';
 import StartStudy from '@/pages/StartStudy';
+import DecisionStudy from '@/pages/DecisionStudy';
 import NotFound from '@/pages/NotFound';
 import { isResearchHost } from '@/lib/host';
 
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="contact" element={<Contact />} />
         <Route path="market-research" element={<TestYourIdea />} />
         <Route path="market-research/start" element={<StartStudy />} />
+        <Route path="decision-study" element={<DecisionStudy />} />
         <Route path="privacy" element={<Privacy />} />
         <Route path="*" element={<NotFound />} />
       </Route>

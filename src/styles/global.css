@@ -2748,3 +2748,73 @@ html[data-theme='warm'] .tyi-stat {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
 }
+
+/* Decision Study questionnaire (unlisted page) */
+.stepper--dense .stepper__label {
+  font-size: 0.75rem;
+}
+@media (max-width: 720px) {
+  .stepper--dense .stepper__label {
+    display: none;
+  }
+}
+.field__label {
+  font-weight: 600;
+  margin: 0 0 0.4rem;
+}
+.packages {
+  display: grid;
+  gap: 0.75rem;
+}
+@media (min-width: 860px) {
+  .packages {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.package {
+  display: grid;
+  gap: 0.4rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  cursor: pointer;
+  background: var(--color-surface);
+}
+.package[data-selected='true'] {
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 2px var(--color-teal);
+}
+.package input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.package:focus-within {
+  outline: 2px solid var(--color-teal);
+  outline-offset: 2px;
+}
+.package__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.package__price {
+  font-weight: 700;
+  color: var(--color-teal);
+}
+.package__summary {
+  font-size: 0.9375rem;
+}
+.package .checklist {
+  margin: 0.25rem 0 0;
+}
+.terms {
+  padding-left: 1.25rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+}
+.terms li + li {
+  margin-top: 0.35rem;
+}

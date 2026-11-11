@@ -84,4 +84,6 @@ export interface PageMeta {
   description: string;
   /** Path beginning with "/" — combined with the production origin for canonicals. */
   path: string;
+  /** Prerendered but noindex and excluded from the sitemap; shared by link only. */
+  unlisted?: boolean;
 }

@@ -18,7 +18,10 @@ export type AnalyticsEvent =
   | 'tyi_form_step'
   | 'tyi_form_submitted'
   | 'tyi_form_accepted'
-  | 'tyi_form_failed';
+  | 'tyi_form_failed'
+  | 'ds_form_submitted'
+  | 'ds_form_accepted'
+  | 'ds_form_failed';
 
 type Payload = Record<string, string | number | boolean>;
 

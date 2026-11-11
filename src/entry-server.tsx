@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import App from './App';
-import { pageMeta, publicRoutes } from './content/meta';
+import { pageMeta, publicRoutes, sitemapRoutes } from './content/meta';
 import { headTagsFor, organizationJsonLd, siteOrigin, isIndexable } from './lib/head';
 import { validateContent } from './content/validate';
 import './styles/global.css';
@@ -16,8 +16,8 @@ export function render(url: string): { html: string; head: string } {
     </StrictMode>,
   );
   const meta = Object.values(pageMeta).find((m) => m.path === url) ?? pageMeta.notFound;
-  const head = headTagsFor(meta, { noindex: meta === pageMeta.notFound });
+  const head = headTagsFor(meta, { noindex: meta === pageMeta.notFound || meta.unlisted === true });
   return { html, head };
 }
 
-export { publicRoutes, organizationJsonLd, siteOrigin, isIndexable, validateContent };
+export { publicRoutes, sitemapRoutes, organizationJsonLd, siteOrigin, isIndexable, validateContent };

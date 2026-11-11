@@ -17,6 +17,7 @@ Runtime variables (Worker → Settings → Variables and Secrets):
 Build variable (Worker → Settings → Build → Variables):
 - `VITE_CONTACT_ENDPOINT` = /api/contact
 - `VITE_STUDY_ENDPOINT` = /api/study
+- `VITE_DECISION_STUDY_ENDPOINT` = /api/decision-study   (the unlisted paid-study questionnaire at /decision-study)
 Optional runtime variables (added 10 Nov, evening):
 - `STUDY_CONFIRM_SECRET` = any long random string (signs the email confirmation links; falls back to RESEND_API_KEY if unset)
 - `SITE_ORIGIN` = https://twinresearch.savantanalytics.net on the test Worker (the origin used in confirmation links; defaults to the request's own origin, so this is only needed if links should always point at one hostname)

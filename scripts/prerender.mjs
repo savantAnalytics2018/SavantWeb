@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
 const template = readFileSync(join(dist, 'index.html'), 'utf8');
-const { render, publicRoutes, organizationJsonLd, siteOrigin, isIndexable, validateContent } = await import(
+const { render, publicRoutes, sitemapRoutes, organizationJsonLd, siteOrigin, isIndexable, validateContent } = await import(
   join(root, 'dist-server', 'entry-server.js')
 );
 
@@ -38,7 +38,7 @@ for (const route of routes) {
 }
 
 // Sitemap and robots — production origin, noindex-aware.
-const urls = publicRoutes.map((r) => (r === '/' ? `${siteOrigin}/` : `${siteOrigin}${r}`));
+const urls = (sitemapRoutes ?? publicRoutes).map((r) => (r === '/' ? `${siteOrigin}/` : `${siteOrigin}${r}`));
 const sitemap =
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
   urls.map((u) => `  <url><loc>${u}</loc></url>`).join('\n') +
