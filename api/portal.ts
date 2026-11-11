@@ -60,6 +60,11 @@ const json = (status: number, body: Record<string, unknown>, extra: Record<strin
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', ...extra } });
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
+export async function sha256(text: string): Promise<string> {
+  const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(d), (b) => b.toString(16).padStart(2, '0')).join('');
+}
+
 export function cookieName(ref: string): string {
   return ref === 'admin' ? 'sp_admin' : `sp_${ref.replace(/[^A-Z0-9]/gi, '_')}`;
 }
@@ -114,6 +119,11 @@ interface Row {
   company: string;
   answers: string;
   scope: string | null;
+  scope_version: number;
+  approved_scope: string | null;
+  approved_scope_sha: string | null;
+  approved_version: number | null;
+  approved_by: string | null;
   approved_at: number | null;
   report_key: string | null;
   report_name: string | null;
@@ -126,6 +136,7 @@ async function getStudy(db: D1Like, ref: string): Promise<PortalStudy | null> {
   if (!r) return null;
   const { results } = await db.prepare('SELECT id, author, body, created_at FROM messages WHERE ref = ? ORDER BY created_at, id').bind(ref).all<{ id: number; author: string; body: string; created_at: number }>();
   const messages: PortalMessage[] = results.map((m) => ({ id: m.id, author: m.author as PortalMessage['author'], body: m.body, createdAt: m.created_at }));
+  const { results: sv } = await deps_db_scopes(db, ref);
   let answers: Record<string, unknown> = {};
   try {
     answers = JSON.parse(r.answers) as Record<string, unknown>;
@@ -141,13 +152,24 @@ async function getStudy(db: D1Like, ref: string): Promise<PortalStudy | null> {
     company: r.company,
     answers,
     scope: r.scope,
+    scopeSha: r.scope ? await sha256(r.scope) : null,
+    scopeVersion: r.scope_version ?? 0,
+    approvedScope: r.approved_scope,
+    approvedScopeSha: r.approved_scope_sha,
+    approvedVersion: r.approved_version,
+    approvedBy: r.approved_by,
     approvedAt: r.approved_at,
+    scopeVersions: sv.map((v) => ({ version: v.version, body: v.body, sha256: v.sha256, proposedAt: v.proposed_at, approvedAt: v.approved_at, approvedBy: v.approved_by })),
     hasReport: !!r.report_key,
     reportName: r.report_name,
     createdAt: r.created_at,
     updatedAt: r.updated_at,
     messages,
   };
+}
+
+function deps_db_scopes(db: D1Like, ref: string) {
+  return db.prepare('SELECT version, body, sha256, proposed_at, approved_at, approved_by FROM scope_versions WHERE ref = ? ORDER BY version').bind(ref).all<{ version: number; body: string; sha256: string; proposed_at: number; approved_at: number | null; approved_by: string | null }>();
 }
 
 async function event(db: D1Like, ref: string, kind: string, detail: string | null, ts: number): Promise<void> {
@@ -280,9 +302,22 @@ export async function portalHandler(req: Request, deps: PortalDeps): Promise<Res
 
   if (action === 'approve' && req.method === 'POST') {
     if (viewer.kind !== 'client') return json(403, { ok: false, message: 'Only the client can approve.' });
-    if (study.status !== 'scope_proposed') return json(409, { ok: false, message: 'There is no scope confirmation to approve yet.' });
-    await deps.db.prepare('UPDATE studies SET status = ?, approved_at = ?, updated_at = ? WHERE ref = ?').bind('approved', ts, ts, ref).run();
-    await event(deps.db, ref, 'approved', viewer.email, ts);
+    if (study.status !== 'scope_proposed' || !study.scope) return json(409, { ok: false, message: 'There is no scope confirmation to approve yet.' });
+    let b: { scopeSha?: unknown } = {};
+    try {
+      b = (await req.json()) as typeof b;
+    } catch {
+      /* fallthrough */
+    }
+    // The click must carry the hash of the text the client saw; a stale page cannot approve a changed scope.
+    const sha = await sha256(study.scope);
+    if (typeof b.scopeSha !== 'string' || b.scopeSha !== sha) return json(409, { ok: false, message: 'The scope changed since this page loaded. Reload to see the current version.' });
+    await deps.db
+      .prepare('UPDATE studies SET status = ?, approved_scope = ?, approved_scope_sha = ?, approved_version = ?, approved_by = ?, approved_at = ?, updated_at = ? WHERE ref = ?')
+      .bind('approved', study.scope, sha, study.scopeVersion, viewer.email, ts, ts, ref)
+      .run();
+    await deps.db.prepare('UPDATE scope_versions SET approved_at = ?, approved_by = ? WHERE ref = ? AND version = ?').bind(ts, viewer.email, ref, study.scopeVersion).run();
+    await event(deps.db, ref, 'approved', `v${study.scopeVersion} ${sha}`, ts);
     if (deps.adminTo) await send(deps, deps.adminTo, `[${ref}] SCOPE APPROVED — ${study.company}`, [`${study.name} (${study.company}) approved the scope for ${ref} at ${new Date(ts).toISOString()}.`, ``, `Next: send the invoice; schedule when payment clears.`, `${deps.origin}${portalPath(deps.origin, 'admin')}`]);
     await send(deps, study.email, `Scope approved (${ref})`, [`Hello ${study.name},`, ``, `Thank you — the scope for ${ref} is locked. We send the invoice next; the study is scheduled when payment clears.`, ``, `Your study page: ${await clientLink()}`, ``, `Savant Analytics`]);
     return json(200, { ok: true, status: 'approved' });
@@ -300,8 +335,22 @@ export async function portalHandler(req: Request, deps: PortalDeps): Promise<Res
     if (!portalStatuses.includes(status)) return json(422, { ok: false, message: 'Unknown status.' });
     const scope = typeof b.scope === 'string' ? b.scope.trim().slice(0, portalLimits.scope) : study.scope;
     if (status === 'scope_proposed' && !scope) return json(422, { ok: false, message: 'Write the scope confirmation before proposing it.' });
-    await deps.db.prepare('UPDATE studies SET status = ?, scope = ?, updated_at = ? WHERE ref = ?').bind(status, scope ?? null, ts, ref).run();
-    await event(deps.db, ref, `status:${status}`, null, ts);
+    const scopeChanged = (scope ?? '') !== (study.scope ?? '');
+    // Once a scope is approved, its text is frozen. Changing it means proposing a NEW version
+    // (status scope_proposed), which the client must approve again — a change order.
+    if (study.approvedScope && scopeChanged && status !== 'scope_proposed') {
+      return json(409, { ok: false, message: 'An approved scope cannot be edited. To change it, propose a new version (status "Scope confirmation ready") for the client to approve.' });
+    }
+    let version = study.scopeVersion;
+    if (status === 'scope_proposed' && (scopeChanged || version === 0 || study.approvedVersion === version)) {
+      version += 1;
+      await deps.db
+        .prepare('INSERT INTO scope_versions (ref, version, body, sha256, proposed_at) VALUES (?, ?, ?, ?, ?)')
+        .bind(ref, version, scope, await sha256(scope!), ts)
+        .run();
+    }
+    await deps.db.prepare('UPDATE studies SET status = ?, scope = ?, scope_version = ?, updated_at = ? WHERE ref = ?').bind(status, scope ?? null, version, ts, ref).run();
+    await event(deps.db, ref, `status:${status}`, status === 'scope_proposed' ? `v${version}` : null, ts);
     const nudge: Partial<Record<PortalStatus, [string, string]>> = {
       needs_input: [`We need your input on ${ref}`, 'There is a question for you on your study page:'],
       scope_proposed: [`Please approve the scope for ${ref}`, 'Our scope confirmation is ready for your approval on your study page:'],

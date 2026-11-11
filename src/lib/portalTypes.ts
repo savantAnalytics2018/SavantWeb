@@ -31,6 +31,15 @@ export interface PortalMessage {
   createdAt: number;
 }
 
+export interface ScopeVersion {
+  version: number;
+  body: string;
+  sha256: string;
+  proposedAt: number;
+  approvedAt: number | null;
+  approvedBy: string | null;
+}
+
 export interface PortalStudy {
   ref: string;
   package: string;
@@ -39,8 +48,17 @@ export interface PortalStudy {
   name: string;
   company: string;
   answers: Record<string, unknown>;
+  /** Current proposed scope (null until Savant proposes one). */
   scope: string | null;
+  scopeSha: string | null;
+  scopeVersion: number;
+  /** Immutable: the exact text the client approved, and who/when. */
+  approvedScope: string | null;
+  approvedScopeSha: string | null;
+  approvedVersion: number | null;
+  approvedBy: string | null;
   approvedAt: number | null;
+  scopeVersions: ScopeVersion[];
   hasReport: boolean;
   reportName: string | null;
   createdAt: number;

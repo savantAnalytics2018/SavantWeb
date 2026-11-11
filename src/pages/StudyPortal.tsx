@@ -74,17 +74,21 @@ export default function StudyPortal() {
               <div className="stack">
                 <ReportBox study={study} />
 
-                {study.scope && (
+                {study.approvedScope && (
+                  <section className="aside-box portal-scope" aria-labelledby="scope-approved-h">
+                    <h2 id="scope-approved-h">Approved scope</h2>
+                    <p className="portal-scope__text">{study.approvedScope}</p>
+                    <p className="small muted">
+                      Version {study.approvedVersion} · approved {study.approvedAt ? fmtDate(study.approvedAt) : ''}
+                      {viewer === 'admin' && study.approvedBy ? ` by ${study.approvedBy}` : ''} · record {study.approvedScopeSha?.slice(0, 12)}
+                    </p>
+                  </section>
+                )}
+                {study.scope && study.status === 'scope_proposed' && study.scopeSha !== study.approvedScopeSha && (
                   <section className="aside-box portal-scope" aria-labelledby="scope-h">
-                    <h2 id="scope-h">Scope confirmation</h2>
+                    <h2 id="scope-h">{study.approvedScope ? 'Change order — new scope for approval' : 'Scope confirmation'}</h2>
                     <p className="portal-scope__text">{study.scope}</p>
-                    {study.status === 'scope_proposed' && viewer === 'client' && <ApproveButton studyRef={study.ref} onDone={load} />}
-                    {study.approvedAt && (
-                      <p className="small muted">
-                        Approved {fmtDate(study.approvedAt)}
-                        {study.status !== 'scope_proposed' ? '.' : ''}
-                      </p>
-                    )}
+                    {viewer === 'client' && study.scopeSha && <ApproveButton studyRef={study.ref} scopeSha={study.scopeSha} onDone={load} />}
                   </section>
                 )}
 
@@ -112,17 +116,20 @@ export default function StudyPortal() {
   );
 }
 
-function ApproveButton({ studyRef, onDone }: { studyRef: string; onDone: () => void }) {
+function ApproveButton({ studyRef, scopeSha, onDone }: { studyRef: string; scopeSha: string; onDone: () => void }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
   const [armed, setArmed] = useState(false);
   async function go() {
     setBusy(true);
     setErr('');
-    const r = await portalApi.approve(studyRef);
+    const r = await portalApi.approve(studyRef, scopeSha);
     setBusy(false);
     if (r.ok) onDone();
-    else setErr(r.message ?? 'Could not approve.');
+    else {
+      setErr(r.message ?? 'Could not approve.');
+      if (r.status === 409) onDone(); // reload so the client sees the current version
+    }
   }
   return (
     <div className="portal-approve">
@@ -134,7 +141,7 @@ function ApproveButton({ studyRef, onDone }: { studyRef: string; onDone: () => v
         </p>
       ) : (
         <>
-          <p className="small">Approving locks the scope above. Changes afterwards are a change order, agreed and paid before work continues.</p>
+          <p className="small">Approving locks the exact text above (we keep a hashed copy with your email and the time). Changes afterwards are a change order you approve separately.</p>
           <p className="portal-approve__row">
             <button type="button" className="btn btn--primary" onClick={go} disabled={busy}>
               {busy ? 'Approving…' : 'Yes, approve'}

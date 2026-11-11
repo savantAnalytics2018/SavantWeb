@@ -196,8 +196,22 @@ function AdminStudy({ studyRef, onBack }: { studyRef: string; onBack: () => void
 
       <div className="portal__grid">
         <div className="stack">
+          {study.approvedScope && (
+            <section className="aside-box portal-scope" aria-labelledby="adm-approved">
+              <h2 id="adm-approved">Approved scope (frozen)</h2>
+              <p className="portal-scope__text">{study.approvedScope}</p>
+              <p className="small muted">
+                v{study.approvedVersion} · {study.approvedBy} · {study.approvedAt ? fmtDate(study.approvedAt) : ''} · sha256 {study.approvedScopeSha}
+              </p>
+            </section>
+          )}
           <section className="aside-box" aria-labelledby="adm-scope">
-            <h2 id="adm-scope">Scope confirmation &amp; status</h2>
+            <h2 id="adm-scope">{study.approvedScope ? 'Change order (new scope version) & status' : 'Scope confirmation & status'}</h2>
+            {study.scopeVersions.length > 0 && (
+              <p className="small muted">
+                Versions: {study.scopeVersions.map((v) => `v${v.version}${v.approvedAt ? ' ✓' : ''}`).join(' · ')}
+              </p>
+            )}
             <form className="form" onSubmit={saveStatus}>
               <div className="field">
                 <label htmlFor="adm-scope-text">Scope confirmation (shown to the client above the Approve button)</label>
@@ -212,7 +226,10 @@ function AdminStudy({ studyRef, onBack }: { studyRef: string; onBack: () => void
                     </option>
                   ))}
                 </select>
-                <p className="field__hint">Setting "Scope confirmation ready", "Needs your input", "Running" or "Delivered" emails the client a nudge with their link.</p>
+                <p className="field__hint">
+                  Setting "Scope confirmation ready", "Needs your input", "Running" or "Delivered" emails the client a nudge with their link.
+                  {study.approvedScope ? ' The approved text is frozen; editing it here and choosing "Scope confirmation ready" proposes a new version the client must approve again.' : ''}
+                </p>
               </div>
               <p>
                 <button type="submit" className="btn btn--primary" disabled={busy}>

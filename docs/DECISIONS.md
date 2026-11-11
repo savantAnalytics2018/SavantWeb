@@ -78,3 +78,7 @@ A second subdomain for people who have already expressed interest. Two pages: `/
 ## D-19 — Paid-study client portal on twindetail (2026-11-11)
 
 Paid tiers get a page per study (`/s/<ref>`) instead of email back-and-forth: status strip, our scope confirmation with a client **Approve** button (timestamped — the contract trigger), a message thread, the questionnaire, and the delivered memo. Access by magic link (signed token → cookie), no accounts or passwords; `/admin` is the same mechanism for Savant. Emails are nudges only. The free snapshot stays email-only. Storage is Cloudflare D1 + R2 bound to the same Worker; without the bindings the questionnaire degrades to email-only. Review promise on the page and in emails: **24 hours**. See docs/PORTAL.md.
+
+## D-20 — Scope approval is bound to an immutable version (2026-11-11)
+
+Raised by Dot: an approval that can be edited afterwards is not a contract. Now: each proposed scope is a numbered version with a SHA-256; the Approve click carries the hash of the text shown and is refused if it no longer matches; approval freezes an exact copy with the approver's email and time, and that record is never updated. Any later change is a new version requiring a fresh approval. The Approve button can be used as the contract trigger.

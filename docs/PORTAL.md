@@ -22,7 +22,8 @@ One page per paid study, no accounts. Lives on the twindetail subdomain next to 
 `submitted` → `reviewing` → (`needs_input` ⇄ `reviewing`) → `scope_proposed` → **client approves** → `approved` → `running` → `delivered` → `closed`
 
 - A Savant message on a submitted/reviewing study flips it to `needs_input` and nudges the client; a client reply flips it back to `reviewing` and nudges Savant.
-- `scope_proposed` requires scope text; the client sees it above the Approve button. Approval is timestamped and emails both sides.
+- `scope_proposed` requires scope text and creates a numbered **scope version** (`scope_versions` table). The client's Approve click carries the SHA-256 of the text they are looking at; the server rejects it (409) if the scope changed since the page loaded.
+- Approval copies the exact text into `approved_scope` with its hash, the client's email (from the signed cookie) and a timestamp. **That record is never updated.** Editing the scope under any other status is refused (409). To change an approved scope, Savant proposes a new version (status `scope_proposed`), which the client approves again — a change order. Every version and its approval stay in `scope_versions`.
 - Uploading the memo (PDF, ≤25 MB, stored in R2) sets `delivered` and nudges the client.
 
 ## Cloudflare setup (Dot) — test Worker first
@@ -32,7 +33,7 @@ One page per paid study, no accounts. Lives on the twindetail subdomain next to 
    npx wrangler d1 create savantweb-portal --config wrangler.test.jsonc
    ```
    Paste the returned `database_id` into `wrangler.test.jsonc` → `d1_databases[0].database_id` (commit that to `market-research`).
-2. **Schema**
+2. **Schema** (if a database was already created from the first `portal.sql`, run `db/portal-002-scope-versions.sql` instead)
    ```
    npx wrangler d1 execute savantweb-portal --remote --file=db/portal.sql --config wrangler.test.jsonc
    ```
