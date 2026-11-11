@@ -11,6 +11,7 @@ import {
   type StudyInput,
 } from '@/lib/studyConfig';
 import { track } from '@/lib/analytics';
+import { localPath } from '@/lib/host';
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -299,7 +300,7 @@ export default function StudyWizard({ fetchImpl }: StudyWizardProps) {
         <p className="muted small">{intakeCopy.disclosure}</p>
         <BriefSummary values={values} heading="A copy of what you submitted" />
         <p>
-          <Link to="/market-research" className="link-arrow">
+          <Link to={localPath('/market-research')} className="link-arrow">
             Back to Market Research
           </Link>
         </p>

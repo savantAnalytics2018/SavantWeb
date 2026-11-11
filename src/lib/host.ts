@@ -31,3 +31,11 @@ export function researchHref(path: '/market-research' | '/market-research/start'
   if (!researchOrigin) return path;
   return path === '/market-research' ? `${researchOrigin}/` : `${researchOrigin}/start`;
 }
+
+/** On the research host, prefer the short paths ("/" and "/start") for in-app links. */
+export function localPath(path: string): string {
+  if (!isResearchHost()) return path;
+  if (path === '/market-research') return '/';
+  if (path === '/market-research/start') return '/start';
+  return path;
+}

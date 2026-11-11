@@ -20,6 +20,7 @@ import {
 import { pageMeta } from '@/content/meta';
 import { useHead } from '@/lib/head';
 import { track } from '@/lib/analytics';
+import { localPath } from '@/lib/host';
 
 /**
  * Market Research landing page. Order (10 Nov review): hero → three outputs →
@@ -42,7 +43,7 @@ export default function TestYourIdea() {
             </h1>
             <p className="lede">{tyiHero.lede}</p>
             <div className="hero__actions">
-              <Link to={tyiHero.primaryCta.href} className="btn btn--primary" onClick={() => track('tyi_cta_click', { location: 'hero' })}>
+              <Link to={localPath(tyiHero.primaryCta.href)} className="btn btn--primary" onClick={() => track('tyi_cta_click', { location: 'hero' })}>
                 {tyiHero.primaryCta.label}
               </Link>
               <a href={tyiHero.secondaryCta.href} className="btn btn--secondary">
@@ -63,7 +64,7 @@ export default function TestYourIdea() {
           </h2>
           <div className="tiles tiles--4">
             {useCases.map((u) => (
-              <Link key={u.id} to="/market-research/start" className="tile" onClick={() => track('tyi_cta_click', { location: `tile-${u.id}` })}>
+              <Link key={u.id} to={localPath('/market-research/start')} className="tile" onClick={() => track('tyi_cta_click', { location: `tile-${u.id}` })}>
                 <span className="tile__icon" data-icon={u.id} aria-hidden="true" />
                 <span className="tile__title">{u.title}</span>
                 <span className="tile__q">{u.question}</span>
@@ -192,7 +193,7 @@ export default function TestYourIdea() {
             About 10 minutes to describe your decision and audience. No account, no sales call.
           </p>
           <p>
-            <Link to={tyiHero.primaryCta.href} className="btn btn--primary on-dark" onClick={() => track('tyi_cta_click', { location: 'final' })}>
+            <Link to={localPath(tyiHero.primaryCta.href)} className="btn btn--primary on-dark" onClick={() => track('tyi_cta_click', { location: 'final' })}>
               {tyiHero.primaryCta.label}
             </Link>
           </p>

@@ -10,12 +10,20 @@ import Privacy from '@/pages/Privacy';
 import TestYourIdea from '@/pages/TestYourIdea';
 import StartStudy from '@/pages/StartStudy';
 import NotFound from '@/pages/NotFound';
+import { isResearchHost } from '@/lib/host';
 
+/**
+ * On twinresearch.<domain> the Worker serves the research landing at "/" and the wizard at
+ * "/start"; the client router must agree so hydration and in-app navigation match the HTML.
+ * During prerender (no window) this is false and the main-site routes are used.
+ */
 export default function App() {
+  const research = isResearchHost();
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route index element={<Home />} />
+        <Route index element={research ? <TestYourIdea /> : <Home />} />
+        {research && <Route path="start" element={<StartStudy />} />}
         <Route path="services" element={<Services />} />
         <Route path="services/:serviceId" element={<ServiceDetail />} />
         <Route path="approach" element={<Approach />} />

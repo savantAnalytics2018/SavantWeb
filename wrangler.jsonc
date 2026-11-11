@@ -11,7 +11,10 @@
     "directory": "./dist",
     "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "html_handling": "drop-trailing-slash"
+    "html_handling": "drop-trailing-slash",
+    // Research subdomain front door: let the Worker rewrite "/" and "/start" before the asset
+    // lookup (otherwise the static index.html / 404 are served first). See docs/SUBDOMAIN.md.
+    "run_worker_first": ["/", "/start"]
   },
   "observability": { "enabled": true }
 }

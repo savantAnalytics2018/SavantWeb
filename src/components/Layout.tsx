@@ -7,8 +7,8 @@ import type { NavItem } from '@/content/types';
 
 /** Nav for the research subdomain: the offer, the wizard, and a way back. */
 const RESEARCH_NAV: NavItem[] = [
-  { id: 'market-research', label: 'Digital-Twin Market Research', href: '/market-research' },
-  { id: 'start', label: 'Start your free study', href: '/market-research/start' },
+  { id: 'market-research', label: 'Digital-Twin Market Research', href: '/' },
+  { id: 'start', label: 'Start your free study', href: '/start' },
 ];
 
 /** Set after mount so prerendered HTML (main-site version) hydrates cleanly. */
