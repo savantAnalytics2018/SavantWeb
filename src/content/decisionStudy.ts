@@ -67,5 +67,7 @@ export const studyCopy = {
   successHeadline: 'Questionnaire received.',
   successBody:
     'We review it within two business days and reply with a scope confirmation, a kickoff date, and an invoice. The study is scheduled when payment clears. If anything in your answers needs clarifying, we ask before quoting.',
+  successBodyPortal:
+    'We read it within 24 hours. Any questions from us, our scope confirmation, your approval, and the finished memo all live on your study page — we email you whenever it needs your attention.',
   successNotSent: (email: string) => `Your questionnaire reached us, but we could not send a copy to ${email}. We will reply to that address within two business days; if nothing arrives, contact us.`,
 };

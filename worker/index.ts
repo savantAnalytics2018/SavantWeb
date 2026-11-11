@@ -6,6 +6,7 @@
 import handler from '../api/contact';
 import studyHandler, { confirmHandler } from '../api/study';
 import decisionStudyHandler from '../api/decisionStudy';
+import { portalHandler, type D1Like, type PortalDeps, type R2Like } from '../api/portal';
 
 interface Env {
   ASSETS: { fetch: (request: Request) => Promise<Response> };
@@ -20,6 +21,26 @@ interface Env {
   STUDY_TURNAROUND?: string;
   STUDY_CONFIRM_SECRET?: string;
   SITE_ORIGIN?: string;
+  /** Paid-study portal (optional). D1 database + R2 bucket; the portal is off when DB is absent. */
+  DB?: D1Like;
+  REPORTS?: R2Like;
+  /** Public origin of the portal, e.g. https://twindetail.savantanalytics.net (defaults to the request origin). */
+  PORTAL_ORIGIN?: string;
+}
+
+function portalDeps(env: Env, request: Request): PortalDeps | undefined {
+  if (!env.DB) return undefined;
+  const secret = env.STUDY_CONFIRM_SECRET || env.RESEND_API_KEY;
+  if (!secret) return undefined;
+  return {
+    db: env.DB,
+    reports: env.REPORTS,
+    secret,
+    apiKey: env.RESEND_API_KEY,
+    from: env.CONTACT_FROM,
+    adminTo: env.STUDY_TO || env.CONTACT_TO,
+    origin: (env.PORTAL_ORIGIN?.trim() || new URL(request.url).origin).replace(/\/$/, ''),
+  };
 }
 
 function bridgeEnv(env: Env): void {
@@ -57,7 +78,12 @@ export default {
     if (url.pathname === '/api/decision-study') {
       if (request.method !== 'POST') return methodNotAllowed();
       bridgeEnv(env);
-      return decisionStudyHandler(request);
+      return decisionStudyHandler(request, portalDeps(env, request));
+    }
+    if (url.pathname.startsWith('/api/portal/')) {
+      const deps = portalDeps(env, request);
+      if (!deps) return new Response(JSON.stringify({ ok: false, message: 'The portal is not configured.' }), { status: 503, headers: { 'Content-Type': 'application/json; charset=utf-8' } });
+      return portalHandler(request, deps);
     }
     if (url.pathname === '/api/study') {
       if (request.method !== 'POST') return methodNotAllowed();
@@ -75,6 +101,11 @@ export default {
         return env.ASSETS.fetch(new Request(url.toString(), request));
       }
     }
+    // Portal deep links on any host: /twin-detail/s/<ref> is client-rendered from the /twin-detail/s shell.
+    if (/^\/twin-detail\/s\/[A-Za-z0-9-]+\/?$/.test(url.pathname)) {
+      url.pathname = '/twin-detail/s';
+      return env.ASSETS.fetch(new Request(url.toString(), request));
+    }
     // Private tier menu: "/" is the menu, "/start/<tier>" the intake. Nothing links here.
     const detailPrefix = (env.DETAIL_HOST_PREFIX ?? 'twindetail.').toLowerCase();
     if (url.hostname.toLowerCase().startsWith(detailPrefix)) {
@@ -85,6 +116,15 @@ export default {
       const m = /^\/start\/([a-z-]+)\/?$/.exec(url.pathname);
       if (m) {
         url.pathname = `/twin-detail/start/${m[1]}`;
+        return env.ASSETS.fetch(new Request(url.toString(), request));
+      }
+      // Client portal pages are client-rendered: serve the prerendered shells.
+      if (url.pathname === '/s' || /^\/s\/[A-Za-z0-9-]+\/?$/.test(url.pathname)) {
+        url.pathname = '/twin-detail/s';
+        return env.ASSETS.fetch(new Request(url.toString(), request));
+      }
+      if (url.pathname === '/admin') {
+        url.pathname = '/twin-detail/admin';
         return env.ASSETS.fetch(new Request(url.toString(), request));
       }
     }

@@ -106,6 +106,7 @@ export default function DecisionStudyWizard({ fetchImpl, presetPackage }: Decisi
   const [serverMessage, setServerMessage] = useState('');
   const [reference, setReference] = useState('');
   const [copySent, setCopySent] = useState(true);
+  const [portalUrl, setPortalUrl] = useState('');
   const [restored, setRestored] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
@@ -199,7 +200,7 @@ export default function DecisionStudyWizard({ fetchImpl, presetPackage }: Decisi
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({ ...values, source: captureSource(), website: honeypot, elapsedMs: Date.now() - startedAt.current }),
       });
-      let data: { ok?: boolean; message?: string; errors?: DsErrors; reference?: string; copySent?: boolean } = {};
+      let data: { ok?: boolean; message?: string; errors?: DsErrors; reference?: string; copySent?: boolean; portalUrl?: string } = {};
       try {
         data = await res.json();
       } catch {
@@ -208,6 +209,7 @@ export default function DecisionStudyWizard({ fetchImpl, presetPackage }: Decisi
       if (res.ok && data.ok) {
         setReference(data.reference ?? '');
         setCopySent(data.copySent !== false);
+        setPortalUrl(data.portalUrl ?? '');
         setStatus('success');
         clearDraft();
         track('ds_form_accepted', { packageId: values.packageId });
@@ -236,9 +238,20 @@ export default function DecisionStudyWizard({ fetchImpl, presetPackage }: Decisi
             Your reference: <strong>{reference}</strong>
           </p>
         )}
-        <p>{studyCopy.successBody}</p>
+        {portalUrl ? (
+          <>
+            <p>{studyCopy.successBodyPortal}</p>
+            <p>
+              <a className="btn btn--primary" href={portalUrl}>
+                Open your study page
+              </a>
+            </p>
+          </>
+        ) : (
+          <p>{studyCopy.successBody}</p>
+        )}
         {!copySent && <p className="notice notice--warning">{studyCopy.successNotSent(values.email.trim())}</p>}
-        <p className="muted small">You can close this page. Questions in the meantime: reply to the copy in your inbox.</p>
+        <p className="muted small">{portalUrl ? 'The same link is in your inbox and works for 30 days.' : 'You can close this page. Questions in the meantime: reply to the copy in your inbox.'}</p>
       </div>
     );
   }

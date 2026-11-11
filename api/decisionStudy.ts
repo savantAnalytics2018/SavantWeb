@@ -8,6 +8,7 @@
  */
 import { coerceDs, emailDomain, isFreeMail, makeDsReference, validateDs, type DsInput } from '../src/lib/decisionStudyConfig';
 import { packages } from '../src/content/decisionStudy';
+import { createStudy, type PortalDeps } from './portal';
 
 const MAX_BODY_BYTES = 128 * 1024;
 const WINDOW_MS = 10 * 60 * 1000;
@@ -121,7 +122,7 @@ async function send(apiKey: string, payload: Record<string, unknown>): Promise<b
   return res.ok;
 }
 
-export default async function handler(req: Request): Promise<Response> {
+export default async function handler(req: Request, portal?: PortalDeps): Promise<Response> {
   if (req.method !== 'POST') return json(405, { ok: false, message: 'Method not allowed.' });
   const to = process.env.STUDY_TO || process.env.CONTACT_TO;
   const from = process.env.CONTACT_FROM;
@@ -170,18 +171,29 @@ export default async function handler(req: Request): Promise<Response> {
       console.error('[decision-study] provider error (internal)', { elapsed: Date.now() - started });
       return json(502, { ok: false, message: 'The questionnaire could not be delivered. Please try again shortly.' });
     }
+    // Portal (paid tiers on twindetail): persist the study and give the client a page.
+    let created: { url: string; cookie: string; link: string } | null = null;
+    if (portal) {
+      try {
+        created = await createStudy(portal, { ref: reference, packageId: input.packageId, email: input.email, name: input.name, company: input.company, answers: input as unknown as Record<string, unknown> });
+      } catch (err) {
+        console.error('[decision-study] portal create failed', { reason: (err as Error).message });
+      }
+    }
     const copy = [
       `Hello ${input.name.trim()},`,
       ``,
       `Thank you — your Decision Study scoping questionnaire is in (reference ${reference}).`,
       ``,
-      `We review it within two business days and reply with a scope confirmation, a kickoff date, and an invoice. The study is scheduled when payment clears. If anything needs clarifying, we ask before quoting.`,
+      created
+        ? `We read it within 24 hours. Any questions from us, our scope confirmation, your approval, and the finished memo all live on your study page:\n${created.link}\n\nThe link works for 30 days; you can request a fresh one from the page at any time.`
+        : `We review it within two business days and reply with a scope confirmation, a kickoff date, and an invoice. The study is scheduled when payment clears. If anything needs clarifying, we ask before quoting.`,
       ``,
       `A copy of what you submitted:`,
       ``,
       text,
       ``,
-      `Reply to this email to add or change anything.`,
+      created ? `Questions in the meantime: use the message box on your study page.` : `Reply to this email to add or change anything.`,
       ``,
       `Savant Analytics`,
     ].join('\n');
@@ -195,6 +207,12 @@ export default async function handler(req: Request): Promise<Response> {
     });
     if (!ok) console.error('[decision-study] provider error (copy)', { elapsed: Date.now() - started });
     console.info('[decision-study] received', { elapsed: Date.now() - started, copySent: ok });
+    if (created) {
+      return new Response(JSON.stringify({ ok: true, reference, copySent: ok, portalUrl: created.url }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Set-Cookie': created.cookie },
+      });
+    }
     return json(200, { ok: true, reference, copySent: ok });
   } catch (err) {
     console.error('[decision-study] provider unreachable', { reason: (err as Error).name });

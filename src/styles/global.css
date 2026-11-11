@@ -2968,3 +2968,119 @@ html[data-theme='warm'] .tyi-stat {
 .link-arrow--back::after {
   content: none;
 }
+
+/* Paid-study portal */
+.portal {
+  max-width: 72rem;
+}
+.portal__head {
+  margin-bottom: var(--s-5);
+}
+.portal-strip {
+  margin-bottom: var(--s-6);
+}
+.portal__grid {
+  display: grid;
+  gap: var(--s-6);
+}
+@media (min-width: 960px) {
+  .portal__grid {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: start;
+  }
+}
+.portal-badge {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--color-teal);
+  color: #fff;
+}
+.portal-badge[data-status='needs_input'],
+.portal-badge[data-status='scope_proposed'] {
+  background: #b45309;
+}
+.portal-badge[data-status='delivered'],
+.portal-badge[data-status='closed'] {
+  background: var(--color-ink-2);
+}
+.portal-thread {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--s-4);
+  display: grid;
+  gap: 0.75rem;
+}
+.portal-msg {
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-surface);
+  max-width: 85%;
+}
+.portal-msg[data-mine='true'] {
+  margin-left: auto;
+  border-color: var(--color-teal);
+}
+.portal-msg__meta {
+  margin: 0 0 0.25rem;
+}
+.portal-msg__body {
+  margin: 0;
+  white-space: pre-wrap;
+}
+.portal-composer textarea {
+  width: 100%;
+}
+.portal-scope__text {
+  white-space: pre-wrap;
+}
+.portal-approve__row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.portal-answers h3 {
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-2);
+  margin: var(--s-4) 0 0.35rem;
+}
+.portal-answers dl {
+  margin: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+.portal-answers dt {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+.portal-answers dd {
+  margin: 0 0 0.25rem;
+  white-space: pre-wrap;
+}
+.portal-answers ol {
+  padding-left: 1.25rem;
+  margin: 0;
+}
+.portal-answers-wrap > summary,
+.portal aside details > summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.portal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+.portal-table th,
+.portal-table td {
+  text-align: left;
+  padding: 0.6rem 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}

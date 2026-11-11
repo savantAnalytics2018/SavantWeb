@@ -63,6 +63,8 @@ export const pageMeta: Record<string, PageMeta> = {
   },
   // Prerendered so the Worker rewrite on twindetail.<domain> hits a static file for every tier.
   twinDetailStartDs: { path: '/twin-detail/start/decision-study', title: 'Intake — Savant Analytics', description: 'Intake for the chosen digital-twin research tier.', unlisted: true },
+  twinDetailPortal: { path: '/twin-detail/s', title: 'Your study — Savant Analytics', description: 'Your Decision Study page: status, questions, scope approval, and the finished memo.', unlisted: true },
+  twinDetailAdmin: { path: '/twin-detail/admin', title: 'Studies — Savant Analytics', description: 'Savant admin view of paid studies.', unlisted: true },
   twinDetailStartCal: { path: '/twin-detail/start/calibration', title: 'Intake — Savant Analytics', description: 'Intake for the chosen digital-twin research tier.', unlisted: true },
   privacy: {
     path: '/privacy',

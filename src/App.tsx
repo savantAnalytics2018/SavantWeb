@@ -12,6 +12,8 @@ import StartStudy from '@/pages/StartStudy';
 import DecisionStudy from '@/pages/DecisionStudy';
 import TwinDetail from '@/pages/TwinDetail';
 import TwinDetailStart from '@/pages/TwinDetailStart';
+import StudyPortal from '@/pages/StudyPortal';
+import AdminPortal from '@/pages/AdminPortal';
 import NotFound from '@/pages/NotFound';
 import { isDetailHost, isResearchHost } from '@/lib/host';
 
@@ -32,6 +34,12 @@ export default function App() {
       <Route path="twin-detail/start/:tier" element={<TwinDetailStart />} />
       {detail && <Route path="/" element={<TwinDetail />} />}
       {detail && <Route path="start/:tier" element={<TwinDetailStart />} />}
+      <Route path="twin-detail/s" element={<StudyPortal />} />
+      <Route path="twin-detail/s/:ref" element={<StudyPortal />} />
+      <Route path="twin-detail/admin" element={<AdminPortal />} />
+      {detail && <Route path="s" element={<StudyPortal />} />}
+      {detail && <Route path="s/:ref" element={<StudyPortal />} />}
+      {detail && <Route path="admin" element={<AdminPortal />} />}
       <Route element={<Layout />}>
         {!detail && <Route index element={research ? <TestYourIdea /> : <Home />} />}
         {research && <Route path="start" element={<StartStudy />} />}
