@@ -136,10 +136,10 @@ export const trackRecord = {
 
 /** Product clip: a recording of the Twin Lab producing a report on an invented example brief. */
 export const demoClip = {
-  eyebrow: 'See a study run',
-  heading: 'From brief to reviewed report, in one sitting.',
-  lede: 'A recording of our research workflow on an invented example: the brief goes in, segments and questions are designed and approved, a simulated panel answers twice, and the report is written from the tabulated answers.',
-  caption: 'Example — invented client. Simulated respondents. Recording shortened; a real study takes longer and is reviewed by a named analyst before it is sent.',
+  eyebrow: 'The report',
+  heading: 'This is what arrives in your inbox.',
+  lede: 'A walk through an example report: the overview, how each option fared by segment, the objections raised, where the results were unstable, and the two to four tests to run with real people next.',
+  caption: 'Example report — invented client, simulated respondents, example reviewer. Your report follows the same structure with your decision, your options, and your audience.',
   mp4: '/media/twin-lab-demo.mp4',
   webm: '/media/twin-lab-demo.webm',
   poster: '/media/twin-lab-demo-poster.jpg',

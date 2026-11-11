@@ -114,7 +114,7 @@ export default function TestYourIdea() {
             <p className="lede">{demoClip.lede}</p>
           </div>
           <figure className="demo-clip">
-            <video muted loop playsInline autoPlay preload="metadata" poster={demoClip.poster} aria-label="Recording of the Twin Lab research workflow on an invented example brief">
+            <video muted loop playsInline autoPlay preload="metadata" poster={demoClip.poster} aria-label="Walk-through of an example research report: overview, results by segment, objections, interpretation, and tests to run with real people">
               <source src={demoClip.webm} type="video/webm" />
               <source src={demoClip.mp4} type="video/mp4" />
             </video>
