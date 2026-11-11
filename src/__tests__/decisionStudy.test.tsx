@@ -14,10 +14,13 @@ describe('Decision Study page', () => {
     render(<MemoryRouter initialEntries={['/']}><App /></MemoryRouter>);
     for (const nav of screen.getAllByRole('navigation')) expect(within(nav).queryByRole('link', { name: /decision study/i })).toBeNull();
   });
-  it('renders the questionnaire with eight steps', () => {
+  it('renders standalone: no site navigation, seven questionnaire steps, the price', () => {
     render(<MemoryRouter initialEntries={['/decision-study']}><App /></MemoryRouter>);
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Scope your Decision Study');
-    expect(screen.getByText('Step 1 of 8')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('One decision.');
+    expect(screen.queryByRole('navigation', { name: 'Primary' })).toBeNull();
+    expect(screen.queryByRole('link', { name: /market research/i })).toBeNull();
+    expect(screen.getByText('Step 1 of 7')).toBeInTheDocument();
+    expect(screen.getAllByText(/\$4,500/).length).toBeGreaterThan(0);
   });
 });
 
@@ -58,11 +61,9 @@ describe('Decision Study validation', () => {
     expect(e.packageId).toBeTruthy();
     expect(e.consent).toBeTruthy();
   });
-  it('checks the free-report reference format and the consumer-mailbox gate', () => {
-    expect(validateDsStep(0, { ...full(), reference: 'nope' }).reference).toBeTruthy();
-    expect(validateDsStep(0, { ...full(), reference: 'TYI-2026-AB12CD' }).reference).toBeUndefined();
-    expect(validateDsStep(7, { ...full(), email: 'jane@gmail.com' }).companySite).toBeTruthy();
-    expect(validateDsStep(7, { ...full(), email: 'jane@gmail.com', companySite: 'acme.com' }).companySite).toBeUndefined();
+  it('applies the consumer-mailbox gate on the last step', () => {
+    expect(validateDsStep(6, { ...full(), email: 'jane@gmail.com' }).companySite).toBeTruthy();
+    expect(validateDsStep(6, { ...full(), email: 'jane@gmail.com', companySite: 'acme.com' }).companySite).toBeUndefined();
   });
   it('coerces untrusted bodies and formats the questionnaire', () => {
     const v = coerceDs({ ...full(), options: [...full().options, 'junk'], questions: ['a', 3, 'b'], packageId: 'bogus' });

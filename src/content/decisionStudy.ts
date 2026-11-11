@@ -10,11 +10,21 @@
  */
 
 export const decisionStudyMeta = {
-  eyebrow: 'Decision Study — scoping questionnaire',
-  title: 'Scope your Decision Study',
+  eyebrow: 'Decision Study',
+  title: 'One decision. Five business days. A memo you can act on.',
   lede:
-    'You have seen the free report. This questionnaire scopes the full study: the decision, the options, the audiences, the evidence you already have, and the questions the study must answer. Allow 25–40 minutes; your answers save in this browser as you go.',
+    'A fixed-scope study of a single product, pricing, or go-to-market decision: up to five options and three audiences, run on a simulated audience, reviewed by a named analyst, delivered as a decision memo with a readout. $4,500, paid before kickoff.',
+  formTitle: 'Scope the study',
+  formLede: 'This questionnaire is the scoping document. What you describe here is what the study covers. Allow 25–40 minutes; your answers save in this browser as you go.',
 };
+
+/** What the $4,500 study delivers — shown above the questionnaire. */
+export const whatYouGet = [
+  { title: 'A decision memo, not a dashboard', detail: 'Eight to twelve pages: the answer to each question you set, the evidence behind it, where the simulation was unstable, and what to test with real buyers before you commit.' },
+  { title: 'Up to five options, three audiences', detail: 'Up to 300 simulated respondents built from your audience definitions, 12–15 questions designed around your decision criteria, sensitivity checks on every leading result.' },
+  { title: 'A named reviewer', detail: 'A Savant analyst checks unsupported claims, contradictory responses, and assumption sensitivity, documents any exclusions, and signs the memo.' },
+  { title: 'A 45-minute readout', detail: 'With the decision owner in the room. One revision round after it. Delivered within five business days of kickoff.' },
+];
 
 export const packages = [
   {
@@ -48,7 +58,6 @@ export const terms = [
 ];
 
 export const studySteps = [
-  { id: 'start', title: 'Your free report' },
   { id: 'decision', title: 'The decision' },
   { id: 'options', title: 'The options' },
   { id: 'audiences', title: 'The audiences' },
@@ -60,8 +69,6 @@ export const studySteps = [
 
 export const studyCopy = {
   preview: 'Preview — this questionnaire is not connected yet, so answers can be saved in your browser but not sent.',
-  referenceHelper: 'The TYI-… reference from your free report email. Leave blank if you did not have a free report.',
-  usefulHelper: 'What in the free report was useful, and what was missing? This shapes where the full study goes deeper.',
   decisionHelper: 'One sentence a colleague would recognise: "Whether to launch X in Q1 at price Y to audience Z."',
   ownerHelper: 'Who makes the final call, and who else has to agree?',
   criteriaHelper: 'What would make you choose one option over another? List the factors in the order they matter.',

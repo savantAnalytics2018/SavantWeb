@@ -22,6 +22,8 @@ export default function App() {
   const research = isResearchHost();
   return (
     <Routes>
+      {/* Standalone: outside the site Layout on purpose (no site header, nav, or footer). */}
+      <Route path="decision-study" element={<DecisionStudy />} />
       <Route element={<Layout />}>
         <Route index element={research ? <TestYourIdea /> : <Home />} />
         {research && <Route path="start" element={<StartStudy />} />}
@@ -32,7 +34,6 @@ export default function App() {
         <Route path="contact" element={<Contact />} />
         <Route path="market-research" element={<TestYourIdea />} />
         <Route path="market-research/start" element={<StartStudy />} />
-        <Route path="decision-study" element={<DecisionStudy />} />
         <Route path="privacy" element={<Privacy />} />
         <Route path="*" element={<NotFound />} />
       </Route>

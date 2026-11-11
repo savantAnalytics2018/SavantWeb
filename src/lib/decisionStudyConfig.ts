@@ -40,10 +40,7 @@ export interface DsAudience {
   knownObjections: string;
 }
 export interface DsInput {
-  // 1. free report
-  reference: string;
-  reportFeedback: string;
-  // 2. decision
+  // 1. decision
   decision: string;
   owner: string;
   decideBy: string;
@@ -90,8 +87,6 @@ export const emptyOption = (): DsOption => ({ name: '', description: '', expecta
 export const emptyAudience = (): DsAudience => ({ name: '', description: '', roles: '', geography: '', stage: '', knownObjections: '' });
 
 export const emptyDs = (): DsInput => ({
-  reference: '',
-  reportFeedback: '',
   decision: '',
   owner: '',
   decideBy: '',
@@ -131,11 +126,10 @@ export type DsErrors = Partial<Record<string, string>>;
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const sitePattern = /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,}(\/\S*)?$/i;
-const refPattern = /^TYI-\d{4}-[A-Z0-9]{6}$/i;
 const tooLong = (s: string, max: number) => s.trim().length > max;
 const tooShort = (s: string, min: number) => s.trim().length < min;
 
-/** Validate one step (0–7). Returns {} when valid. */
+/** Validate one step (0–6). Returns {} when valid. */
 export function validateDsStep(step: number, v: DsInput): DsErrors {
   const e: DsErrors = {};
   const need = (key: keyof DsInput, msg: string, min = dsLimits.text.min, max = dsLimits.text.max) => {
@@ -149,10 +143,6 @@ export function validateDsStep(step: number, v: DsInput): DsErrors {
 
   switch (step) {
     case 0:
-      if (v.reference.trim() && !refPattern.test(v.reference.trim())) e.reference = 'References look like TYI-2026-AB12CD.';
-      optional('reportFeedback', dsLimits.text.max);
-      break;
-    case 1:
       need('decision', 'State the decision in one or two sentences.');
       need('owner', 'Tell us who decides.', 2, dsLimits.short.max);
       need('decideBy', 'Give a date or a month.', 2, dsLimits.short.max);
@@ -162,7 +152,7 @@ export function validateDsStep(step: number, v: DsInput): DsErrors {
       need('changeMind', 'Tell us what would change your mind — or that nothing would.', 5);
       optional('constraints', dsLimits.text.max);
       break;
-    case 2: {
+    case 1: {
       const filled = v.options.filter((o) => o.name.trim() || o.description.trim());
       if (filled.length < 2) e.options = 'Describe at least two options to compare.';
       v.options.forEach((o, i) => {
@@ -175,7 +165,7 @@ export function validateDsStep(step: number, v: DsInput): DsErrors {
       });
       break;
     }
-    case 3: {
+    case 2: {
       const filled = v.audiences.filter((a) => a.description.trim());
       if (filled.length < 1) e.audiences = 'Describe at least one audience.';
       v.audiences.forEach((a, i) => {
@@ -190,12 +180,12 @@ export function validateDsStep(step: number, v: DsInput): DsErrors {
       optional('buyingCommittee', dsLimits.text.max);
       break;
     }
-    case 4:
+    case 3:
       optional('evidence', dsLimits.long.max);
       optional('competitors', dsLimits.text.max);
       optional('priorResearch', dsLimits.text.max);
       break;
-    case 5: {
+    case 4: {
       const qs = v.questions.map((q) => q.trim()).filter(Boolean);
       if (qs.length < 1) e.questions = 'Give us at least one question the memo must answer.';
       v.questions.forEach((q, i) => {
@@ -205,13 +195,13 @@ export function validateDsStep(step: number, v: DsInput): DsErrors {
       optional('outOfScope', dsLimits.text.max);
       break;
     }
-    case 6:
+    case 5:
       need('readoutAttendees', 'Who should be at the readout?', 2, dsLimits.short.max * 2);
       optional('format', dsLimits.short.max * 2);
       need('deadline', 'When do you need the memo?', 2, dsLimits.short.max);
       optional('confidentiality', dsLimits.text.max);
       break;
-    case 7: {
+    case 6: {
       if (!packages.some((p) => p.id === v.packageId)) e.packageId = 'Choose a package.';
       if (!v.name.trim()) e.name = 'Please enter your name.';
       if (!v.company.trim()) e.company = 'Please enter your company.';
@@ -237,7 +227,7 @@ export function validateDsStep(step: number, v: DsInput): DsErrors {
 
 export function validateDs(v: DsInput): DsErrors {
   let all: DsErrors = {};
-  for (let i = 0; i < 8; i++) all = { ...all, ...validateDsStep(i, v) };
+  for (let i = 0; i < 7; i++) all = { ...all, ...validateDsStep(i, v) };
   return all;
 }
 
@@ -250,8 +240,6 @@ export function coerceDs(b: Record<string, unknown>): DsInput {
   const pkg = packages.some((p) => p.id === b.packageId) ? (b.packageId as PackageId) : '';
   const oneOf = <T extends string>(k: string, allowed: readonly T[]): T | '' => (allowed.includes(b[k] as T) ? (b[k] as T) : '');
   return {
-    reference: s('reference', 40),
-    reportFeedback: s('reportFeedback', dsLimits.text.max),
     decision: s('decision', dsLimits.text.max),
     owner: s('owner', dsLimits.short.max),
     decideBy: s('decideBy', dsLimits.short.max),

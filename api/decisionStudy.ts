@@ -2,8 +2,7 @@
  * Decision Study scoping-questionnaire endpoint — POST /api/decision-study.
  * Same defenses as api/study.ts (honeypot, timing, per-IP rate limit, server validation,
  * no content logging). Emails Savant the full questionnaire tagged [DECISION STUDY] and the
- * client a copy with the reference. No confirmation link: the client has already been through
- * the free report and this page is shared one-to-one.
+ * client a copy with the reference. Standalone page, shared one-to-one; no confirmation link.
  *
  * Environment: STUDY_TO (or CONTACT_TO), CONTACT_FROM, RESEND_API_KEY.
  */
@@ -54,11 +53,7 @@ export function formatQuestionnaire(v: DsInput, reference: string): string {
     `Reference: ${reference}`,
     `Package: ${pkg ? `${pkg.name} (${pkg.price})` : '—'}`,
     ``,
-    `1. FREE REPORT`,
-    `Free-report reference: ${or(v.reference)}`,
-    `What was useful / missing: ${or(v.reportFeedback)}`,
-    ``,
-    `2. THE DECISION`,
+    `1. THE DECISION`,
     `Decision: ${v.decision.trim()}`,
     `Owner / approvers: ${v.owner.trim()}`,
     `Decide by: ${v.decideBy.trim()}`,
@@ -68,36 +63,36 @@ export function formatQuestionnaire(v: DsInput, reference: string): string {
     `What would change their mind: ${v.changeMind.trim()}`,
     `Constraints: ${or(v.constraints)}`,
     ``,
-    `3. OPTIONS`,
+    `2. OPTIONS`,
     options || '  —',
     ``,
-    `4. AUDIENCES`,
+    `3. AUDIENCES`,
     audiences || '  —',
     `Buying committee: ${or(v.buyingCommittee)}`,
     ``,
-    `5. EXISTING EVIDENCE`,
+    `4. EXISTING EVIDENCE`,
     `Evidence: ${or(v.evidence)}`,
     `Competitors / alternatives: ${or(v.competitors)}`,
     `Prior research: ${or(v.priorResearch)}`,
     ``,
-    `6. QUESTIONS THE MEMO MUST ANSWER`,
+    `5. QUESTIONS THE MEMO MUST ANSWER`,
     questions || '  —',
     `Hypotheses: ${or(v.hypotheses)}`,
     `Out of scope: ${or(v.outOfScope)}`,
     ``,
-    `7. DELIVERABLE AND TIMING`,
+    `6. DELIVERABLE AND TIMING`,
     `Readout attendees: ${v.readoutAttendees.trim()}`,
     `Format: ${or(v.format)}`,
     `Needed by: ${v.deadline.trim()}`,
     `Confidentiality / NDA: ${or(v.confidentiality)}`,
     ``,
-    `8. COMMERCIAL`,
+    `7. COMMERCIAL`,
     `Billing contact: ${or(v.billingContact)}`,
     `Purchase order required: ${or(v.poRequired)}`,
     `Preferred payment: ${or(v.paymentMethod)}`,
     `Terms acknowledged: ${v.consent ? 'yes' : 'no'}`,
     ``,
-    `9. CONTACT`,
+    `8. CONTACT`,
     `Name: ${v.name.trim()}`,
     `Role: ${or(v.role)}`,
     `Company: ${v.company.trim()}`,
@@ -109,7 +104,7 @@ export function formatQuestionnaire(v: DsInput, reference: string): string {
 
 export function formatDsTriage(v: DsInput): string {
   return [
-    `10. TRIAGE (internal)`,
+    `9. TRIAGE (internal)`,
     `Mailbox: ${isFreeMail(v.email) ? `consumer (${emailDomain(v.email)}); organisation given as ${or(v.companySite)}` : `company domain ${emailDomain(v.email)}`}`,
     `Source: ${or(v.source)}`,
     `Options: ${v.options.filter((o) => o.name.trim() || o.description.trim()).length} · Audiences: ${v.audiences.filter((a) => a.description.trim()).length} · Questions: ${v.questions.filter((q) => q.trim()).length}`,
@@ -167,7 +162,7 @@ export default async function handler(req: Request): Promise<Response> {
       from,
       to: [to],
       reply_to: input.email.trim(),
-      subject: `[${reference}] [DECISION STUDY] ${input.company.trim()} — ${pkg?.name ?? 'package?'}${input.reference.trim() ? ` — from ${input.reference.trim().toUpperCase()}` : ''}`,
+      subject: `[${reference}] [DECISION STUDY] ${input.company.trim()} — ${pkg?.name ?? 'package?'}`,
       text: `Decision Study scoping questionnaire via savantanalytics.net\nStatus: New — scope, quote, invoice\n\n${text}\n\n${formatDsTriage(input)}`,
       html: `<pre style="font:14px/1.5 system-ui">${esc(`Decision Study scoping questionnaire via savantanalytics.net\nStatus: New — scope, quote, invoice\n\n${text}\n\n${formatDsTriage(input)}`)}</pre>`,
     });

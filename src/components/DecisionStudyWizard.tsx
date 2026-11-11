@@ -1,5 +1,4 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
 import { packages, studyCopy, studySteps, terms } from '@/content/decisionStudy';
 import {
   coerceDs,
@@ -147,14 +146,13 @@ export default function DecisionStudyWizard({ fetchImpl }: DecisionStudyWizardPr
   }
 
   const stepFor = (k: string): number => {
-    if (k === 'reference' || k === 'reportFeedback') return 0;
-    if (['decision', 'owner', 'decideBy', 'stakes', 'criteria', 'currentLeaning', 'changeMind', 'constraints'].includes(k)) return 1;
-    if (k.startsWith('option')) return 2;
-    if (k.startsWith('audience') || k === 'buyingCommittee') return 3;
-    if (['evidence', 'competitors', 'priorResearch'].includes(k)) return 4;
-    if (k.startsWith('question') || k === 'hypotheses' || k === 'outOfScope') return 5;
-    if (['readoutAttendees', 'format', 'deadline', 'confidentiality'].includes(k)) return 6;
-    return 7;
+    if (['decision', 'owner', 'decideBy', 'stakes', 'criteria', 'currentLeaning', 'changeMind', 'constraints'].includes(k)) return 0;
+    if (k.startsWith('option')) return 1;
+    if (k.startsWith('audience') || k === 'buyingCommittee') return 2;
+    if (['evidence', 'competitors', 'priorResearch'].includes(k)) return 3;
+    if (k.startsWith('question') || k === 'hypotheses' || k === 'outOfScope') return 4;
+    if (['readoutAttendees', 'format', 'deadline', 'confidentiality'].includes(k)) return 5;
+    return 6;
   };
 
   function next() {
@@ -182,7 +180,7 @@ export default function DecisionStudyWizard({ fetchImpl }: DecisionStudyWizardPr
       return;
     }
     if (disabled) return;
-    const errs = validateDsStep(7, values);
+    const errs = validateDsStep(6, values);
     if (Object.keys(errs).length) {
       setErrors(errs);
       focusFirstError(errs);
@@ -236,11 +234,7 @@ export default function DecisionStudyWizard({ fetchImpl }: DecisionStudyWizardPr
         )}
         <p>{studyCopy.successBody}</p>
         {!copySent && <p className="notice notice--warning">{studyCopy.successNotSent(values.email.trim())}</p>}
-        <p>
-          <Link to="/" className="link-arrow">
-            Back to Savant Analytics
-          </Link>
-        </p>
+        <p className="muted small">You can close this page. Questions in the meantime: reply to the copy in your inbox.</p>
       </div>
     );
   }
@@ -302,20 +296,8 @@ export default function DecisionStudyWizard({ fetchImpl }: DecisionStudyWizardPr
           </div>
         )}
 
-        {/* 0 — free report */}
+        {/* 0 — decision */}
         {step === 0 && (
-          <>
-            <Field id={fid('reference')} label="Free-report reference" optional hint={studyCopy.referenceHelper} error={errors.reference}>
-              {input('reference', 40, { placeholder: 'TYI-2026-AB12CD', autoCapitalize: 'characters' })}
-            </Field>
-            <Field id={fid('reportFeedback')} label="What was useful, and what was missing?" optional hint={studyCopy.usefulHelper} error={errors.reportFeedback}>
-              {textarea('reportFeedback', 5)}
-            </Field>
-          </>
-        )}
-
-        {/* 1 — decision */}
-        {step === 1 && (
           <>
             <Field id={fid('decision')} label="The decision, in one or two sentences" hint={studyCopy.decisionHelper} error={errors.decision}>
               {textarea('decision', 3)}
@@ -346,8 +328,8 @@ export default function DecisionStudyWizard({ fetchImpl }: DecisionStudyWizardPr
           </>
         )}
 
-        {/* 2 — options */}
-        {step === 2 && (
+        {/* 1 — options */}
+        {step === 1 && (
           <>
             <p className="muted" style={{ marginTop: 0 }}>
               {studyCopy.optionsIntro}
@@ -384,8 +366,8 @@ export default function DecisionStudyWizard({ fetchImpl }: DecisionStudyWizardPr
           </>
         )}
 
-        {/* 3 — audiences */}
-        {step === 3 && (
+        {/* 2 — audiences */}
+        {step === 2 && (
           <>
             <p className="muted" style={{ marginTop: 0 }}>
               {studyCopy.audiencesIntro}
@@ -436,8 +418,8 @@ export default function DecisionStudyWizard({ fetchImpl }: DecisionStudyWizardPr
           </>
         )}
 
-        {/* 4 — evidence */}
-        {step === 4 && (
+        {/* 3 — evidence */}
+        {step === 3 && (
           <>
             <p className="muted" style={{ marginTop: 0 }}>
               {studyCopy.evidenceIntro}
@@ -454,8 +436,8 @@ export default function DecisionStudyWizard({ fetchImpl }: DecisionStudyWizardPr
           </>
         )}
 
-        {/* 5 — questions */}
-        {step === 5 && (
+        {/* 4 — questions */}
+        {step === 4 && (
           <>
             <p className="muted" style={{ marginTop: 0 }}>
               {studyCopy.questionsIntro}
@@ -484,8 +466,8 @@ export default function DecisionStudyWizard({ fetchImpl }: DecisionStudyWizardPr
           </>
         )}
 
-        {/* 6 — logistics */}
-        {step === 6 && (
+        {/* 5 — logistics */}
+        {step === 5 && (
           <>
             <p className="muted" style={{ marginTop: 0 }}>
               {studyCopy.logisticsIntro}
@@ -505,8 +487,8 @@ export default function DecisionStudyWizard({ fetchImpl }: DecisionStudyWizardPr
           </>
         )}
 
-        {/* 7 — commercial + contact */}
-        {step === 7 && (
+        {/* 6 — commercial + contact */}
+        {step === 6 && (
           <>
             <div className="field" role="radiogroup" aria-labelledby={fid('packageId-label')} id={fid('packageId')}>
               <p id={fid('packageId-label')} className="field__label">
