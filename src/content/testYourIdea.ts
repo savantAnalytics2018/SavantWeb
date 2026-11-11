@@ -134,6 +134,17 @@ export const trackRecord = {
   published: (rate: string) => `On the studies we have compared so far, the simulated audience agreed with a human panel on the leading option ${rate}. The method and exclusions are described in each report.`,
 };
 
+/** Product clip: a recording of the Twin Lab producing a report on an invented example brief. */
+export const demoClip = {
+  eyebrow: 'See a study run',
+  heading: 'From brief to reviewed report, in one sitting.',
+  lede: 'A recording of our research workflow on an invented example: the brief goes in, segments and questions are designed and approved, a simulated panel answers twice, and the report is written from the tabulated answers.',
+  caption: 'Example — invented client. Simulated respondents. Recording shortened; a real study takes longer and is reviewed by a named analyst before it is sent.',
+  mp4: '/media/twin-lab-demo.mp4',
+  webm: '/media/twin-lab-demo.webm',
+  poster: '/media/twin-lab-demo-poster.jpg',
+};
+
 /** Signpost to paid work. Intake page only — no prices here. */
 export const ifYouNeedMore = {
   heading: 'Need a deeper answer?',

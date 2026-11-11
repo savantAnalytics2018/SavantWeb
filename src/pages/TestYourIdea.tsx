@@ -5,6 +5,7 @@ import { Faq } from '@/components/Sections';
 import {
   analystLine,
   deliverableHeading,
+  demoClip,
   deliverableLede,
   howItWorks,
   ifYouNeedMore,
@@ -101,6 +102,24 @@ export default function TestYourIdea() {
             ))}
           </ul>
           <p className="small muted">{analystLine}</p>
+        </div>
+      </section>
+
+      {/* Product clip */}
+      <section className="section" aria-labelledby="tyi-demo">
+        <div className="container stack-lg">
+          <div className="section-head">
+            <p className="eyebrow">{demoClip.eyebrow}</p>
+            <h2 id="tyi-demo">{demoClip.heading}</h2>
+            <p className="lede">{demoClip.lede}</p>
+          </div>
+          <figure className="demo-clip">
+            <video muted loop playsInline autoPlay preload="metadata" poster={demoClip.poster} aria-label="Recording of the Twin Lab research workflow on an invented example brief">
+              <source src={demoClip.webm} type="video/webm" />
+              <source src={demoClip.mp4} type="video/mp4" />
+            </video>
+            <figcaption className="small muted">{demoClip.caption}</figcaption>
+          </figure>
         </div>
       </section>
 
