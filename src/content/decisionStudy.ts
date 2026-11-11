@@ -9,23 +9,6 @@
  * Prices are a single source of truth here; change them in one place.
  */
 
-export const decisionStudyMeta = {
-  eyebrow: 'Decision Study',
-  title: 'One decision. Five business days. A memo you can act on.',
-  lede:
-    'A fixed-scope study of a single product, pricing, or go-to-market decision: up to five options and three audiences, run on a simulated audience, reviewed by a named analyst, delivered as a decision memo with a readout. $4,500, paid before kickoff.',
-  formTitle: 'Scope the study',
-  formLede: 'This questionnaire is the scoping document. What you describe here is what the study covers. Allow 25–40 minutes; your answers save in this browser as you go.',
-};
-
-/** What the $4,500 study delivers — shown above the questionnaire. */
-export const whatYouGet = [
-  { title: 'A decision memo, not a dashboard', detail: 'Eight to twelve pages: the answer to each question you set, the evidence behind it, where the simulation was unstable, and what to test with real buyers before you commit.' },
-  { title: 'Up to five options, three audiences', detail: 'Up to 300 simulated respondents built from your audience definitions, 12–15 questions designed around your decision criteria, sensitivity checks on every leading result.' },
-  { title: 'A named reviewer', detail: 'A Savant analyst checks unsupported claims, contradictory responses, and assumption sensitivity, documents any exclusions, and signs the memo.' },
-  { title: 'A 45-minute readout', detail: 'With the decision owner in the room. One revision round after it. Delivered within five business days of kickoff.' },
-];
-
 export const packages = [
   {
     id: 'decision-study',

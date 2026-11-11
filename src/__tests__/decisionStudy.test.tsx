@@ -16,11 +16,11 @@ describe('Decision Study page', () => {
   });
   it('renders standalone: no site navigation, seven questionnaire steps, the price', () => {
     render(<MemoryRouter initialEntries={['/decision-study']}><App /></MemoryRouter>);
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('One decision.');
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Decision Study scoping questionnaire');
     expect(screen.queryByRole('navigation', { name: 'Primary' })).toBeNull();
     expect(screen.queryByRole('link', { name: /market research/i })).toBeNull();
     expect(screen.getByText('Step 1 of 7')).toBeInTheDocument();
-    expect(screen.getAllByText(/\$4,500/).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/what you get/i)).toBeNull();
   });
 });
 

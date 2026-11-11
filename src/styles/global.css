@@ -2871,3 +2871,7 @@ html[data-theme='warm'] .tyi-stat {
   padding: 1.25rem 0;
   background: var(--color-surface);
 }
+
+.ds__form {
+  max-width: 52rem;
+}
