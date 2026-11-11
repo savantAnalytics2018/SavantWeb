@@ -16,7 +16,7 @@
     // endpoints ("/api/*" — otherwise a missing asset returns the static 404 page). See docs/SUBDOMAIN.md.
     // Research subdomain front door: let the Worker rewrite "/" and "/start" before the asset
     // lookup (otherwise the static index.html / 404 are served first). See docs/SUBDOMAIN.md.
-    "run_worker_first": ["/", "/start", "/api/*"]
+    "run_worker_first": ["/", "/start", "/start/*", "/api/*"]
   },
   "observability": { "enabled": true }
 }

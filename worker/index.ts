@@ -11,6 +11,8 @@ interface Env {
   ASSETS: { fetch: (request: Request) => Promise<Response> };
   /** Hostname prefix of the research front door (default "twinresearch."). */
   RESEARCH_HOST_PREFIX?: string;
+  /** Hostname prefix of the private tier menu (default "twindetail."). */
+  DETAIL_HOST_PREFIX?: string;
   CONTACT_TO?: string;
   CONTACT_FROM?: string;
   RESEND_API_KEY?: string;
@@ -70,6 +72,19 @@ export default {
       const target = map[url.pathname];
       if (target) {
         url.pathname = target;
+        return env.ASSETS.fetch(new Request(url.toString(), request));
+      }
+    }
+    // Private tier menu: "/" is the menu, "/start/<tier>" the intake. Nothing links here.
+    const detailPrefix = (env.DETAIL_HOST_PREFIX ?? 'twindetail.').toLowerCase();
+    if (url.hostname.toLowerCase().startsWith(detailPrefix)) {
+      if (url.pathname === '/') {
+        url.pathname = '/twin-detail';
+        return env.ASSETS.fetch(new Request(url.toString(), request));
+      }
+      const m = /^\/start\/([a-z-]+)\/?$/.exec(url.pathname);
+      if (m) {
+        url.pathname = `/twin-detail/start/${m[1]}`;
         return env.ASSETS.fetch(new Request(url.toString(), request));
       }
     }

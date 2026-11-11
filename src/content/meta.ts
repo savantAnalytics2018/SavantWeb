@@ -49,6 +49,21 @@ export const pageMeta: Record<string, PageMeta> = {
     description: 'Scoping questionnaire for a fixed-scope Decision Study: the decision, the options, the audiences, the evidence, and the questions the memo must answer.',
     unlisted: true,
   },
+  twinDetail: {
+    path: '/twin-detail',
+    title: 'Digital-Twin Research — tiers — Savant Analytics',
+    description: 'Three tiers of digital-twin research: a complimentary snapshot, a fixed-scope Decision Study, and a Decision Study with human calibration.',
+    unlisted: true,
+  },
+  twinDetailStart: {
+    path: '/twin-detail/start/snapshot',
+    title: 'Intake — Savant Analytics',
+    description: 'Intake for the chosen digital-twin research tier.',
+    unlisted: true,
+  },
+  // Prerendered so the Worker rewrite on twindetail.<domain> hits a static file for every tier.
+  twinDetailStartDs: { path: '/twin-detail/start/decision-study', title: 'Intake — Savant Analytics', description: 'Intake for the chosen digital-twin research tier.', unlisted: true },
+  twinDetailStartCal: { path: '/twin-detail/start/calibration', title: 'Intake — Savant Analytics', description: 'Intake for the chosen digital-twin research tier.', unlisted: true },
   privacy: {
     path: '/privacy',
     title: 'Privacy — Savant Analytics',

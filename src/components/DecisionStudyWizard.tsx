@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import { packages, studyCopy, studySteps, terms } from '@/content/decisionStudy';
+import { packages, studyCopy, studySteps, terms, type PackageId } from '@/content/decisionStudy';
 import {
   coerceDs,
   dsConfig,
@@ -91,12 +91,14 @@ function Field({
 
 export interface DecisionStudyWizardProps {
   fetchImpl?: typeof fetch;
+  /** Pre-select a package (e.g. from the tier the client chose on the twindetail menu). */
+  presetPackage?: PackageId;
 }
 
-export default function DecisionStudyWizard({ fetchImpl }: DecisionStudyWizardProps) {
+export default function DecisionStudyWizard({ fetchImpl, presetPackage }: DecisionStudyWizardProps) {
   const id = useId();
   const fid = (k: string) => `${id}-${k}`;
-  const [values, setValues] = useState<DsInput>(emptyDs);
+  const [values, setValues] = useState<DsInput>(() => ({ ...emptyDs(), packageId: presetPackage ?? '' }));
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<DsErrors>({});
   const [honeypot, setHoneypot] = useState('');
@@ -112,9 +114,11 @@ export default function DecisionStudyWizard({ fetchImpl }: DecisionStudyWizardPr
   useEffect(() => {
     const d = loadDraft();
     if (d) {
-      setValues(d);
+      // A tier chosen on the menu wins over whatever the draft last had.
+      setValues(presetPackage ? { ...d, packageId: presetPackage } : d);
       setRestored(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     if (status !== 'success') saveDraft(values);

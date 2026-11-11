@@ -19,6 +19,7 @@ export type AnalyticsEvent =
   | 'tyi_form_submitted'
   | 'tyi_form_accepted'
   | 'tyi_form_failed'
+  | 'tier_cta_click'
   | 'ds_form_submitted'
   | 'ds_form_accepted'
   | 'ds_form_failed';

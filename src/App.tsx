@@ -10,8 +10,10 @@ import Privacy from '@/pages/Privacy';
 import TestYourIdea from '@/pages/TestYourIdea';
 import StartStudy from '@/pages/StartStudy';
 import DecisionStudy from '@/pages/DecisionStudy';
+import TwinDetail from '@/pages/TwinDetail';
+import TwinDetailStart from '@/pages/TwinDetailStart';
 import NotFound from '@/pages/NotFound';
-import { isResearchHost } from '@/lib/host';
+import { isDetailHost, isResearchHost } from '@/lib/host';
 
 /**
  * On twinresearch.<domain> the Worker serves the research landing at "/" and the wizard at
@@ -20,12 +22,18 @@ import { isResearchHost } from '@/lib/host';
  */
 export default function App() {
   const research = isResearchHost();
+  const detail = isDetailHost();
   return (
     <Routes>
       {/* Standalone: outside the site Layout on purpose (no site header, nav, or footer). */}
       <Route path="decision-study" element={<DecisionStudy />} />
+      {/* Private tier menu (twindetail.<domain>): hidden main-site paths plus short paths on that host. */}
+      <Route path="twin-detail" element={<TwinDetail />} />
+      <Route path="twin-detail/start/:tier" element={<TwinDetailStart />} />
+      {detail && <Route path="/" element={<TwinDetail />} />}
+      {detail && <Route path="start/:tier" element={<TwinDetailStart />} />}
       <Route element={<Layout />}>
-        <Route index element={research ? <TestYourIdea /> : <Home />} />
+        {!detail && <Route index element={research ? <TestYourIdea /> : <Home />} />}
         {research && <Route path="start" element={<StartStudy />} />}
         <Route path="services" element={<Services />} />
         <Route path="services/:serviceId" element={<ServiceDetail />} />

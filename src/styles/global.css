@@ -2906,3 +2906,65 @@ html[data-theme='warm'] .tyi-stat {
     /* autoplay is suppressed by the browser; poster remains */
   }
 }
+
+/* Twin Detail — private tier menu */
+.tiers {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 900px) {
+  .tiers {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.tier {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  background: var(--color-surface);
+}
+.tier[data-tier='decision-study'] {
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 2px var(--color-teal);
+}
+.tier__price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  display: grid;
+  gap: 0.2rem;
+  margin: 0;
+}
+.tier__price-note {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--color-ink-2);
+}
+.tier__summary {
+  font-size: 0.9375rem;
+  margin: 0;
+}
+.tier .checklist {
+  margin: 0;
+  flex: 1;
+}
+.tier__bestfor {
+  margin: 0;
+  color: var(--color-ink-2);
+}
+.tier__cta {
+  margin: 0.25rem 0 0;
+}
+.tier__cta .btn {
+  width: 100%;
+  justify-content: center;
+}
+.link-arrow--back::before {
+  content: '← ';
+}
+.link-arrow--back::after {
+  content: none;
+}

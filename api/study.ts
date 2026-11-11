@@ -228,8 +228,9 @@ export default async function handler(req: Request): Promise<Response> {
 export async function confirmHandler(req: Request): Promise<Response> {
   const url = new URL(req.url);
   const token = url.searchParams.get('t') ?? '';
-  const research = url.hostname.toLowerCase().startsWith('twinresearch.');
-  const back = (ok: boolean) => new Response(null, { status: 303, headers: { Location: `${research ? '/start' : '/market-research/start'}?confirmed=${ok ? '1' : '0'}`, 'Cache-Control': 'no-store' } });
+  const host = url.hostname.toLowerCase();
+  const backPath = host.startsWith('twinresearch.') ? '/start' : host.startsWith('twindetail.') ? '/start/snapshot' : '/market-research/start';
+  const back = (ok: boolean) => new Response(null, { status: 303, headers: { Location: `${backPath}?confirmed=${ok ? '1' : '0'}`, 'Cache-Control': 'no-store' } });
   const payload = token ? await verifyToken(token, confirmSecret()) : null;
   if (!payload) {
     console.info('[study] confirm rejected');
