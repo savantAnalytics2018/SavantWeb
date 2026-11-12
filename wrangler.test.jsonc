@@ -25,6 +25,6 @@
   //   1. npx wrangler d1 create savantweb-portal --config wrangler.test.jsonc   → paste database_id below
   //   2. npx wrangler d1 execute savantweb-portal --remote --file=db/portal.sql --config wrangler.test.jsonc
   //   3. npx wrangler r2 bucket create savantweb-reports
-  "d1_databases": [{ "binding": "DB", "database_name": "savantweb-portal", "database_id": "REPLACE_WITH_ID_FROM_STEP_1" }],
+  "d1_databases": [{ "binding": "DB", "database_name": "savantweb-portal", "database_id": "13dc0ee3-b621-4261-a5d7-685c9580c30d" }],
   "r2_buckets": [{ "binding": "REPORTS", "bucket_name": "savantweb-reports" }]
 }
