@@ -19,6 +19,8 @@
     // lookup (otherwise the static index.html / 404 are served first). See docs/SUBDOMAIN.md.
     "run_worker_first": ["/", "/start", "/start/*", "/s", "/s/*", "/admin", "/twin-detail/s/*", "/api/*"]
   },
+  // Non-secret runtime variables. PORTAL_ORIGIN is the host used in the portal's emailed links.
+  "vars": { "PORTAL_ORIGIN": "https://twindetail.savantanalytics.net" },
   "observability": { "enabled": true },
   // Paid-study client portal (docs/PORTAL.md). Both bindings are optional: without DB the portal
   // routes return 503 and the Decision Study questionnaire falls back to email-only.
